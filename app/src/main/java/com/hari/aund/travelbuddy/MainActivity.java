@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,7 +37,22 @@ public class MainActivity extends AppCompatActivity
                 mDrawerLayout,
                 toolbar,
                 R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
+                R.string.navigation_drawer_close){
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // TODO Auto-generated method stub
+                Utility.hideSoftKeyboard(MainActivity.this);
+                super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // TODO Auto-generated method stub
+                Utility.hideSoftKeyboard(MainActivity.this);
+                super.onDrawerClosed(drawerView);
+            }
+        };
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -58,6 +74,12 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Utility.hideSoftKeyboard(this);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
