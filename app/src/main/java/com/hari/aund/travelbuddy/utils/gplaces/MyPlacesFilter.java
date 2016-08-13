@@ -1,4 +1,4 @@
-package com.hari.aund.travelbuddy;
+package com.hari.aund.travelbuddy.utils.gplaces;
 
 import android.util.Log;
 import android.widget.Filter;
@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Places;
+import com.hari.aund.travelbuddy.adapter.PlaceAutoCompleteAdapter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,7 +25,7 @@ public class MyPlacesFilter extends Filter {
 
     private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
 
-    MyPlacesFilter(PlaceAutoCompleteAdapter placeAutoCompleteAdapter){
+    public MyPlacesFilter(PlaceAutoCompleteAdapter placeAutoCompleteAdapter){
         mPlaceAutoCompleteAdapter = placeAutoCompleteAdapter;
     }
 

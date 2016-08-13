@@ -1,10 +1,12 @@
-package com.hari.aund.travelbuddy;
+package com.hari.aund.travelbuddy.utils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.hari.aund.travelbuddy.activity.MainActivity;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/13/2016.

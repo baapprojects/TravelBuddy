@@ -1,4 +1,4 @@
-package com.hari.aund.travelbuddy;
+package com.hari.aund.travelbuddy.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +18,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.hari.aund.travelbuddy.activity.MainActivity;
+import com.hari.aund.travelbuddy.utils.gplaces.PlaceAutoComplete;
+import com.hari.aund.travelbuddy.adapter.PlaceAutoCompleteAdapter;
+import com.hari.aund.travelbuddy.R;
+import com.hari.aund.travelbuddy.utils.Utility;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.hari.aund.travelbuddy;
+package com.hari.aund.travelbuddy.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+
+import com.hari.aund.travelbuddy.R;
 
 public class SplashActivity extends AppCompatActivity
         implements View.OnClickListener {

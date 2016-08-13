@@ -1,4 +1,4 @@
-package com.hari.aund.travelbuddy;
+package com.hari.aund.travelbuddy.utils.gplaces;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/14/2016.

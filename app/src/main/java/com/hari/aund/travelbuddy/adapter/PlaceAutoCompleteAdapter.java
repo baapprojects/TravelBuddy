@@ -1,4 +1,4 @@
-package com.hari.aund.travelbuddy;
+package com.hari.aund.travelbuddy.adapter;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
@@ -8,6 +8,8 @@ import android.widget.Filterable;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.hari.aund.travelbuddy.utils.gplaces.MyPlacesFilter;
+import com.hari.aund.travelbuddy.utils.gplaces.PlaceAutoComplete;
 
 import java.util.ArrayList;
 

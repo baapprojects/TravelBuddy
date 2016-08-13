@@ -1,4 +1,4 @@
-package com.hari.aund.travelbuddy;
+package com.hari.aund.travelbuddy.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,6 +12,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.hari.aund.travelbuddy.R;
+import com.hari.aund.travelbuddy.utils.Utility;
+import com.hari.aund.travelbuddy.fragment.ExplorePlacesFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
