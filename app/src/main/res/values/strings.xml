@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TravelBuddy</string>
+    <string name="title">Travel Buddy</string>
+    <string name="sub_title">Search local places with ease!</string>
+    <string name="go_in">go...</string>
+    <string name="back_drop_text">BackDrop</string>
 </resources>
