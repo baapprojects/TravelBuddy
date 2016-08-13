@@ -4,4 +4,10 @@
     <string name="sub_title">Search local places with ease!</string>
     <string name="go_in">go...</string>
     <string name="back_drop_text">BackDrop</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

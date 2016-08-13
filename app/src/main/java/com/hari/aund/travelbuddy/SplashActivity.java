@@ -26,9 +26,9 @@ public class SplashActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.goIn) {
-            Intent intent = new Intent(this, SplashActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-            Log.d(LOG_TAG, "onClick : Intent Triggered " + "SplashActivity");
+            Log.d(LOG_TAG, "onClick : Intent Triggered " + "MainActivity");
         }
     }
 }
