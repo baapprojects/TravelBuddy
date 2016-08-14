@@ -2,8 +2,7 @@
     <string name="app_name">TravelBuddy</string>
     <string name="title">Travel Buddy</string>
     <string name="sub_title">Search local places with ease!</string>
-    <string name="go_in">go...</string>
-    <string name="back_drop_text">BackDrop</string>
+    <string name="go_in">go&#8230;</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -16,4 +15,10 @@
     <string name="communicate">Communicate</string>
     <string name="share">Share</string>
     <string name="contact_us">Contact us!</string>
+
+    <string name="content_desc_back_drop">BackDrop</string>
+    <string name="content_desc_find_place_on_map">Click! to find place on map.</string>
+
+    <string name="def_no_place_selected">No Place Selected</string>
+    <string name="hint_auto_complete">Start typing to find a place</string>
 </resources>

@@ -12,6 +12,7 @@ import com.hari.aund.travelbuddy.adapter.PlaceAutoCompleteAdapter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -120,6 +121,18 @@ public class MyPlacesFilter extends Filter {
             resultList.add(new PlaceAutoComplete(
                     prediction.getPlaceId(),
                     prediction.getFullText(null)));
+
+            Log.d(LOG_TAG, "PlaceId - " + prediction.getPlaceId());
+            Log.d(LOG_TAG, "PlaceFullText - " + prediction.getFullText(null));
+            List<Integer> placeTypeIntegerList = prediction.getPlaceTypes();
+            if (placeTypeIntegerList != null && !placeTypeIntegerList.isEmpty()) {
+                for (int index = 0; index < placeTypeIntegerList.size(); index++){
+                    Log.d(LOG_TAG, "PlaceType[" + index +"] - " + placeTypeIntegerList.get(index));
+                }
+            }
+            Log.d(LOG_TAG, "PlacePrimaryText - " + prediction.getPrimaryText(null));
+            Log.d(LOG_TAG, "PlaceSecondaryText - " + prediction.getSecondaryText(null));
+            Log.d(LOG_TAG, "DataValid - " + prediction.isDataValid());
         }
 
         // Release the buffer now that all data has been copied.

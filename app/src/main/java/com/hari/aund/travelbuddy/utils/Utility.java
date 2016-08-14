@@ -34,4 +34,8 @@ public class Utility {
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    public static boolean isPlacePickerSettingEnabled(){
+        return true;
+    }
 }
