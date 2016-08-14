@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
+import com.hari.aund.travelbuddy.activity.PlacesActivity;
 import com.hari.aund.travelbuddy.adapter.PlaceAutoCompleteAdapter;
 import com.hari.aund.travelbuddy.utils.Utility;
 import com.hari.aund.travelbuddy.utils.gplaces.PlaceAutoComplete;
@@ -152,6 +153,11 @@ public class ExplorePlacesFragment extends Fragment
         } else if (view.getId() == R.id.new_place_found_on_map) {
             Toast.makeText(getContext(), getNewPlace(), Toast.LENGTH_LONG)
                     .show();
+
+            Intent placesIntent = new Intent(getActivity(), PlacesActivity.class);
+            placesIntent.putExtra(Utility.KEY_PLACE_ID, "placeId");
+            placesIntent.putExtra(Utility.KEY_PLACE_NAME, getNewPlace());
+            startActivity(placesIntent);
         }
     }
 
@@ -176,6 +182,11 @@ public class ExplorePlacesFragment extends Fragment
 
         if ((placeId != null) && (placeName != null)) {
             Log.d(LOG_TAG, "PlaceId - " + placeId + " Name - " + placeName);
+
+            Intent placesIntent = new Intent(getActivity(), PlacesActivity.class);
+            placesIntent.putExtra(Utility.KEY_PLACE_ID, placeId);
+            placesIntent.putExtra(Utility.KEY_PLACE_NAME, placeName);
+            startActivity(placesIntent);
         }
     }
 
@@ -188,10 +199,12 @@ public class ExplorePlacesFragment extends Fragment
                 //mPlacesNameAL.add(place.getName().toString());
                 //mPlacesNameAL.add(place.getAddress().toString());
                 //mDefaultPlacesArrayAdapter.notifyDataSetChanged();
-                setNewPlace(place.getAddress().toString());
+                //setNewPlace(place.getAddress().toString());
+                setNewPlace(place.getName().toString());
 
                 Log.d(LOG_TAG, "PlaceId - " + place.getId());
-                Log.d(LOG_TAG, "PlaceName - " + place.getAddress().toString());
+                Log.d(LOG_TAG, "PlaceName - " + place.getName().toString());
+                Log.d(LOG_TAG, "PlaceAddress - " + place.getAddress().toString());
 
                 if (getView() != null) {
                     Snackbar.make(getView(), place.getId() + "\n" + place.getAddress().toString(), Snackbar.LENGTH_LONG)

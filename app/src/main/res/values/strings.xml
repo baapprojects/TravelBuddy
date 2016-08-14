@@ -21,4 +21,6 @@
 
     <string name="def_no_place_selected">No Place Selected</string>
     <string name="hint_auto_complete">Start typing to find a place</string>
+
+    <string name="title_activity_places">PlacesActivity</string>
 </resources>
