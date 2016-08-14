@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity
             Utility.NAV_SECTION_EXPLORE_PLACES;
     private DrawerLayout mDrawerLayout;
 
+    private int mNavSectionId = DEFAULT_SECTION_ID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +34,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        changeFragment(ExplorePlacesFragment
-                .getNewInstance(DEFAULT_SECTION_ID));
+        if (savedInstanceState == null) {
+            changeFragment(ExplorePlacesFragment
+                    .getNewInstance(getNavSectionId()));
+        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -99,32 +103,46 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_explore_places:
-                changeFragment(ExplorePlacesFragment
-                        .getNewInstance(Utility.NAV_SECTION_EXPLORE_PLACES));
+                setNavSectionId(Utility.NAV_SECTION_EXPLORE_PLACES);
                 break;
             case R.id.nav_search_flight:
-                changeFragment(ExplorePlacesFragment
-                        .getNewInstance(Utility.NAV_SECTION_SEARCH_FLIGHTS));
+                setNavSectionId(Utility.NAV_SECTION_SEARCH_FLIGHTS);
                 break;
             case R.id.nav_favourite:
-                changeFragment(ExplorePlacesFragment
-                        .getNewInstance(Utility.NAV_SECTION_FAVOURITES));
+                setNavSectionId(Utility.NAV_SECTION_FAVOURITES);
                 break;
             case R.id.nav_share:
-                changeFragment(ExplorePlacesFragment
-                        .getNewInstance(DEFAULT_SECTION_ID));
+                setNavSectionId(DEFAULT_SECTION_ID);
                 break;
             case R.id.nav_contact_us:
-                changeFragment(ExplorePlacesFragment
-                        .getNewInstance(DEFAULT_SECTION_ID));
+                setNavSectionId(DEFAULT_SECTION_ID);
                 break;
             default:
                 Log.e(LOG_TAG, "Unknown id - " + item.getItemId());
                 break;
         }
 
+        changeFragment(ExplorePlacesFragment
+                .getNewInstance(getNavSectionId()));
+
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null){
+            setNavSectionId(savedInstanceState
+                    .getInt(Utility.KEY_NAVIGATION_SECTION_ID));
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Utility.KEY_NAVIGATION_SECTION_ID,
+                getNavSectionId());
     }
 
     private void changeFragment(Fragment fragment) {
@@ -132,5 +150,13 @@ public class MainActivity extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit();
+    }
+
+    public int getNavSectionId() {
+        return mNavSectionId;
+    }
+
+    public void setNavSectionId(int navSectionId) {
+        this.mNavSectionId = navSectionId;
     }
 }

@@ -19,6 +19,8 @@ public class Utility {
     public static final int NAV_SECTION_SHARE = 4;
     public static final int NAV_SECTION_CONTACT_US = 5;
 
+    public static final String KEY_NAVIGATION_SECTION_ID = "nav_section_id";
+
     /**
      * Hides the soft keyboard
      */

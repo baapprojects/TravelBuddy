@@ -3,6 +3,7 @@ package com.hari.aund.travelbuddy.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -43,7 +44,7 @@ public class ExplorePlacesFragment extends Fragment
         View.OnClickListener {
 
     private static final String LOG_TAG = ExplorePlacesFragment.class.getSimpleName();
-    private static final String KEY_NAVIGATION_SECTION_ID = "nav_section_id";
+    private static final String KEY_NEW_PLACE_NAME = "new-place-name";
     private static final int PLACE_PICKER_REQUEST = 1;
     private static final int RESULTS_OK = -1;
 
@@ -65,7 +66,7 @@ public class ExplorePlacesFragment extends Fragment
         ExplorePlacesFragment explorePlacesFragment = new ExplorePlacesFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putInt(KEY_NAVIGATION_SECTION_ID, navSectionId);
+        bundle.putInt(Utility.KEY_NAVIGATION_SECTION_ID, navSectionId);
         explorePlacesFragment.setArguments(bundle);
 
         return explorePlacesFragment;
@@ -113,6 +114,22 @@ public class ExplorePlacesFragment extends Fragment
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            setNavSectionId(savedInstanceState.getInt(Utility.KEY_NAVIGATION_SECTION_ID));
+            setNewPlace(savedInstanceState.getString(KEY_NEW_PLACE_NAME));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Utility.KEY_NAVIGATION_SECTION_ID, getNavSectionId());
+        outState.putString(KEY_NEW_PLACE_NAME, getNewPlace());
+    }
+
+    @Override
     public void onStop() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
@@ -124,7 +141,7 @@ public class ExplorePlacesFragment extends Fragment
     public void onClick(View view) {
         if (view.getId() == R.id.find_place_on_map) {
             try {
-                mNewPlace.setText(getString(R.string.def_no_place_selected));
+                setNewPlace(getString(R.string.def_no_place_selected));
 
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
@@ -133,7 +150,7 @@ public class ExplorePlacesFragment extends Fragment
                 e.printStackTrace();
             }
         } else if (view.getId() == R.id.new_place_found_on_map) {
-            Toast.makeText(getContext(), mNewPlace.getText(), Toast.LENGTH_LONG)
+            Toast.makeText(getContext(), getNewPlace(), Toast.LENGTH_LONG)
                     .show();
         }
     }
@@ -171,7 +188,7 @@ public class ExplorePlacesFragment extends Fragment
                 //mPlacesNameAL.add(place.getName().toString());
                 //mPlacesNameAL.add(place.getAddress().toString());
                 //mDefaultPlacesArrayAdapter.notifyDataSetChanged();
-                mNewPlace.setText(place.getAddress().toString());
+                setNewPlace(place.getAddress().toString());
 
                 Log.d(LOG_TAG, "PlaceId - " + place.getId());
                 Log.d(LOG_TAG, "PlaceName - " + place.getAddress().toString());
@@ -189,7 +206,11 @@ public class ExplorePlacesFragment extends Fragment
     }
 
     private void readAndSetNavSectionId() {
-        this.mNavSectionId = getArguments().getInt(KEY_NAVIGATION_SECTION_ID);
+        setNavSectionId(getArguments().getInt(Utility.KEY_NAVIGATION_SECTION_ID));
+    }
+
+    private void setNavSectionId(int navSectionId) {
+        this.mNavSectionId = navSectionId;
         Log.d(LOG_TAG, "NAV SECTION ID - " +
                 getNavSectionId() + " & Name : " + getNavSectionName());
     }
@@ -350,5 +371,13 @@ public class ExplorePlacesFragment extends Fragment
             searchPlace.setAdapter(getPlaceAutoCompleteAdapter());
             searchPlace.setOnItemClickListener(this);
         }
+    }
+
+    private void setNewPlace(String newPlace) {
+        mNewPlace.setText(newPlace);
+    }
+
+    private String getNewPlace() {
+        return mNewPlace.getText().toString();
     }
 }
