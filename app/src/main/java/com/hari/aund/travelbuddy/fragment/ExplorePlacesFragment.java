@@ -266,22 +266,22 @@ public class ExplorePlacesFragment extends Fragment
     private void setDefaultPlacesIdAL() {
         mPlacesIdAL = new ArrayList<>();
 
-        mPlacesIdAL.add("ChIJLbZ-NFv9DDkRzk0gTkm3wlI");
+        mPlacesIdAL.add("ChIJSdRbuoqEXjkRFmVPYRHdzk8");
+        mPlacesIdAL.add("ChIJd7gN4_CECDsRZ7QW-3bwXco");
         mPlacesIdAL.add("ChIJbU60yXAWrjsR4E9-UejD3_g");
+        mPlacesIdAL.add("ChIJpQoX1dIJGToRqD-zaCsOWPw");
+        mPlacesIdAL.add("ChIJYTN9T-plUjoRM9RjaAunYW4");
+        mPlacesIdAL.add("ChIJQbc2YxC6vzsRkkDzYv-H-Oo");
         mPlacesIdAL.add("ChIJlfcOXx8FWTkRLlJU7YfYG4Y");
         mPlacesIdAL.add("ChIJ9wH5Z8NTBDkRJXdLVsUE_nw");
-        mPlacesIdAL.add("ChIJYTN9T-plUjoRM9RjaAunYW4");
-        mPlacesIdAL.add("ChIJW_Wc1P8SCDsRmXw47fuQvWQ");
-        mPlacesIdAL.add("ChIJwe1EZjDG5zsRaYxkjY_tpF0");
-        mPlacesIdAL.add("ChIJQbc2YxC6vzsRkkDzYv-H-Oo");
         mPlacesIdAL.add("ChIJnaj_mSQJ4TgR8eeXRm16VgY");
-        mPlacesIdAL.add("ChIJd7gN4_CECDsRZ7QW-3bwXco");
-        mPlacesIdAL.add("ChIJ5XOPmBBwrzsRCe4TG2b7kns");
-        mPlacesIdAL.add("ChIJARFGZy6_wjsRQ-Oenb9DjYI");
-        mPlacesIdAL.add("ChIJSdRbuoqEXjkRFmVPYRHdzk8");
-        mPlacesIdAL.add("ChIJpQoX1dIJGToRqD-zaCsOWPw");
-        mPlacesIdAL.add("ChIJZ_YISduC-DkRvCxsj-Yw40M");
         mPlacesIdAL.add("ChIJv8a-SlENCDsRkkGEpcqC1Qs");
+        mPlacesIdAL.add("ChIJZ_YISduC-DkRvCxsj-Yw40M");
+        mPlacesIdAL.add("ChIJW_Wc1P8SCDsRmXw47fuQvWQ");
+        mPlacesIdAL.add("ChIJ5XOPmBBwrzsRCe4TG2b7kns");
+        mPlacesIdAL.add("ChIJwe1EZjDG5zsRaYxkjY_tpF0");
+        mPlacesIdAL.add("ChIJLbZ-NFv9DDkRzk0gTkm3wlI");
+        mPlacesIdAL.add("ChIJARFGZy6_wjsRQ-Oenb9DjYI");
     }
 
     private String getDefaultPlaceId(int position) {
@@ -295,22 +295,22 @@ public class ExplorePlacesFragment extends Fragment
     private void setUpDefaultPlacesNameAL() {
         mPlacesNameAL = new ArrayList<>();
 
-        mPlacesNameAL.add("New Delhi, India");
+        mPlacesNameAL.add("Ahmedabad, Gujarat, India");
+        mPlacesNameAL.add("Alappuzha, Kerala, India");
         mPlacesNameAL.add("Bangalore, Karnataka, India");
+        mPlacesNameAL.add("Bhubaneswar, Odisha, India");
+        mPlacesNameAL.add("Chennai, Tamil Nadu, India");
+        mPlacesNameAL.add("Goa, India");
         mPlacesNameAL.add("Gujarat, India");
         mPlacesNameAL.add("Himachal Pradesh, India");
-        mPlacesNameAL.add("Chennai, Tamil Nadu, India");
-        mPlacesNameAL.add("Kerala, India");
-        mPlacesNameAL.add("Mumbai, Maharashtra, India");
-        mPlacesNameAL.add("Goa, India");
-        mPlacesNameAL.add("Jammu & Kashmir");
-        mPlacesNameAL.add("Alappuzha, Kerala, India");
-        mPlacesNameAL.add("Mysuru, Karnataka, India");
-        mPlacesNameAL.add("Pune, Maharashtra, India");
-        mPlacesNameAL.add("Ahmedabad, Gujarat, India");
-        mPlacesNameAL.add("Bhubaneswar, Odisha, India");
-        mPlacesNameAL.add("Kolkata, West Bengal, India");
+        mPlacesNameAL.add("Jammu and Kashmir");
         mPlacesNameAL.add("Kochi, Kerala, India");
+        mPlacesNameAL.add("Kolkata, West Bengal, India");
+        mPlacesNameAL.add("Kerala, India");
+        mPlacesNameAL.add("Mysuru, Karnataka, India");
+        mPlacesNameAL.add("Mumbai, Maharashtra, India");
+        mPlacesNameAL.add("New Delhi, India");
+        mPlacesNameAL.add("Pune, Maharashtra, India");
     }
 
     private String getDefaultPlaceName(int position) {
