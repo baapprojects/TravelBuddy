@@ -27,6 +27,8 @@ public class Utility {
     public static final String KEY_PLACE_ID = "place_id";
     public static final String KEY_PLACE_NAME = "place_name";
 
+    public static final String KEY_PLACE_TYPE_NAME = "place_type_name";
+
     private static final String PLACES_URL_BASE =
             "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
     private static final String PLACES_URL_KEY_PREFIX = "&key=";

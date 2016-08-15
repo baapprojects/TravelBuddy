@@ -1,5 +1,6 @@
 package com.hari.aund.travelbuddy.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,8 +31,6 @@ public class PlacesActivity extends AppCompatActivity
     private static final String TAG_GEOMETRY = "geometry";
     private static final String TAG_LOCATION = "location";
 
-    private ActionBar mActionBar = null;
-
     private String mPlaceId = null;
     private String mPlaceName = null;
     private Double latitude = null;
@@ -56,7 +55,7 @@ public class PlacesActivity extends AppCompatActivity
             mPlaceName = getIntent().getStringExtra(Utility.KEY_PLACE_NAME);
         }
 
-        mActionBar = getSupportActionBar();
+        ActionBar mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setTitle(mPlaceName);
             mActionBar.setDisplayHomeAsUpEnabled(true);
@@ -82,26 +81,43 @@ public class PlacesActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
+        Class classType = PlacesCategoryAActivity.class;
+        String placeTypeName = "Default";
         switch (view.getId()){
             case R.id.tourist:
                 Log.d(LOG_TAG, "Tourists Selected!");
+                placeTypeName = "Tourists";
+                classType = PlacesCategoryAActivity.class;
                 break;
             case R.id.hotel:
                 Log.d(LOG_TAG, "Hotel Selected!");
+                placeTypeName = "Hotel";
+                classType = PlacesCategoryBActivity.class;
                 break;
             case R.id.restaurants:
                 Log.d(LOG_TAG, "Restaurants Selected!");
+                placeTypeName = "Restaurants";
+                classType = PlacesCategoryCActivity.class;
                 break;
             case R.id.shopping:
                 Log.d(LOG_TAG, "Shopping Selected!");
+                placeTypeName = "Shopping";
+                classType = PlacesCategoryAActivity.class;
                 break;
             case R.id.movie:
                 Log.d(LOG_TAG, "Movie Selected!");
+                placeTypeName = "Movie";
+                classType = PlacesCategoryBActivity.class;
                 break;
             case R.id.food_court:
                 Log.d(LOG_TAG, "Food Court Selected!");
+                placeTypeName = "Food Court";
+                classType = PlacesCategoryCActivity.class;
                 break;
         }
+        Intent placesTypeIntent = new Intent(this, classType);
+        placesTypeIntent.putExtra(Utility.KEY_PLACE_TYPE_NAME, placeTypeName);
+        startActivity(placesTypeIntent);
     }
 
     public void getPlaceDetail() {
