@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hari.aund.travelbuddy.R;
+import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
 import com.hari.aund.travelbuddy.data.PlacesCategory;
 import com.hari.aund.travelbuddy.data.PlacesCategories;
 import com.hari.aund.travelbuddy.utils.Utility;
@@ -46,7 +47,7 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
             public void onClick(View onClickView) {
                 PlacesCategory placesCategory = mPlacesCategory.get(viewHolder.getAdapterPosition());
 
-                Intent placesCategoryIntent = new Intent(mContext, placesCategory.getCategoryActivityClass());
+                Intent placesCategoryIntent = new Intent(mContext, PlacesCategoryActivity.class);
                 placesCategoryIntent.putExtra(Utility.KEY_PLACE_CATEGORY_INFO, placesCategory);
                 placesCategoryIntent.putExtra(Utility.KEY_PLACE_TYPE_NAME, placesCategory.getCategoryName());
                 mContext.startActivity(placesCategoryIntent);

@@ -44,26 +44,8 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.PlacesCategoryAActivity"
+            android:name=".activity.PlacesCategoryActivity"
             android:label="@string/title_activity_places_category_a"
-            android:parentActivityName=".activity.PlacesActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.PlacesActivity" />
-        </activity>
-        <activity
-            android:name=".activity.PlacesCategoryBActivity"
-            android:label="@string/title_activity_places_category_b"
-            android:parentActivityName=".activity.PlacesActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.PlacesActivity" />
-        </activity>
-        <activity
-            android:name=".activity.PlacesCategoryCActivity"
-            android:label="@string/title_activity_places_category_c"
             android:parentActivityName=".activity.PlacesActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

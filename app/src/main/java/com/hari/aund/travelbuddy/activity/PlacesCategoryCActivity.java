@@ -1,7 +1,6 @@
 package com.hari.aund.travelbuddy.activity;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.hari.aund.travelbuddy.R;
-import com.hari.aund.travelbuddy.adapter.ViewSectionsPagerAdapter;
 import com.hari.aund.travelbuddy.data.PlacesCategory;
 import com.hari.aund.travelbuddy.utils.Utility;
 
@@ -38,14 +36,6 @@ public class PlacesCategoryCActivity extends AppCompatActivity {
             actionBar.setTitle(mPlaceTypeName);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        ViewSectionsPagerAdapter sectionsPagerAdapter =
-                new ViewSectionsPagerAdapter(this,
-                        getSupportFragmentManager(),
-                        mPlacesCategory.getCategoryActivityId());
-
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(sectionsPagerAdapter);
     }
 
     @Override

@@ -1,9 +1,7 @@
 package com.hari.aund.travelbuddy.data;
 
 import com.hari.aund.travelbuddy.R;
-import com.hari.aund.travelbuddy.activity.PlacesCategoryAActivity;
-import com.hari.aund.travelbuddy.activity.PlacesCategoryBActivity;
-import com.hari.aund.travelbuddy.activity.PlacesCategoryCActivity;
+import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/15/2016.
@@ -172,15 +170,7 @@ public class PlacesCategories {
     }
 
     public static Class getCategoryActivityClass(int categoryActivityId){
-        switch (categoryActivityId){
-            case PLACES_CATEGORY_A_ACTIVITY:
-                return PlacesCategoryAActivity.class;
-            case PLACES_CATEGORY_B_ACTIVITY:
-                return PlacesCategoryBActivity.class;
-            case PLACES_CATEGORY_C_ACTIVITY:
-                return PlacesCategoryCActivity.class;
-        }
-        return null;
+        return PlacesCategoryActivity.class;
     }
 
     public static int getCategoryImageResourceId(int categoryId){

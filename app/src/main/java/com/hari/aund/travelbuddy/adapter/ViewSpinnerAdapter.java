@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
 import com.hari.aund.travelbuddy.activity.PlacesCategoryBActivity;
 
 /**
@@ -19,6 +20,7 @@ public class ViewSpinnerAdapter extends ArrayAdapter<String>
 
     private static final String LOG_TAG = ViewSectionsPagerAdapter.class.getSimpleName();
 
+    private PlacesCategoryActivity placesCategoryActivity;
     private PlacesCategoryBActivity placesCategoryBActivity;
     private final Helper mDropDownHelper;
 
@@ -27,6 +29,14 @@ public class ViewSpinnerAdapter extends ArrayAdapter<String>
                               String[] subTypeNames) {
         super(context, android.R.layout.simple_list_item_1, subTypeNames);
         this.placesCategoryBActivity = placesCategoryBActivity;
+        mDropDownHelper = new Helper(context);
+    }
+
+    public ViewSpinnerAdapter(PlacesCategoryActivity placesCategoryActivity,
+                              Context context,
+                              String[] subTypeNames) {
+        super(context, android.R.layout.simple_list_item_1, subTypeNames);
+        this.placesCategoryActivity = placesCategoryActivity;
         mDropDownHelper = new Helper(context);
     }
 
