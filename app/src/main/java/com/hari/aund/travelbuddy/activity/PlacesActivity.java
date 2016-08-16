@@ -5,8 +5,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -54,16 +55,21 @@ public class PlacesActivity extends AppCompatActivity
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        /* TODO: Consider Using it for Tablets
         StaggeredGridLayoutManager sGridLayoutManager =
                 new StaggeredGridLayoutManager(
                         Utility.PLACES_ACTIVITY_COLUMN_COUNT_PORTRAIT,
                         StaggeredGridLayoutManager.VERTICAL
                 );
+        */
+
+        GridLayoutManager gridLayoutManager =
+                new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false);
 
         PlacesCategoryAdapter placesCategoryAdapter = new PlacesCategoryAdapter(this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(sGridLayoutManager);
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(placesCategoryAdapter);
 
         FloatingActionButton favouriteFab =

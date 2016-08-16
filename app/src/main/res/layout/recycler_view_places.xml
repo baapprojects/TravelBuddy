@@ -27,6 +27,7 @@
             android:layout_marginStart="20dp"
             android:src="@drawable/ic_tourists"/>
 
+        <!-- TODO: Consider Using it for Tablets
         <TextView
             android:id="@+id/category_name"
             android:layout_width="wrap_content"
@@ -36,6 +37,7 @@
             android:text="Tourists"
             android:textAppearance="@android:style/TextAppearance.Medium"
             android:textSize="35sp" />
+        -->
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

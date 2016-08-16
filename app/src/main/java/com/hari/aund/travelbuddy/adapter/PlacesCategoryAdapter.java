@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
@@ -61,7 +60,8 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
     public void onBindViewHolder(PlacesCategoryAdapter.ViewHolder viewHolder, int position) {
         PlacesCategory placesCategory = mPlacesCategory.get(position);
 
-        viewHolder.categoryName.setText(placesCategory.getCategoryName());
+        //TODO: Consider Using it for Tablets
+        //viewHolder.categoryName.setText(placesCategory.getCategoryName());
         viewHolder.categoryImage.setImageResource(placesCategory.getImageResourceId());
     }
 
@@ -71,13 +71,13 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView categoryName;
+        //TextView categoryName; /* TODO: Consider Using it for Tablets */
         ImageView categoryImage;
-        View view;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            categoryName = (TextView) itemView.findViewById(R.id.category_name);
+            //TODO: Consider Using it for Tablets
+            //categoryName = (TextView) itemView.findViewById(R.id.category_name);
             categoryImage = (ImageView) itemView.findViewById(R.id.category_image);
         }
     }
