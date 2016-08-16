@@ -1,4 +1,4 @@
-package com.hari.aund.travelbuddy.utils;
+package com.hari.aund.travelbuddy.data;
 
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.PlacesCategoryAActivity;

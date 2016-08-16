@@ -1,9 +1,7 @@
-package com.hari.aund.travelbuddy.activity;
+package com.hari.aund.travelbuddy.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.hari.aund.travelbuddy.utils.PlacesCategories;
 
 import java.util.ArrayList;
 
@@ -44,7 +42,7 @@ public class PlacesCategory implements Parcelable{
     }
 
     protected PlacesCategory(Parcel in) {
-        setCategoryActivityId(in.readInt());
+        setCategoryId(in.readInt());
         setCategoryName(in.readString());
         if (in.readByte() == SUB_TYPE_LIST_VALID_REF) {
             mSubTypeList = new ArrayList<String>();
@@ -115,7 +113,7 @@ public class PlacesCategory implements Parcelable{
         this.mSubTypeList = mSubTypeList;
     }
 
-    private int getSubTypeListSize(){
+    public int getSubTypeListSize(){
         return mSubTypeList.size();
     }
 
