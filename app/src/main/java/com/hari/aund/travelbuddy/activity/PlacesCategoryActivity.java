@@ -16,7 +16,7 @@ import android.widget.Spinner;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.ViewSectionsPagerAdapter;
 import com.hari.aund.travelbuddy.adapter.ViewSpinnerAdapter;
-import com.hari.aund.travelbuddy.data.PlacesCategories;
+import com.hari.aund.travelbuddy.data.PlacesCategoryValues;
 import com.hari.aund.travelbuddy.data.PlacesCategory;
 import com.hari.aund.travelbuddy.fragment.PlacesSubTypeFragment;
 import com.hari.aund.travelbuddy.utils.Utility;
@@ -53,15 +53,15 @@ public class PlacesCategoryActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
 
-        if ((mPlacesCategory.getCategoryActivityId() == PlacesCategories.PLACES_CATEGORY_A_ACTIVITY) ||
-                (mPlacesCategory.getCategoryActivityId() == PlacesCategories.PLACES_CATEGORY_C_ACTIVITY)) {
+        if ((mPlacesCategory.getCategoryActivityId() == PlacesCategoryValues.PLACES_CATEGORY_A_ACTIVITY) ||
+                (mPlacesCategory.getCategoryActivityId() == PlacesCategoryValues.PLACES_CATEGORY_C_ACTIVITY)) {
             ViewSectionsPagerAdapter sectionsPagerAdapter =
                     new ViewSectionsPagerAdapter(this,
                             getSupportFragmentManager());
 
             viewPager.setAdapter(sectionsPagerAdapter);
 
-            if (mPlacesCategory.getCategoryActivityId() == PlacesCategories.PLACES_CATEGORY_A_ACTIVITY) {
+            if (mPlacesCategory.getCategoryActivityId() == PlacesCategoryValues.PLACES_CATEGORY_A_ACTIVITY) {
                 tabLayout.setupWithViewPager(viewPager);
             } else {
                 tabLayout.setVisibility(View.INVISIBLE);
@@ -69,7 +69,7 @@ public class PlacesCategoryActivity extends AppCompatActivity
             }
 
             spinner.setVisibility(View.INVISIBLE);
-        } else if (mPlacesCategory.getCategoryActivityId() == PlacesCategories.PLACES_CATEGORY_B_ACTIVITY){
+        } else if (mPlacesCategory.getCategoryActivityId() == PlacesCategoryValues.PLACES_CATEGORY_B_ACTIVITY){
             viewPager.setVisibility(View.INVISIBLE);
             tabLayout.setVisibility(View.INVISIBLE);
             appBarLayout.removeView(tabLayout);

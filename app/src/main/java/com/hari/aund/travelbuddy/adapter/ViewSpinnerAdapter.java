@@ -35,7 +35,6 @@ public class ViewSpinnerAdapter extends ArrayAdapter<String>
         View view;
 
         if (convertView == null) {
-            // Inflate the drop down using the helper's LayoutInflater
             LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
             view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
         } else {

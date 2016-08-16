@@ -22,22 +22,22 @@ public class PlacesCategory implements Parcelable{
 
     public PlacesCategory(int categoryId) {
         setCategoryId(categoryId);
-        setCategoryName(PlacesCategories.placesCategories[categoryId]);
+        setCategoryName(PlacesCategoryValues.placesCategories[categoryId]);
 
-        setSubTypeList(PlacesCategories.categoriesSubTypeCount[categoryId]);
+        setSubTypeList(PlacesCategoryValues.categoriesSubTypeCount[categoryId]);
 
-        for (int index = 0; index < PlacesCategories.categoriesSubTypeCount[categoryId]; index++){
-            getSubTypeList().add(PlacesCategories.getSubType(categoryId, index));
+        for (int index = 0; index < PlacesCategoryValues.categoriesSubTypeCount[categoryId]; index++){
+            getSubTypeList().add(PlacesCategoryValues.getSubType(categoryId, index));
         }
 
-        setCategoryActivityId(PlacesCategories
-                .getCategoryActivityId(PlacesCategories
+        setCategoryActivityId(PlacesCategoryValues
+                .getCategoryActivityId(PlacesCategoryValues
                         .categoriesSubTypeCount[categoryId]));
 
-        setCategoryActivityClass(PlacesCategories
+        setCategoryActivityClass(PlacesCategoryValues
                 .getCategoryActivityClass(getCategoryActivityId()));
 
-        setImageResourceId(PlacesCategories
+        setImageResourceId(PlacesCategoryValues
                 .getCategoryImageResourceId(categoryId));
     }
 

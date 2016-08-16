@@ -6,7 +6,7 @@ import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
 /**
  * Created by Hari Nivas Kumar R P on 8/15/2016.
  */
-public class PlacesCategories {
+public class PlacesCategoryValues {
 
     public static final int MAX_PLACES_CATEGORIES = 10;
 

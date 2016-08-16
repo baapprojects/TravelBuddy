@@ -40,10 +40,13 @@ public class PlacesSubTypeFragment extends Fragment {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         args.putString(ARG_SECTION_NAME, sectionName);
         args.putString(ARG_CATEGORY_NAME, categoryName);
+        fragment.setArguments(args);
+
+        Log.d(LOG_TAG, "Category Activity Id - " + categoryActivityId);
         Log.d(LOG_TAG, "SectionNumber - " + sectionNumber);
         Log.d(LOG_TAG, "SectionName - " + sectionName);
-        //args.putParcelable(Utility.KEY_PLACE_CATEGORY_INFO, );
-        fragment.setArguments(args);
+        Log.d(LOG_TAG, "Category Name - " + categoryName);
+
         return fragment;
     }
 
@@ -58,7 +61,7 @@ public class PlacesSubTypeFragment extends Fragment {
         mCategoryName = getArguments().getString(ARG_CATEGORY_NAME);
 
         /* TODO: Set Category Activity name for Type 'C'
-        if (mCategoryActivityId == PlacesCategories.PLACES_CATEGORY_C_ACTIVITY) {
+        if (mCategoryActivityId == PlacesCategoryValues.PLACES_CATEGORY_C_ACTIVITY) {
             PlacesCategoryActivity placesCategoryActivity =
                     (PlacesCategoryActivity) getActivity();
             ActionBar actionBar = placesCategoryActivity.getSupportActionBar();
@@ -73,10 +76,7 @@ public class PlacesSubTypeFragment extends Fragment {
         CharSequence charSequence = "Section id - " + mSectionNumber + "\n" +
                 "Section Name - " + mSectionName;
 
-        Log.d(LOG_TAG, "From Char Sequence - " + charSequence);
-
         TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
         textView.setText(charSequence);
 
         return rootView;

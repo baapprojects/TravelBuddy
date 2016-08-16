@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
 import com.hari.aund.travelbuddy.data.PlacesCategory;
-import com.hari.aund.travelbuddy.data.PlacesCategories;
+import com.hari.aund.travelbuddy.data.PlacesCategoryValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
 
     public PlacesCategoryAdapter(Context context) {
         mContext = context;
-        mPlacesCategory = new ArrayList<>(PlacesCategories.MAX_PLACES_CATEGORIES);
-        for (int index = 0; index < PlacesCategories.MAX_PLACES_CATEGORIES; index++) {
+        mPlacesCategory = new ArrayList<>(PlacesCategoryValues.MAX_PLACES_CATEGORIES);
+        for (int index = 0; index < PlacesCategoryValues.MAX_PLACES_CATEGORIES; index++) {
             mPlacesCategory.add(new PlacesCategory(index));
         }
     }
@@ -61,7 +61,7 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
     public void onBindViewHolder(PlacesCategoryAdapter.ViewHolder viewHolder, int position) {
         PlacesCategory placesCategory = mPlacesCategory.get(position);
 
-        viewHolder.categoryName.setText(placesCategory.getCategoryId() + " - " + placesCategory.getCategoryName());
+        viewHolder.categoryName.setText(placesCategory.getCategoryName());
         viewHolder.categoryImage.setImageResource(placesCategory.getImageResourceId());
     }
 
