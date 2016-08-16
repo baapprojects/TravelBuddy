@@ -42,7 +42,12 @@ public class ViewSectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Log.d(LOG_TAG, "Position - " + position);
         Log.d(LOG_TAG, "Name - " + mSubTypeList.get(position));
-        return PlacesSubTypeFragment.newInstance(position + 1, mSubTypeList.get(position));
+        return PlacesSubTypeFragment.newInstance(
+                mPlacesCategoryActivity.getPlacesCategory().getCategoryActivityId(),
+                position + 1,
+                mSubTypeList.get(position),
+                mPlacesCategoryActivity.getPlaceTypeName()
+        );
     }
 
     @Override

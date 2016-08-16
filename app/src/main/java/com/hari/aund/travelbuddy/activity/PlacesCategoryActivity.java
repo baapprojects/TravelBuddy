@@ -1,6 +1,7 @@
 package com.hari.aund.travelbuddy.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -47,6 +48,7 @@ public class PlacesCategoryActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.places_category_appbar);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
@@ -63,12 +65,14 @@ public class PlacesCategoryActivity extends AppCompatActivity
                 tabLayout.setupWithViewPager(viewPager);
             } else {
                 tabLayout.setVisibility(View.INVISIBLE);
+                appBarLayout.removeView(tabLayout);
             }
 
             spinner.setVisibility(View.INVISIBLE);
         } else if (mPlacesCategory.getCategoryActivityId() == PlacesCategories.PLACES_CATEGORY_B_ACTIVITY){
             viewPager.setVisibility(View.INVISIBLE);
             tabLayout.setVisibility(View.INVISIBLE);
+            appBarLayout.removeView(tabLayout);
 
             ViewSpinnerAdapter viewSpinnerAdapter = new ViewSpinnerAdapter(this,
                     toolbar.getContext(),
@@ -108,8 +112,11 @@ public class PlacesCategoryActivity extends AppCompatActivity
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long longValue) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.nested_scroll_view,
-                        PlacesSubTypeFragment.newInstance(position + 1,
-                                mPlacesCategory.getSubTypeList().get(position))
+                        PlacesSubTypeFragment.newInstance(
+                                mPlacesCategory.getCategoryActivityId(),
+                                position + 1,
+                                mPlacesCategory.getSubTypeList().get(position),
+                                mPlaceTypeName)
                 ).commit();
     }
 
@@ -118,11 +125,11 @@ public class PlacesCategoryActivity extends AppCompatActivity
 
     }
 
-    public PlacesCategory getPlacesCategory() {
-        return mPlacesCategory;
+    public String getPlaceTypeName() {
+        return mPlaceTypeName;
     }
 
-    private void setPlacesCategory(PlacesCategory mPlacesCategory) {
-        this.mPlacesCategory = mPlacesCategory;
+    public PlacesCategory getPlacesCategory() {
+        return mPlacesCategory;
     }
 }

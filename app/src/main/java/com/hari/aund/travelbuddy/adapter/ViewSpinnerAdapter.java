@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
-import com.hari.aund.travelbuddy.activity.PlacesCategoryBActivity;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/16/2016.
@@ -21,16 +20,7 @@ public class ViewSpinnerAdapter extends ArrayAdapter<String>
     private static final String LOG_TAG = ViewSectionsPagerAdapter.class.getSimpleName();
 
     private PlacesCategoryActivity placesCategoryActivity;
-    private PlacesCategoryBActivity placesCategoryBActivity;
     private final Helper mDropDownHelper;
-
-    public ViewSpinnerAdapter(PlacesCategoryBActivity placesCategoryBActivity,
-                              Context context,
-                              String[] subTypeNames) {
-        super(context, android.R.layout.simple_list_item_1, subTypeNames);
-        this.placesCategoryBActivity = placesCategoryBActivity;
-        mDropDownHelper = new Helper(context);
-    }
 
     public ViewSpinnerAdapter(PlacesCategoryActivity placesCategoryActivity,
                               Context context,
