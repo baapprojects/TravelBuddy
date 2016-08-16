@@ -16,8 +16,8 @@ import android.widget.Spinner;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.ViewSectionsPagerAdapter;
 import com.hari.aund.travelbuddy.adapter.ViewSpinnerAdapter;
-import com.hari.aund.travelbuddy.data.PlacesCategoryValues;
 import com.hari.aund.travelbuddy.data.PlacesCategory;
+import com.hari.aund.travelbuddy.data.PlacesCategoryValues;
 import com.hari.aund.travelbuddy.fragment.PlacesSubTypeFragment;
 import com.hari.aund.travelbuddy.utils.Utility;
 
@@ -27,31 +27,29 @@ public class PlacesCategoryActivity extends AppCompatActivity
     private static final String LOG_TAG = PlacesCategoryActivity.class.getSimpleName();
 
     private PlacesCategory mPlacesCategory = null;
-    private String mPlaceTypeName = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_places_category);
+        setContentView(R.layout.activity_places_sub_type);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (getIntent().getExtras() != null) {
             mPlacesCategory = getIntent().getParcelableExtra(Utility.KEY_PLACE_CATEGORY_INFO);
-            mPlaceTypeName = getIntent().getStringExtra(Utility.KEY_PLACE_TYPE_NAME);
         }
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(mPlaceTypeName);
+            actionBar.setTitle(mPlacesCategory.getCategoryName());
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.places_category_appbar);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
         if ((mPlacesCategory.getCategoryActivityId() == PlacesCategoryValues.PLACES_CATEGORY_A_ACTIVITY) ||
                 (mPlacesCategory.getCategoryActivityId() == PlacesCategoryValues.PLACES_CATEGORY_C_ACTIVITY)) {
@@ -69,7 +67,7 @@ public class PlacesCategoryActivity extends AppCompatActivity
             }
 
             spinner.setVisibility(View.INVISIBLE);
-        } else if (mPlacesCategory.getCategoryActivityId() == PlacesCategoryValues.PLACES_CATEGORY_B_ACTIVITY){
+        } else if (mPlacesCategory.getCategoryActivityId() == PlacesCategoryValues.PLACES_CATEGORY_B_ACTIVITY) {
             viewPager.setVisibility(View.INVISIBLE);
             tabLayout.setVisibility(View.INVISIBLE);
             appBarLayout.removeView(tabLayout);
@@ -113,20 +111,14 @@ public class PlacesCategoryActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.nested_scroll_view,
                         PlacesSubTypeFragment.newInstance(
-                                mPlacesCategory.getCategoryActivityId(),
-                                position + 1,
-                                mPlacesCategory.getSubTypeList().get(position),
-                                mPlaceTypeName)
+                                position + 1,//sectionNumber not categoryId
+                                mPlacesCategory)
                 ).commit();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
-
-    public String getPlaceTypeName() {
-        return mPlaceTypeName;
     }
 
     public PlacesCategory getPlacesCategory() {

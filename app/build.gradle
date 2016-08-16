@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile 'com.google.android.gms:play-services:9.4.0'
     compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'com.pnikosis:materialish-progress:1.7'
 }

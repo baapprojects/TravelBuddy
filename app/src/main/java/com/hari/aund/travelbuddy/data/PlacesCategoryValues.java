@@ -124,11 +124,11 @@ public class PlacesCategoryValues {
             touristsSpotSubTypes.length
     };
 
-    public static String getSubType(int categoryId, int position){
-        if (position >= categoriesSubTypeCount[categoryId]){
+    public static String getSubType(int categoryId, int position) {
+        if (position >= categoriesSubTypeCount[categoryId]) {
             return null;
         }
-        switch (categoryId){
+        switch (categoryId) {
             case PLACES_CATEGORY_BANKING_ID:
                 return bankingSubTypes[position];
             case PLACES_CATEGORY_COMMUTE_ID:
@@ -158,23 +158,23 @@ public class PlacesCategoryValues {
     public static final int PLACES_CATEGORY_C_ACTIVITY = 3;
     public static final int PLACES_CATEGORY_INVALID = 4;
 
-    public static int getCategoryActivityId(int categorySubTypeCount){
-        if (categorySubTypeCount > 2 && categorySubTypeCount < 5){
+    public static int getCategoryActivityId(int categorySubTypeCount) {
+        if (categorySubTypeCount > 2 && categorySubTypeCount < 5) {
             return PLACES_CATEGORY_A_ACTIVITY;
-        } else if (categorySubTypeCount < 7){
+        } else if (categorySubTypeCount < 7) {
             return PLACES_CATEGORY_B_ACTIVITY;
-        } else if (categorySubTypeCount < 9){
+        } else if (categorySubTypeCount < 9) {
             return PLACES_CATEGORY_C_ACTIVITY;
         }
         return PLACES_CATEGORY_INVALID;
     }
 
-    public static Class getCategoryActivityClass(int categoryActivityId){
+    public static Class getCategoryActivityClass(int categoryActivityId) {
         return PlacesCategoryActivity.class;
     }
 
-    public static int getCategoryImageResourceId(int categoryId){
-        switch (categoryId){
+    public static int getCategoryImageResourceId(int categoryId) {
+        switch (categoryId) {
             case PLACES_CATEGORY_BANKING_ID:
                 return R.drawable.ic_restaurant;
             case PLACES_CATEGORY_COMMUTE_ID:

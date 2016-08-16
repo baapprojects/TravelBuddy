@@ -27,19 +27,49 @@ public class Utility {
     public static final String KEY_PLACE_ID = "place_id";
     public static final String KEY_PLACE_NAME = "place_name";
 
-    public static final String KEY_PLACE_TYPE_NAME = "place_type_name";
     public static final String KEY_PLACE_CATEGORY_INFO = "places_category_info";
 
     public static final int PLACES_ACTIVITY_COLUMN_COUNT_PORTRAIT = 1;
     public static final int PLACES_ACTIVITY_COLUMN_COUNT_LANDSCAPE = 1;
 
-    private static final String PLACES_URL_BASE =
-            "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
-    private static final String PLACES_URL_KEY_PREFIX = "&key=";
+    private static final String PLACES_API_BASE_URL =
+            "https://maps.googleapis.com/maps/api/place/";
 
-    public static String getPlacesUrl(String placeId) {
-        return PLACES_URL_BASE + placeId +
-                PLACES_URL_KEY_PREFIX + TBConfig.getPlacesApiKey();
+    private static final String PLACES_API_REQ_TYPE_DETAIL = "details";
+    private static final String PLACES_API_REQ_TYPE_NEARBY_SEARCH = "nearbysearch";
+
+    private static final String PLACES_API_RES_TYPE = "/json?";
+
+    private static final String PLACES_URL_KEY_BASE_PLACE_ID = "placeid=";
+    private static final String PLACES_URL_KEY_BASE_LOCATION = "location=";
+
+    private static final String PLACES_URL_PREFIX_TYPES = "&types=";
+    private static final String PLACES_URL_PREFIX_RADIUS = "&radius=";
+    private static final String PLACES_URL_PREFIX_RANK_BY = "&rankby=";
+    private static final String PLACES_URL_PREFIX_KEY = "&key=";
+
+    private static final String PLACES_URL_SUFFIX_RADIUS_DEF = "30000";
+    private static final String PLACES_URL_SUFFIX_RANK_BY_DEF = "prominence";
+
+    //Type: details
+    public static String getPlacesDetailsUrl(String placeId) {
+        return PLACES_API_BASE_URL +
+                PLACES_API_REQ_TYPE_DETAIL +
+                PLACES_API_RES_TYPE +
+                PLACES_URL_KEY_BASE_PLACE_ID + placeId +
+                PLACES_URL_PREFIX_KEY + TBConfig.getPlacesApiKey();
+    }
+
+    //Type: nearbysearch
+    public static String getPlacesListUrl(String latitudeAndLongitude, String  sectionName){
+        return PLACES_API_BASE_URL +
+                PLACES_API_REQ_TYPE_NEARBY_SEARCH +
+                PLACES_API_RES_TYPE +
+                PLACES_URL_KEY_BASE_LOCATION + latitudeAndLongitude +
+                PLACES_URL_PREFIX_TYPES + sectionName +
+                PLACES_URL_PREFIX_RADIUS + PLACES_URL_SUFFIX_RADIUS_DEF +
+                PLACES_URL_PREFIX_RANK_BY + PLACES_URL_SUFFIX_RANK_BY_DEF +
+                PLACES_URL_PREFIX_KEY + TBConfig.getPlacesApiKey();
     }
 
     /**

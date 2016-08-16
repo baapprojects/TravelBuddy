@@ -28,14 +28,17 @@ public class PlacesActivity extends AppCompatActivity
 
     private static final String LOG_TAG = PlacesActivity.class.getSimpleName();
 
+    // TODO : Move this to Parser
     private static final String TAG_RESULT = "result";
     private static final String TAG_GEOMETRY = "geometry";
     private static final String TAG_LOCATION = "location";
+    private static final String TAG_LATITUDE = "lat";
+    private static final String TAG_LONGITUDE = "lng";
 
     private String mPlaceId = null;
     private String mPlaceName = null;
-    private Double latitude = null;
-    private Double longitude = null;
+    private PlacesCategoryAdapter mPlacesCategoryAdapter = null;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class PlacesActivity extends AppCompatActivity
         if (getIntent().getExtras() != null) {
             mPlaceId = getIntent().getStringExtra(Utility.KEY_PLACE_ID);
             mPlaceName = getIntent().getStringExtra(Utility.KEY_PLACE_NAME);
+            getPlaceDetail();
         }
 
         ActionBar mActionBar = getSupportActionBar();
@@ -66,17 +70,15 @@ public class PlacesActivity extends AppCompatActivity
         GridLayoutManager gridLayoutManager =
                 new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false);
 
-        PlacesCategoryAdapter placesCategoryAdapter = new PlacesCategoryAdapter(this);
+        mPlacesCategoryAdapter = new PlacesCategoryAdapter(this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(placesCategoryAdapter);
+        recyclerView.setAdapter(mPlacesCategoryAdapter);
 
         FloatingActionButton favouriteFab =
                 (FloatingActionButton) findViewById(R.id.fab_places_favourite);
         favouriteFab.setOnClickListener(this);
-
-        getPlaceDetail();
     }
 
     @Override
@@ -87,9 +89,11 @@ public class PlacesActivity extends AppCompatActivity
         }
     }
 
+    // TODO : Move this to Parser
     public void getPlaceDetail() {
-        String placesReqUrl = Utility.getPlacesUrl(mPlaceId);
+        String placesReqUrl = Utility.getPlacesDetailsUrl(mPlaceId);
         Log.d(LOG_TAG, "URL - " + placesReqUrl);
+
         JsonObjectRequest placesJsonObjReq =
                 new JsonObjectRequest(
                         placesReqUrl,
@@ -102,12 +106,17 @@ public class PlacesActivity extends AppCompatActivity
                                     JSONObject geometry = results.getJSONObject(TAG_GEOMETRY);
                                     JSONObject location = geometry.getJSONObject(TAG_LOCATION);
 
-                                    latitude = Double.parseDouble(location.getString("lat"));
-                                    longitude = Double.parseDouble(location.getString("lng"));
+                                    Double latitude = Double.parseDouble(location.getString(TAG_LATITUDE));
+                                    Double longitude = Double.parseDouble(location.getString(TAG_LONGITUDE));
+
+                                    mPlacesCategoryAdapter.setLatitude(latitude);
+                                    mPlacesCategoryAdapter.setLongitude(longitude);
+                                    mPlacesCategoryAdapter.notifyDataSetChanged();
 
                                     Log.d(LOG_TAG, "PlaceId - " + mPlaceId);
                                     Log.d(LOG_TAG, "Place Name - " + mPlaceName);
-                                    Log.d(LOG_TAG, "Latitude - " + latitude + " Longitude - " + longitude);
+                                    Log.d(LOG_TAG, "Latitude - " + latitude);
+                                    Log.d(LOG_TAG, "Longitude - " + longitude);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

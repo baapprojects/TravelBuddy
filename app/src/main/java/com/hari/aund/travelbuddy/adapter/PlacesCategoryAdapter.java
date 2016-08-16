@@ -24,15 +24,20 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
     private static final String LOG_TAG = PlacesCategoryAdapter.class.getSimpleName();
 
     private Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private ArrayList<PlacesCategory> mPlacesCategory;
+    private ArrayList<PlacesCategory> mPlacesCategoryList;
+    private Double mLatitude;
+    private Double mLongitude;
 
     public PlacesCategoryAdapter(Context context) {
         mContext = context;
-        mPlacesCategory = new ArrayList<>(PlacesCategoryValues.MAX_PLACES_CATEGORIES);
-        for (int index = 0; index < PlacesCategoryValues.MAX_PLACES_CATEGORIES; index++) {
-            mPlacesCategory.add(new PlacesCategory(index));
-        }
+        setPlacesCategoryList();
+    }
+
+    public PlacesCategoryAdapter(Context context, Double latitude, Double longitude) {
+        mContext = context;
+        mLatitude = latitude;
+        mLongitude = longitude;
+        setPlacesCategoryList();
     }
 
     @Override
@@ -44,11 +49,13 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
         newView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View onClickView) {
-                PlacesCategory placesCategory = mPlacesCategory.get(viewHolder.getAdapterPosition());
+                PlacesCategory placesCategory = getPlacesCategoryList().get(viewHolder.getAdapterPosition());
+
+                placesCategory.setLatitude(getLatitude());
+                placesCategory.setLongitude(getLongitude());
 
                 Intent placesCategoryIntent = new Intent(mContext, PlacesCategoryActivity.class);
                 placesCategoryIntent.putExtra(Utility.KEY_PLACE_CATEGORY_INFO, placesCategory);
-                placesCategoryIntent.putExtra(Utility.KEY_PLACE_TYPE_NAME, placesCategory.getCategoryName());
                 mContext.startActivity(placesCategoryIntent);
             }
         });
@@ -58,7 +65,11 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
 
     @Override
     public void onBindViewHolder(PlacesCategoryAdapter.ViewHolder viewHolder, int position) {
-        PlacesCategory placesCategory = mPlacesCategory.get(position);
+        if (mPlacesCategoryList.isEmpty()){
+            return;
+        }
+
+        PlacesCategory placesCategory = mPlacesCategoryList.get(position);
 
         //TODO: Consider Using it for Tablets
         //viewHolder.categoryName.setText(placesCategory.getCategoryName());
@@ -67,7 +78,18 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
 
     @Override
     public int getItemCount() {
-        return mPlacesCategory.size();
+        return mPlacesCategoryList.size();
+    }
+
+    public ArrayList<PlacesCategory> getPlacesCategoryList() {
+        return mPlacesCategoryList;
+    }
+
+    private void setPlacesCategoryList() {
+        mPlacesCategoryList = new ArrayList<>(PlacesCategoryValues.MAX_PLACES_CATEGORIES);
+        for (int index = 0; index < PlacesCategoryValues.MAX_PLACES_CATEGORIES; index++) {
+            mPlacesCategoryList.add(new PlacesCategory(index));
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,5 +102,21 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
             //categoryName = (TextView) itemView.findViewById(R.id.category_name);
             categoryImage = (ImageView) itemView.findViewById(R.id.category_image);
         }
+    }
+
+    public Double getLatitude() {
+        return mLatitude;
+    }
+
+    public void setLatitude(Double mLatitude) {
+        this.mLatitude = mLatitude;
+    }
+
+    public Double getLongitude() {
+        return mLongitude;
+    }
+
+    public void setLongitude(Double mLongitude) {
+        this.mLongitude = mLongitude;
     }
 }
