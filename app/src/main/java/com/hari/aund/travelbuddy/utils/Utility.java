@@ -28,6 +28,10 @@ public class Utility {
     public static final String KEY_PLACE_NAME = "place_name";
 
     public static final String KEY_PLACE_TYPE_NAME = "place_type_name";
+    public static final String KEY_PLACE_CATEGORY_INFO = "places_category_info";
+
+    public static final int PLACES_ACTIVITY_COLUMN_COUNT_PORTRAIT = 1;
+    public static final int PLACES_ACTIVITY_COLUMN_COUNT_LANDSCAPE = 1;
 
     private static final String PLACES_URL_BASE =
             "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
