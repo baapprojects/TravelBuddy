@@ -1,5 +1,6 @@
 package com.hari.aund.travelbuddy.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,36 +10,22 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.PlacesCategoryAdapter;
-import com.hari.aund.travelbuddy.app.TravelBuddyApp;
+import com.hari.aund.travelbuddy.parser.PlacesApiParser;
+import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class PlacesActivity extends AppCompatActivity
-        implements View.OnClickListener {
+        implements View.OnClickListener, DefaultValues {
 
     private static final String LOG_TAG = PlacesActivity.class.getSimpleName();
 
-    // TODO : Move this to Parser
-    private static final String TAG_RESULT = "result";
-    private static final String TAG_GEOMETRY = "geometry";
-    private static final String TAG_LOCATION = "location";
-    private static final String TAG_LATITUDE = "lat";
-    private static final String TAG_LONGITUDE = "lng";
-
-    private String mPlaceId = null;
-    private String mPlaceName = null;
+    private String mPlaceId;
+    private String mPlaceName;
     private PlacesCategoryAdapter mPlacesCategoryAdapter = null;
-    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +34,15 @@ public class PlacesActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (getIntent().getExtras() != null) {
-            mPlaceId = getIntent().getStringExtra(Utility.KEY_PLACE_ID);
-            mPlaceName = getIntent().getStringExtra(Utility.KEY_PLACE_NAME);
-            getPlaceDetail();
-        }
+        readValues(getIntent());
 
         ActionBar mActionBar = getSupportActionBar();
         if (mActionBar != null) {
-            mActionBar.setTitle(mPlaceName);
+            mActionBar.setTitle(getPlaceName());
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        new PlacesApiParser(this).getPlaceDetails();
 
         /* TODO: Consider Using it for Tablets
         StaggeredGridLayoutManager sGridLayoutManager =
@@ -89,48 +74,46 @@ public class PlacesActivity extends AppCompatActivity
         }
     }
 
-    // TODO : Move this to Parser
-    public void getPlaceDetail() {
-        String placesReqUrl = Utility.getPlacesDetailsUrl(mPlaceId);
-        Log.d(LOG_TAG, "URL - " + placesReqUrl);
+    private void readValues(Intent intent) {
+        //Set Default Values if extras is null; Def Place Alappuzha
+        if (intent.getExtras() != null) {
+            setPlaceId(getIntent());
+            setPlaceName(getIntent());
+        } else {
+            setPlaceId(DEFAULT_PLACE_ID);
+            setPlaceName(DEFAULT_PLACE_NAME);
+        }
+    }
 
-        JsonObjectRequest placesJsonObjReq =
-                new JsonObjectRequest(
-                        placesReqUrl,
-                        null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject jsonObject) {
-                                try {
-                                    JSONObject results = jsonObject.getJSONObject(TAG_RESULT);
-                                    JSONObject geometry = results.getJSONObject(TAG_GEOMETRY);
-                                    JSONObject location = geometry.getJSONObject(TAG_LOCATION);
+    public String getPlaceId() {
+        return mPlaceId;
+    }
 
-                                    Double latitude = Double.parseDouble(location.getString(TAG_LATITUDE));
-                                    Double longitude = Double.parseDouble(location.getString(TAG_LONGITUDE));
+    private void setPlaceId(String mPlaceId) {
+        this.mPlaceId = mPlaceId;
+    }
 
-                                    mPlacesCategoryAdapter.setLatitude(latitude);
-                                    mPlacesCategoryAdapter.setLongitude(longitude);
-                                    mPlacesCategoryAdapter.notifyDataSetChanged();
+    private void setPlaceId(Intent intent) {
+        setPlaceId(intent.getStringExtra(Utility.KEY_PLACE_ID));
+    }
 
-                                    Log.d(LOG_TAG, "PlaceId - " + mPlaceId);
-                                    Log.d(LOG_TAG, "Place Name - " + mPlaceName);
-                                    Log.d(LOG_TAG, "Latitude - " + latitude);
-                                    Log.d(LOG_TAG, "Longitude - " + longitude);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                                Log.e(LOG_TAG, "Volley : onErrorResponse - " + volleyError.getMessage());
-                            }
-                        }
-                );
+    public String getPlaceName() {
+        return mPlaceName;
+    }
 
-        TravelBuddyApp.getInstance()
-                .addToRequestQueue(placesJsonObjReq);
+    private void setPlaceName(String mPlaceName) {
+        this.mPlaceName = mPlaceName;
+    }
+
+    private void setPlaceName(Intent intent) {
+        setPlaceName(intent.getStringExtra(Utility.KEY_PLACE_NAME));
+    }
+
+    public PlacesCategoryAdapter getPlacesCategoryAdapter() {
+        return mPlacesCategoryAdapter;
+    }
+
+    private void setPlacesCategoryAdapter(PlacesCategoryAdapter mPlacesCategoryAdapter) {
+        this.mPlacesCategoryAdapter = mPlacesCategoryAdapter;
     }
 }

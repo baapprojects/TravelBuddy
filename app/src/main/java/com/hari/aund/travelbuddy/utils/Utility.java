@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.hari.aund.travelbuddy.activity.MainActivity;
-import com.hari.aund.travelbuddy.app.TBConfig;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/13/2016.
@@ -31,46 +30,6 @@ public class Utility {
 
     public static final int PLACES_ACTIVITY_COLUMN_COUNT_PORTRAIT = 1;
     public static final int PLACES_ACTIVITY_COLUMN_COUNT_LANDSCAPE = 1;
-
-    private static final String PLACES_API_BASE_URL =
-            "https://maps.googleapis.com/maps/api/place/";
-
-    private static final String PLACES_API_REQ_TYPE_DETAIL = "details";
-    private static final String PLACES_API_REQ_TYPE_NEARBY_SEARCH = "nearbysearch";
-
-    private static final String PLACES_API_RES_TYPE = "/json?";
-
-    private static final String PLACES_URL_KEY_BASE_PLACE_ID = "placeid=";
-    private static final String PLACES_URL_KEY_BASE_LOCATION = "location=";
-
-    private static final String PLACES_URL_PREFIX_TYPES = "&types=";
-    private static final String PLACES_URL_PREFIX_RADIUS = "&radius=";
-    private static final String PLACES_URL_PREFIX_RANK_BY = "&rankby=";
-    private static final String PLACES_URL_PREFIX_KEY = "&key=";
-
-    private static final String PLACES_URL_SUFFIX_RADIUS_DEF = "30000";
-    private static final String PLACES_URL_SUFFIX_RANK_BY_DEF = "prominence";
-
-    //Type: details
-    public static String getPlacesDetailsUrl(String placeId) {
-        return PLACES_API_BASE_URL +
-                PLACES_API_REQ_TYPE_DETAIL +
-                PLACES_API_RES_TYPE +
-                PLACES_URL_KEY_BASE_PLACE_ID + placeId +
-                PLACES_URL_PREFIX_KEY + TBConfig.getPlacesApiKey();
-    }
-
-    //Type: nearbysearch
-    public static String getPlacesListUrl(String latitudeAndLongitude, String  sectionName){
-        return PLACES_API_BASE_URL +
-                PLACES_API_REQ_TYPE_NEARBY_SEARCH +
-                PLACES_API_RES_TYPE +
-                PLACES_URL_KEY_BASE_LOCATION + latitudeAndLongitude +
-                PLACES_URL_PREFIX_TYPES + sectionName +
-                PLACES_URL_PREFIX_RADIUS + PLACES_URL_SUFFIX_RADIUS_DEF +
-                PLACES_URL_PREFIX_RANK_BY + PLACES_URL_SUFFIX_RANK_BY_DEF +
-                PLACES_URL_PREFIX_KEY + TBConfig.getPlacesApiKey();
-    }
 
     /**
      * Hides the soft keyboard

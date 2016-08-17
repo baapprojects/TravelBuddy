@@ -65,7 +65,7 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
 
     @Override
     public void onBindViewHolder(PlacesCategoryAdapter.ViewHolder viewHolder, int position) {
-        if (mPlacesCategoryList.isEmpty()){
+        if (mPlacesCategoryList.isEmpty()) {
             return;
         }
 
@@ -108,15 +108,23 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
         return mLatitude;
     }
 
-    public void setLatitude(Double mLatitude) {
-        this.mLatitude = mLatitude;
+    private void setLatitude(Double latitude) {
+        mLatitude = latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        setLatitude(Double.parseDouble(latitude));
     }
 
     public Double getLongitude() {
         return mLongitude;
     }
 
-    public void setLongitude(Double mLongitude) {
-        this.mLongitude = mLongitude;
+    private void setLongitude(Double longitude) {
+        mLongitude = longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        setLongitude(Double.parseDouble(longitude));
     }
 }
