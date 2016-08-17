@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
+        //TODO: Needs Fragment changes for corresponding Navigation
         changeFragment(ExplorePlacesFragment
                 .getNewInstance(getNavSectionId()));
 

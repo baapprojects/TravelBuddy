@@ -36,7 +36,7 @@
         </activity>
         <activity
             android:name=".activity.PlacesCategoryActivity"
-            android:label="@string/title_activity_places"
+            android:label="@string/title_activity_places_category"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -45,13 +45,22 @@
         </activity>
         <activity
             android:name=".activity.PlacesSubTypeActivity"
-            android:label="@string/title_activity_places_category_a"
+            android:label="@string/title_activity_places_sub_type"
             android:parentActivityName=".activity.PlacesCategoryActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.PlacesCategoryActivity" />
+        </activity>
+        <activity
+            android:name=".activity.PlaceDetailActivity"
+            android:label="@string/title_activity_place_detail"
+            android:parentActivityName=".activity.PlacesSubTypeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.PlacesSubTypeActivity" />
         </activity>
     </application>
 

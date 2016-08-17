@@ -22,11 +22,8 @@
     <string name="def_no_place_selected">No Place Selected</string>
     <string name="hint_auto_complete">Start typing to find a place</string>
 
-    <string name="title_activity_places">Places Activity</string>
-    <string name="title_activity_places_category_a">Places Category A</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_places_category_b">Places Category B</string>
-    <string name="title_activity_places_category_c">Places Category C</string>
+    <string name="title_activity_places_category">Places Category Activity</string>
+    <string name="title_activity_places_sub_type">Places Sub Type Activity</string>
 
     <string name="call">CALL</string>
     <string name="website">WEBSITE</string>
@@ -35,4 +32,5 @@
     <string name="address">ADDRESS</string>
     <string name="photo">PHOTOS</string>
     <string name="time">TIME</string>
+    <string name="title_activity_place_detail">Place Detail</string>
 </resources>
