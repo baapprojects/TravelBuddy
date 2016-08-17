@@ -14,8 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.hari.aund.travelbuddy.R;
-import com.hari.aund.travelbuddy.utils.Utility;
 import com.hari.aund.travelbuddy.fragment.ExplorePlacesFragment;
+import com.hari.aund.travelbuddy.fragment.FlightSearchFragment;
+import com.hari.aund.travelbuddy.utils.Utility;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity
                 mDrawerLayout,
                 toolbar,
                 R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close){
+                R.string.navigation_drawer_close) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -110,9 +111,13 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.nav_explore_places:
                 setNavSectionId(Utility.NAV_SECTION_EXPLORE_PLACES);
+                changeFragment(ExplorePlacesFragment
+                        .getNewInstance(getNavSectionId()));
                 break;
             case R.id.nav_search_flight:
                 setNavSectionId(Utility.NAV_SECTION_SEARCH_FLIGHTS);
+                changeFragment(FlightSearchFragment
+                        .getNewInstance(getNavSectionId()));
                 break;
             case R.id.nav_favourite:
                 setNavSectionId(Utility.NAV_SECTION_FAVOURITES);
@@ -128,10 +133,6 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        //TODO: Needs Fragment changes for corresponding Navigation
-        changeFragment(ExplorePlacesFragment
-                .getNewInstance(getNavSectionId()));
-
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             setNavSectionId(savedInstanceState
                     .getInt(Utility.KEY_NAVIGATION_SECTION_ID));
         }

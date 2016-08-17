@@ -3,9 +3,11 @@ package com.hari.aund.travelbuddy.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
 
 /**
@@ -53,4 +55,22 @@ public class Utility {
     public static boolean isPlacePickerSettingEnabled() {
         return true;
     }
+
+    public static String getNavSectionName(Context context, int navSectionId) {
+        switch (navSectionId) {
+            case Utility.NAV_SECTION_EXPLORE_PLACES:
+                //return "Explore Places";
+                return context.getResources().getString(R.string.explore_places);
+            case Utility.NAV_SECTION_SEARCH_FLIGHTS:
+                //return "Search Flights";
+                return context.getResources().getString(R.string.search_flights);
+            case Utility.NAV_SECTION_FAVOURITES:
+                //return "Favourites";
+                return context.getResources().getString(R.string.favourites);
+            default:
+                Log.e(LOG_TAG, "Unknown Navigation Section id");
+                return context.getResources().getString(R.string.unknown);
+        }
+    }
+
 }

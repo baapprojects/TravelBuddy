@@ -50,6 +50,7 @@ public class ExplorePlacesFragment extends Fragment
     private static final int RESULTS_OK = -1;
 
     private int mNavSectionId;
+    private String mNavSectionName;
     private String mNewPlaceId;
     private String mNewPlaceName;
     private static LatLngBounds mLatLngBounds = null;
@@ -89,7 +90,7 @@ public class ExplorePlacesFragment extends Fragment
 
         initValues();
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_explore_places, container, false);
 
         setExplorePlacesVisibility(rootView);
 
@@ -240,33 +241,24 @@ public class ExplorePlacesFragment extends Fragment
 
     private void readAndSetNavSectionId() {
         setNavSectionId(getArguments().getInt(Utility.KEY_NAVIGATION_SECTION_ID));
+        setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
+        Log.d(LOG_TAG, "NAV SECTION ID - " + getNavSectionId() + " & Name : " + getNavSectionName());
     }
 
     private void setNavSectionId(int navSectionId) {
         this.mNavSectionId = navSectionId;
-        Log.d(LOG_TAG, "NAV SECTION ID - " +
-                getNavSectionId() + " & Name : " + getNavSectionName());
     }
 
     private int getNavSectionId() {
         return mNavSectionId;
     }
 
+    private void setNavSectionName(String navSectionName) {
+        this.mNavSectionName = navSectionName;
+    }
+
     private String getNavSectionName() {
-        switch (mNavSectionId) {
-            case Utility.NAV_SECTION_EXPLORE_PLACES:
-                //return "Explore Places";
-                return getResources().getString(R.string.explore_places);
-            case Utility.NAV_SECTION_SEARCH_FLIGHTS:
-                //return "Search Flights";
-                return getResources().getString(R.string.search_flights);
-            case Utility.NAV_SECTION_FAVOURITES:
-                //return "Favourites";
-                return getResources().getString(R.string.favourites);
-            default:
-                Log.e(LOG_TAG, "Unknown Navigation Section id");
-                return "Unknown";
-        }
+        return mNavSectionName;
     }
 
     private void setFragmentTitle() {

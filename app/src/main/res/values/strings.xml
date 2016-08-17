@@ -12,6 +12,7 @@
     <string name="explore_places">Explore Places</string>
     <string name="search_flights">Flights</string>
     <string name="favourites">Favourites</string>
+    <string name="unknown">Unknown</string>
     <string name="communicate">Communicate</string>
     <string name="share">Share</string>
     <string name="contact_us">Contact us!</string>
@@ -33,4 +34,11 @@
     <string name="photo">PHOTOS</string>
     <string name="time">TIME</string>
     <string name="title_activity_place_detail">Place Detail</string>
+    <string name="title_activity_flight">FlightActivity</string>
+    <string name="f">Flights</string>
+    <string name="from">From</string>
+    <string name="chennai">Chennai</string>
+    <string name="to">To</string>
+    <string name="delhi">Delhi</string>
+    <string name="search">SEARCH</string>
 </resources>
