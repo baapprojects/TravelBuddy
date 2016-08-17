@@ -33,6 +33,12 @@ public class PlacesActivity extends AppCompatActivity
         setContentView(R.layout.activity_places);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         readValues(getIntent());
 
