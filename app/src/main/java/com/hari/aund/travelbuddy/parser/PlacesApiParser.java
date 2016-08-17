@@ -38,7 +38,7 @@ public class PlacesApiParser implements PlacesApiUrlValues {
     }
 
     //Type: details
-    public static String getPlacesDetailsUrl(String placeId) {
+    public static String getExplorePlacesDetailsUrl(String placeId) {
         return PLACES_API_BASE_URL +
                 PLACES_API_REQ_TYPE_DETAIL +
                 PLACES_API_RES_TYPE +
@@ -46,9 +46,9 @@ public class PlacesApiParser implements PlacesApiUrlValues {
                 PLACES_URL_PREFIX_KEY + TBConfig.getPlacesApiKey();
     }
 
-    private void parsePlaceDetails(JSONObject jsonObjectIn) {
+    private void parseExplorePlaceDetails(JSONObject jsonObjectIn) {
         try {
-            Log.d(LOG_TAG, "parsePlaceDetails : jsonObjectIn - " + jsonObjectIn);
+            Log.d(LOG_TAG, "parseExplorePlaceDetails : jsonObjectIn - " + jsonObjectIn);
 
             JSONObject resultsJsonObject = jsonObjectIn.getJSONObject(TAG_RESULT);
             JSONObject geometryJsonObject = resultsJsonObject.getJSONObject(TAG_GEOMETRY);
@@ -71,8 +71,8 @@ public class PlacesApiParser implements PlacesApiUrlValues {
         }
     }
 
-    public void getPlaceDetails() {
-        String placesReqUrl = getPlacesDetailsUrl(mPlacesCategoryActivity.getPlaceId());
+    public void getExplorePlaceDetails() {
+        String placesReqUrl = getExplorePlacesDetailsUrl(mPlacesCategoryActivity.getPlaceId());
         Log.d(LOG_TAG, "URL - " + placesReqUrl);
 
         JsonObjectRequest placesJsonObjReq =
@@ -83,7 +83,7 @@ public class PlacesApiParser implements PlacesApiUrlValues {
                             @Override
                             public void onResponse(JSONObject jsonObjectIn) {
                                 //Log.d(LOG_TAG, "getPlaceListDetails : jsonObjectIn - " + jsonObjectIn);
-                                parsePlaceDetails(jsonObjectIn);
+                                parseExplorePlaceDetails(jsonObjectIn);
                             }
                         },
                         new Response.ErrorListener() {

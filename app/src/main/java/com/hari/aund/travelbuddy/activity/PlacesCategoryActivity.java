@@ -48,7 +48,7 @@ public class PlacesCategoryActivity extends AppCompatActivity
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        new PlacesApiParser(this).getPlaceDetails();
+        new PlacesApiParser(this).getExplorePlaceDetails();
 
         /* TODO: Consider Using it for Tablets
         StaggeredGridLayoutManager sGridLayoutManager =
