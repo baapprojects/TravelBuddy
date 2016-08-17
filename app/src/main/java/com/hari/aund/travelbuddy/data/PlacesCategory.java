@@ -14,9 +14,8 @@ public class PlacesCategory implements Parcelable {
     private static final byte SUB_TYPE_LIST_VALID_REF = 0x01;
 
     private int mCategoryId;
-    private int mCategoryActivityId = 0;
-    private int mImageResourceId = 0;
-    private Class mCategoryActivityClass = null;
+    private int mCategoryActivityId;
+    private int mImageResourceId;
     private String mCategoryName;
     private Double mLatitude;
     private Double mLongitude;
@@ -35,9 +34,6 @@ public class PlacesCategory implements Parcelable {
         setCategoryActivityId(PlacesCategoryValues
                 .getCategoryActivityId(PlacesCategoryValues
                         .categoriesSubTypeCount[categoryId]));
-
-        setCategoryActivityClass(PlacesCategoryValues
-                .getCategoryActivityClass(getCategoryActivityId()));
 
         setImageResourceId(PlacesCategoryValues
                 .getCategoryImageResourceId(categoryId));
@@ -129,14 +125,6 @@ public class PlacesCategory implements Parcelable {
 
     private void setCategoryActivityId(int categoryActivityId) {
         this.mCategoryActivityId = categoryActivityId;
-    }
-
-    public Class getCategoryActivityClass() {
-        return mCategoryActivityClass;
-    }
-
-    private void setCategoryActivityClass(Class categoryActivityClass) {
-        this.mCategoryActivityClass = categoryActivityClass;
     }
 
     public int getImageResourceId() {

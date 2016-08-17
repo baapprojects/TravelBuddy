@@ -1,7 +1,6 @@
 package com.hari.aund.travelbuddy.data;
 
 import com.hari.aund.travelbuddy.R;
-import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/15/2016.
@@ -167,10 +166,6 @@ public class PlacesCategoryValues {
             return PLACES_CATEGORY_C_ACTIVITY;
         }
         return PLACES_CATEGORY_INVALID;
-    }
-
-    public static Class getCategoryActivityClass(int categoryActivityId) {
-        return PlacesCategoryActivity.class;
     }
 
     public static int getCategoryImageResourceId(int categoryId) {
