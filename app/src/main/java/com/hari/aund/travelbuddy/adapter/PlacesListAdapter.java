@@ -13,7 +13,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.hari.aund.travelbuddy.R;
-import com.hari.aund.travelbuddy.activity.MainActivity;
+import com.hari.aund.travelbuddy.activity.PlaceDetailActivity;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
 import com.hari.aund.travelbuddy.parser.PlacesApiParser;
 import com.hari.aund.travelbuddy.utils.Utility;
@@ -57,9 +57,7 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
                         .get(viewHolder.getAdapterPosition())
                         .getPlaceId();
 
-                // TODO: Change appropriate class
-                //Intent intent = new Intent(mContext, PlaceDetailActivity.class);
-                Intent intent = new Intent(mContext, MainActivity.class);
+                Intent intent = new Intent(mContext, PlaceDetailActivity.class);
                 intent.putExtra(Utility.KEY_PLACE_ID, placeId);
                 intent.putExtra(Utility.KEY_CATEGORY_ID, mCategoryId);
                 intent.putExtra(Utility.KEY_CATEGORY_NAME, mCategoryName);

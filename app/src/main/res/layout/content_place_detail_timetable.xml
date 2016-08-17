@@ -24,7 +24,7 @@
             android:textStyle="bold" />
 
         <LinearLayout
-            android:id="@+id/timetable"
+            android:id="@+id/timetable_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

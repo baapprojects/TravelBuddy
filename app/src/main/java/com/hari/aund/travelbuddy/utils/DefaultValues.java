@@ -19,4 +19,6 @@ public interface DefaultValues {
     Double DEFAULT_LATITUDE = 9.4126239;
     Double DEFAULT_LONGITUDE = 76.4100267;
 
+    String DEFAULT_PLACE_ID_TEMPLE = "ChIJS9LI1WGUpzsRnnBIX4GNem8";
+    String DEFAULT_PLACE_NAME_TEMPLE = "Guruvayur Temple";
 }

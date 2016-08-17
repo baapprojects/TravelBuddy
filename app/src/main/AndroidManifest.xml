@@ -57,6 +57,7 @@
             android:name=".activity.PlaceDetailActivity"
             android:label="@string/title_activity_place_detail"
             android:parentActivityName=".activity.PlacesSubTypeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

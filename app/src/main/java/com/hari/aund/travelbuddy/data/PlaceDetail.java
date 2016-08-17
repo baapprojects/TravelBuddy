@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Hari Nivas Kumar R P on 8/17/2016.
  */
-public class PlaceDetail {
+public class PlaceDetail{
 
     private String mId;
     private String mName;
@@ -14,8 +14,8 @@ public class PlaceDetail {
     private String mPhoneNumber;
     private String mAddress;
     private Double mRating;
-    private Double mLatitude;
-    private Double mLongitude;
+    private double mLatitude;
+    private double mLongitude;
     private ArrayList<String> mPhotoReference;
     private ArrayList<String> mTimetable;
 
@@ -81,19 +81,19 @@ public class PlaceDetail {
         mRating = rating;
     }
 
-    public Double getLatitude() {
+    public double getLatitude() {
         return mLatitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(double latitude) {
         mLatitude = latitude;
     }
 
-    public Double getLongitude() {
+    public double getLongitude() {
         return mLongitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(double longitude) {
         mLongitude = longitude;
     }
 
@@ -146,7 +146,7 @@ public class PlaceDetail {
     }
 
     public boolean hasRating(){
-        return getRating() != 0;
+        return mRating != null;
     }
     
     public boolean hasPhotoReference(){
