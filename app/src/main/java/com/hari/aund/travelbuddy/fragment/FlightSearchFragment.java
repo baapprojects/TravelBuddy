@@ -1,6 +1,7 @@
 package com.hari.aund.travelbuddy.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hari.aund.travelbuddy.R;
+import com.hari.aund.travelbuddy.activity.FlightDetailActivity;
 import com.hari.aund.travelbuddy.activity.MainActivity;
 import com.hari.aund.travelbuddy.utils.Utility;
 
@@ -27,9 +29,6 @@ public class FlightSearchFragment extends Fragment
         implements View.OnClickListener {
 
     private static final String LOG_TAG = FlightSearchFragment.class.getSimpleName();
-
-    private static final String KEY_CITY_SOURCE = "from_source_city";
-    private static final String KEY_CITY_DESTINATION = "to_destination_city";
 
     private static final int INDEX_CITIES_FROM = 1;
     private static final int INDEX_CITIES_TO = 2;
@@ -95,6 +94,12 @@ public class FlightSearchFragment extends Fragment
                             .show();
                     return;
                 }
+
+                Intent intent = new Intent(getActivity(), FlightDetailActivity.class);
+                intent.putExtra(Utility.KEY_CITY_SOURCE, getFromSourceCity());
+                intent.putExtra(Utility.KEY_CITY_DESTINATION, getToDestinationCity());
+                startActivity(intent);
+
                 break;
         }
     }
@@ -150,8 +155,8 @@ public class FlightSearchFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            setFromSourceCity(savedInstanceState.getString(KEY_CITY_SOURCE));
-            setToDestinationCity(savedInstanceState.getString(KEY_CITY_DESTINATION));
+            setFromSourceCity(savedInstanceState.getString(Utility.KEY_CITY_SOURCE));
+            setToDestinationCity(savedInstanceState.getString(Utility.KEY_CITY_DESTINATION));
         } else {
             setFromSourceCity(getContext().getResources().getString(R.string.chennai));
             setToDestinationCity(getContext().getResources().getString(R.string.delhi));
@@ -161,8 +166,8 @@ public class FlightSearchFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(KEY_CITY_SOURCE, getFromSourceCity());
-        outState.putString(KEY_CITY_DESTINATION, getToDestinationCity());
+        outState.putString(Utility.KEY_CITY_SOURCE, getFromSourceCity());
+        outState.putString(Utility.KEY_CITY_DESTINATION, getToDestinationCity());
     }
 
     private void readAndSetNavSectionId() {

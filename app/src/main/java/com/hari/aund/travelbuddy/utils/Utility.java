@@ -36,6 +36,9 @@ public class Utility {
     public static final int PLACES_ACTIVITY_COLUMN_COUNT_PORTRAIT = 1;
     public static final int PLACES_ACTIVITY_COLUMN_COUNT_LANDSCAPE = 1;
 
+    public static final String KEY_CITY_SOURCE = "from_source_city";
+    public static final String KEY_CITY_DESTINATION = "to_destination_city";
+
     /**
      * Hides the soft keyboard
      */

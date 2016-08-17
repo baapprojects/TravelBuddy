@@ -41,4 +41,5 @@
     <string name="to">To</string>
     <string name="delhi">Delhi</string>
     <string name="search">SEARCH</string>
+    <string name="title_activity_flight_detail">Flight Details</string>
 </resources>

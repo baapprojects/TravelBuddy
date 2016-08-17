@@ -63,6 +63,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.PlacesSubTypeActivity" />
         </activity>
+        <activity
+            android:name=".activity.FlightDetailActivity"
+            android:label="@string/title_activity_flight_detail"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hari.aund.travelbuddy.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
