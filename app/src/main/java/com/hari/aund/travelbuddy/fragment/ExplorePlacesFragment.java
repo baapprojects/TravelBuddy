@@ -45,20 +45,20 @@ public class ExplorePlacesFragment extends Fragment
         View.OnClickListener {
 
     private static final String LOG_TAG = ExplorePlacesFragment.class.getSimpleName();
-    private static final String KEY_NEW_PLACE_NAME = "new-place-name";
+
     private static final int PLACE_PICKER_REQUEST = 1;
     private static final int RESULTS_OK = -1;
 
-    private int mNavSectionId = 0;
+    private int mNavSectionId;
+    private String mNewPlaceId;
+    private String mNewPlaceName;
     private static LatLngBounds mLatLngBounds = null;
     private static ArrayList<String> mPlacesIdAL = null, mPlacesNameAL = null;
     private static ArrayAdapter<String> mDefaultPlacesArrayAdapter = null;
     private static PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter = null;
-
     private ActionBar mActionBar = null;
     private GoogleApiClient mGoogleApiClient = null;
-
-    private TextView mNewPlace;
+    private TextView mNewPlaceTextView;
 
     public ExplorePlacesFragment() {
     }
@@ -119,7 +119,11 @@ public class ExplorePlacesFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             setNavSectionId(savedInstanceState.getInt(Utility.KEY_NAVIGATION_SECTION_ID));
-            setNewPlace(savedInstanceState.getString(KEY_NEW_PLACE_NAME));
+            setNewPlaceId(savedInstanceState.getString(Utility.KEY_PLACE_ID));
+            setNewPlaceName(savedInstanceState.getString(Utility.KEY_PLACE_NAME));
+            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState bundle is Read!");
+        }else {
+            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState bundle is Empty!");
         }
     }
 
@@ -127,7 +131,9 @@ public class ExplorePlacesFragment extends Fragment
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(Utility.KEY_NAVIGATION_SECTION_ID, getNavSectionId());
-        outState.putString(KEY_NEW_PLACE_NAME, getNewPlace());
+        outState.putString(Utility.KEY_PLACE_ID, getNewPlaceId());
+        outState.putString(Utility.KEY_PLACE_NAME, getNewPlaceName());
+        Log.d(LOG_TAG, "onSaveInstanceState - outInstanceState bundle is Filled!");
     }
 
     @Override
@@ -142,7 +148,8 @@ public class ExplorePlacesFragment extends Fragment
     public void onClick(View view) {
         if (view.getId() == R.id.find_place_on_map) {
             try {
-                setNewPlace(getString(R.string.def_no_place_selected));
+                setNewPlaceId(getString(R.string.def_no_place_selected));
+                setNewPlaceName(getString(R.string.def_no_place_selected));
 
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
@@ -151,12 +158,21 @@ public class ExplorePlacesFragment extends Fragment
                 e.printStackTrace();
             }
         } else if (view.getId() == R.id.new_place_found_on_map) {
-            Toast.makeText(getContext(), getNewPlace(), Toast.LENGTH_LONG)
+
+            if (getNewPlaceName() == null){
+                Toast.makeText(getContext(),
+                        "No New Place Selected.\nChoose one from the List!",
+                        Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            Toast.makeText(getContext(), getNewPlaceName(), Toast.LENGTH_LONG)
                     .show();
 
             Intent placesIntent = new Intent(getActivity(), PlacesActivity.class);
-            placesIntent.putExtra(Utility.KEY_PLACE_ID, "placeId");
-            placesIntent.putExtra(Utility.KEY_PLACE_NAME, getNewPlace());
+            placesIntent.putExtra(Utility.KEY_PLACE_ID, getNewPlaceId());
+            placesIntent.putExtra(Utility.KEY_PLACE_NAME, getNewPlaceName());
             startActivity(placesIntent);
         }
     }
@@ -173,6 +189,9 @@ public class ExplorePlacesFragment extends Fragment
 
             placeId = place.getPlaceId();
             placeName = place.getPlaceDescription();
+
+            setNewPlaceId(placeId);
+            setNewPlaceName(placeName);
         } else if (adapterView.getAdapter() instanceof ArrayAdapter<?>) {
             Log.d(LOG_TAG, "adapterView.getAdapter() instanceof ArrayAdapter<String>");
 
@@ -199,8 +218,9 @@ public class ExplorePlacesFragment extends Fragment
                 //mPlacesNameAL.add(place.getName().toString());
                 //mPlacesNameAL.add(place.getAddress().toString());
                 //mDefaultPlacesArrayAdapter.notifyDataSetChanged();
-                //setNewPlace(place.getAddress().toString());
-                setNewPlace(place.getName().toString());
+                //setPlaceNameToTextView(place.getAddress().toString());
+                setNewPlaceId(place.getId());
+                setNewPlaceName(place.getAddress().toString());
 
                 Log.d(LOG_TAG, "PlaceId - " + place.getId());
                 Log.d(LOG_TAG, "PlaceName - " + place.getName().toString());
@@ -360,24 +380,24 @@ public class ExplorePlacesFragment extends Fragment
                 (RelativeLayout) rootView.findViewById(R.id.explore_places_layout);
         ImageView findPlace =
                 (ImageView) rootView.findViewById(R.id.find_place_on_map);
-        mNewPlace =
+        mNewPlaceTextView =
                 (TextView) rootView.findViewById(R.id.new_place_found_on_map);
         AutoCompleteTextView searchPlace =
                 (AutoCompleteTextView) rootView.findViewById(R.id.explore_place);
 
-        //Read from Settings
+        //TODO: Read from Settings
         if (Utility.isPlacePickerSettingEnabled() &&
                 getNavSectionId() == Utility.NAV_SECTION_EXPLORE_PLACES) {
             findPlace.setVisibility(View.VISIBLE);
             findPlace.setOnClickListener(this);
 
-            mNewPlace.setVisibility(View.VISIBLE);
-            mNewPlace.setOnClickListener(this);
+            mNewPlaceTextView.setVisibility(View.VISIBLE);
+            mNewPlaceTextView.setOnClickListener(this);
 
             searchPlace.setVisibility(View.INVISIBLE);
         } else {
             findPlace.setVisibility(View.INVISIBLE);
-            mNewPlace.setVisibility(View.INVISIBLE);
+            mNewPlaceTextView.setVisibility(View.INVISIBLE);
 
             setPlaceAutoCompleteAdapter();
             searchPlace.setVisibility(View.VISIBLE);
@@ -386,11 +406,28 @@ public class ExplorePlacesFragment extends Fragment
         }
     }
 
-    private void setNewPlace(String newPlace) {
-        mNewPlace.setText(newPlace);
+    public String getNewPlaceName() {
+        return mNewPlaceName;
     }
 
-    private String getNewPlace() {
-        return mNewPlace.getText().toString();
+    public void setNewPlaceName(String newPlaceName) {
+        mNewPlaceName = newPlaceName;
+        setPlaceNameToTextView(getNewPlaceName());
+    }
+
+    public String getNewPlaceId() {
+        return mNewPlaceId;
+    }
+
+    public void setNewPlaceId(String newPlaceId) {
+        mNewPlaceId = newPlaceId;
+    }
+
+    private void setPlaceNameToTextView(String newPlace) {
+        mNewPlaceTextView.setText(newPlace);
+    }
+
+    private String getPlaceNameFromTextView() {
+        return mNewPlaceTextView.getText().toString();
     }
 }
