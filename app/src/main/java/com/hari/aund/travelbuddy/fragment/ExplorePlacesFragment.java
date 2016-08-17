@@ -29,7 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
-import com.hari.aund.travelbuddy.activity.PlacesActivity;
+import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
 import com.hari.aund.travelbuddy.adapter.PlaceAutoCompleteAdapter;
 import com.hari.aund.travelbuddy.utils.Utility;
 import com.hari.aund.travelbuddy.utils.gplaces.PlaceAutoComplete;
@@ -170,7 +170,7 @@ public class ExplorePlacesFragment extends Fragment
             Toast.makeText(getContext(), getNewPlaceName(), Toast.LENGTH_LONG)
                     .show();
 
-            Intent placesIntent = new Intent(getActivity(), PlacesActivity.class);
+            Intent placesIntent = new Intent(getActivity(), PlacesCategoryActivity.class);
             placesIntent.putExtra(Utility.KEY_PLACE_ID, getNewPlaceId());
             placesIntent.putExtra(Utility.KEY_PLACE_NAME, getNewPlaceName());
             startActivity(placesIntent);
@@ -202,7 +202,7 @@ public class ExplorePlacesFragment extends Fragment
         if ((placeId != null) && (placeName != null)) {
             Log.d(LOG_TAG, "PlaceId - " + placeId + " Name - " + placeName);
 
-            Intent placesIntent = new Intent(getActivity(), PlacesActivity.class);
+            Intent placesIntent = new Intent(getActivity(), PlacesCategoryActivity.class);
             placesIntent.putExtra(Utility.KEY_PLACE_ID, placeId);
             placesIntent.putExtra(Utility.KEY_PLACE_NAME, placeName);
             startActivity(placesIntent);

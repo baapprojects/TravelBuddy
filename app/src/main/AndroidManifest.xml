@@ -35,7 +35,7 @@
                 android:value=".activity.SplashActivity" />
         </activity>
         <activity
-            android:name=".activity.PlacesActivity"
+            android:name=".activity.PlacesCategoryActivity"
             android:label="@string/title_activity_places"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -46,12 +46,12 @@
         <activity
             android:name=".activity.PlacesSubTypeActivity"
             android:label="@string/title_activity_places_category_a"
-            android:parentActivityName=".activity.PlacesActivity"
+            android:parentActivityName=".activity.PlacesCategoryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.PlacesActivity" />
+                android:value=".activity.PlacesCategoryActivity" />
         </activity>
     </application>
 

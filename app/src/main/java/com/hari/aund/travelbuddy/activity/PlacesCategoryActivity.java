@@ -18,10 +18,10 @@ import com.hari.aund.travelbuddy.parser.PlacesApiParser;
 import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 
-public class PlacesActivity extends AppCompatActivity
+public class PlacesCategoryActivity extends AppCompatActivity
         implements View.OnClickListener, DefaultValues {
 
-    private static final String LOG_TAG = PlacesActivity.class.getSimpleName();
+    private static final String LOG_TAG = PlacesCategoryActivity.class.getSimpleName();
 
     private String mPlaceId;
     private String mPlaceName;

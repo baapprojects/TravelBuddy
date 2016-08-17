@@ -5,7 +5,7 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.hari.aund.travelbuddy.activity.PlacesActivity;
+import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
 import com.hari.aund.travelbuddy.app.TBConfig;
 import com.hari.aund.travelbuddy.app.TravelBuddyApp;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
@@ -22,15 +22,15 @@ public class PlacesApiParser implements PlacesApiUrlValues {
 
     private static final String LOG_TAG = PlacesApiParser.class.getSimpleName();
 
-    private PlacesActivity mPlacesActivity;
+    private PlacesCategoryActivity mPlacesCategoryActivity;
     private PlacesSubTypeFragment mPlacesSubTypeFragment;
 
     public PlacesApiParser(){
 
     }
 
-    public PlacesApiParser(PlacesActivity placesActivity) {
-        mPlacesActivity = placesActivity;
+    public PlacesApiParser(PlacesCategoryActivity placesCategoryActivity) {
+        mPlacesCategoryActivity = placesCategoryActivity;
     }
 
     public PlacesApiParser(PlacesSubTypeFragment placesSubTypeFragment) {
@@ -54,25 +54,25 @@ public class PlacesApiParser implements PlacesApiUrlValues {
             JSONObject geometryJsonObject = resultsJsonObject.getJSONObject(TAG_GEOMETRY);
             JSONObject locationJsonObject = geometryJsonObject.getJSONObject(TAG_LOCATION);
 
-            mPlacesActivity.getPlacesCategoryAdapter().setLatitude(
-                    locationJsonObject.getString(TAG_LATITUDE));
-            mPlacesActivity.getPlacesCategoryAdapter().setLongitude(
-                    locationJsonObject.getString(TAG_LONGITUDE));
-            mPlacesActivity.getPlacesCategoryAdapter().notifyDataSetChanged();
+            mPlacesCategoryActivity.getPlacesCategoryAdapter().setLatitude(
+                    locationJsonObject.getString(TAG_LAT));
+            mPlacesCategoryActivity.getPlacesCategoryAdapter().setLongitude(
+                    locationJsonObject.getString(TAG_LNG));
+            mPlacesCategoryActivity.getPlacesCategoryAdapter().notifyDataSetChanged();
 
-            Log.d(LOG_TAG, "PlaceId - " + mPlacesActivity.getPlaceId());
-            Log.d(LOG_TAG, "Place Name - " + mPlacesActivity.getPlaceName());
+            Log.d(LOG_TAG, "PlaceId - " + mPlacesCategoryActivity.getPlaceId());
+            Log.d(LOG_TAG, "Place Name - " + mPlacesCategoryActivity.getPlaceName());
             Log.d(LOG_TAG, "Latitude - " +
-                    mPlacesActivity.getPlacesCategoryAdapter().getLatitude());
+                    mPlacesCategoryActivity.getPlacesCategoryAdapter().getLatitude());
             Log.d(LOG_TAG, "Longitude - " +
-                    mPlacesActivity.getPlacesCategoryAdapter().getLongitude());
+                    mPlacesCategoryActivity.getPlacesCategoryAdapter().getLongitude());
         } catch (JSONException jsonException) {
             jsonException.printStackTrace();
         }
     }
 
     public void getPlaceDetails() {
-        String placesReqUrl = getPlacesDetailsUrl(mPlacesActivity.getPlaceId());
+        String placesReqUrl = getPlacesDetailsUrl(mPlacesCategoryActivity.getPlaceId());
         Log.d(LOG_TAG, "URL - " + placesReqUrl);
 
         JsonObjectRequest placesJsonObjReq =
@@ -123,7 +123,7 @@ public class PlacesApiParser implements PlacesApiUrlValues {
 
                 placesListInfo.setPlaceId(jsonObject.getString(TAG_PLACE_ID));
                 placesListInfo.setPlaceName(jsonObject.getString(TAG_NAME));
-                placesListInfo.setPlaceAddress(jsonObject.getString(TAG_ADDRESS));
+                placesListInfo.setPlaceAddress(jsonObject.getString(TAG_VICINITY));
                 placesListInfo.setIconUrl(jsonObject.getString(TAG_ICON));
 
                 if (jsonObject.has(TAG_RATING)) {
