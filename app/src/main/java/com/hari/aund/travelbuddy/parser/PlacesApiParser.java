@@ -25,6 +25,10 @@ public class PlacesApiParser implements PlacesApiUrlValues {
     private PlacesActivity mPlacesActivity;
     private PlacesSubTypeFragment mPlacesSubTypeFragment;
 
+    public PlacesApiParser(){
+
+    }
+
     public PlacesApiParser(PlacesActivity placesActivity) {
         mPlacesActivity = placesActivity;
     }
@@ -177,4 +181,13 @@ public class PlacesApiParser implements PlacesApiUrlValues {
         TravelBuddyApp.getInstance().addToRequestQueue(placeReq);
     }
 
+    //Type:photoreference
+    public String getPhotoUrl(String photoReference) {
+        return PLACES_API_BASE_URL +
+                PLACES_API_REQ_TYPE_PHOTO +
+                PLACES_URL_KEY_BASE_PHOTO_REFERENCE + photoReference +
+                PLACES_URL_PREFIX_MAX_HEIGHT + PLACES_URL_SUFFIX_MAX_HEIGHT_DEF +
+                PLACES_URL_PREFIX_MAX_WIDTH + PLACES_URL_SUFFIX_MAX_WIDTH_DEF +
+                PLACES_URL_PREFIX_KEY + TBConfig.getPlacesApiKey();
+    }
 }

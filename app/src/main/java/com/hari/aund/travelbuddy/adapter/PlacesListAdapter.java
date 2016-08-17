@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
+import com.hari.aund.travelbuddy.parser.PlacesApiParser;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -21,6 +25,8 @@ import java.util.ArrayList;
  * Created by Hari Nivas Kumar R P on 8/16/2016.
  */
 public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.ViewHolder> {
+
+    private static final String LOG_TAG = PlacesListAdapter.class.getSimpleName();
 
     private int mCategoryId;
     private Context mContext;
@@ -59,20 +65,40 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(PlacesListAdapter.ViewHolder viewHolder, int position) {
-        PlacesListInfo PlacesListInfo = mPlacesListInfoArrayList.get(position);
+    public void onBindViewHolder(final PlacesListAdapter.ViewHolder viewHolder, int position) {
+        PlacesListInfo placesListInfo = mPlacesListInfoArrayList.get(position);
 
-        Typeface typefaceName = Typeface.createFromAsset(mContext.getAssets(),"Rosario-Bold.ttf");
-        Typeface typefaceAddress = Typeface.createFromAsset(mContext.getAssets(),"Rosario-Regular.ttf");
+        if (placesListInfo.isPhotoReferenceAvailable()) {
+            //Log.d(LOG_TAG, "ImageUrl - " + new PlacesApiParser().getPhotoUrl(placesListInfo.getPhotoReference()));
+            Picasso.with(mContext)
+                    .load(new PlacesApiParser().getPhotoUrl(placesListInfo.getPhotoReference()))
+                    .placeholder(R.drawable.loading_icon)
+                    .error(R.drawable.no_image)
+                    .into(viewHolder.place_pic,
+                            new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    //Log.d(LOG_TAG, "onSuccess - image loading success!");
+                                }
+                                @Override
+                                public void onError() {
+                                    Log.e(LOG_TAG, "onError - image loading failure!");
+                                }
+                            }
+                    );
+        }
 
-        viewHolder.place_id.setText(PlacesListInfo.getPlaceId());
-        viewHolder.place_name.setText(PlacesListInfo.getPlaceName());
+        Typeface typefaceName = Typeface.createFromAsset(mContext.getAssets(), "Rosario-Bold.ttf");
+        Typeface typefaceAddress = Typeface.createFromAsset(mContext.getAssets(), "Rosario-Regular.ttf");
+
+        viewHolder.place_id.setText(placesListInfo.getPlaceId());
+        viewHolder.place_name.setText(placesListInfo.getPlaceName());
         viewHolder.place_name.setTypeface(typefaceName);
-        viewHolder.place_address.setText(PlacesListInfo.getPlaceAddress());
+        viewHolder.place_address.setText(placesListInfo.getPlaceAddress());
         viewHolder.place_address.setTypeface(typefaceAddress);
 
-        if (PlacesListInfo.getPlaceRating() != null) {
-            viewHolder.rating.setRating(Float.parseFloat(String.valueOf(PlacesListInfo.getPlaceRating())));
+        if (placesListInfo.getPlaceRating() != null) {
+            viewHolder.rating.setRating(Float.parseFloat(String.valueOf(placesListInfo.getPlaceRating())));
         }
     }
 

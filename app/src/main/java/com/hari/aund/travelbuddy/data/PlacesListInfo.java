@@ -71,4 +71,8 @@ public class PlacesListInfo {
     public String getPhotoReference() {
         return mPhotoReference;
     }
+
+    public boolean isPhotoReferenceAvailable(){
+        return mPhotoReference != null;
+    }
 }
