@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.hari.aund.travelbuddy.R;
-import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
+import com.hari.aund.travelbuddy.activity.PlacesSubTypeActivity;
 import com.hari.aund.travelbuddy.data.PlacesCategory;
 import com.hari.aund.travelbuddy.data.PlacesCategoryValues;
 import com.hari.aund.travelbuddy.utils.Utility;
@@ -54,7 +54,7 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
                 placesCategory.setLatitude(getLatitude());
                 placesCategory.setLongitude(getLongitude());
 
-                Intent placesCategoryIntent = new Intent(mContext, PlacesCategoryActivity.class);
+                Intent placesCategoryIntent = new Intent(mContext, PlacesSubTypeActivity.class);
                 placesCategoryIntent.putExtra(Utility.KEY_PLACE_CATEGORY_INFO, placesCategory);
                 mContext.startActivity(placesCategoryIntent);
             }

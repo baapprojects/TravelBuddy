@@ -70,8 +70,8 @@ public class PlacesSubTypeFragment extends Fragment
 
         /* TODO: Set Category Activity name for Type 'C'
         if (mCategoryActivityId == PlacesCategoryValues.PLACES_CATEGORY_C_ACTIVITY) {
-            PlacesCategoryActivity placesCategoryActivity =
-                    (PlacesCategoryActivity) getActivity();
+            PlacesSubTypeActivity placesCategoryActivity =
+                    (PlacesSubTypeActivity) getActivity();
             ActionBar actionBar = placesCategoryActivity.getSupportActionBar();
             if (actionBar != null) {
                 String activityNewTitle = mCategoryName +

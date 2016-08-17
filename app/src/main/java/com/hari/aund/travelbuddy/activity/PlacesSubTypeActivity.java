@@ -21,10 +21,10 @@ import com.hari.aund.travelbuddy.data.PlacesCategoryValues;
 import com.hari.aund.travelbuddy.fragment.PlacesSubTypeFragment;
 import com.hari.aund.travelbuddy.utils.Utility;
 
-public class PlacesCategoryActivity extends AppCompatActivity
+public class PlacesSubTypeActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
 
-    private static final String LOG_TAG = PlacesCategoryActivity.class.getSimpleName();
+    private static final String LOG_TAG = PlacesSubTypeActivity.class.getSimpleName();
 
     private PlacesCategory mPlacesCategory = null;
 

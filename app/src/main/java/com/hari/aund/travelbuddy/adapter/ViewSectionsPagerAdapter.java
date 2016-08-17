@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
+import com.hari.aund.travelbuddy.activity.PlacesSubTypeActivity;
 import com.hari.aund.travelbuddy.fragment.PlacesSubTypeFragment;
 
 /**
@@ -14,25 +14,25 @@ public class ViewSectionsPagerAdapter extends FragmentPagerAdapter {
 
     private final String LOG_TAG = ViewSectionsPagerAdapter.class.getSimpleName();
 
-    private PlacesCategoryActivity mPlacesCategoryActivity;
+    private PlacesSubTypeActivity mPlacesSubTypeActivity;
 
-    public ViewSectionsPagerAdapter(PlacesCategoryActivity placesCategoryActivity,
+    public ViewSectionsPagerAdapter(PlacesSubTypeActivity placesSubTypeActivity,
                                     FragmentManager fragmentManager) {
         super(fragmentManager);
-        mPlacesCategoryActivity = placesCategoryActivity;
+        mPlacesSubTypeActivity = placesSubTypeActivity;
     }
 
     @Override
     public Fragment getItem(int position) {
         return PlacesSubTypeFragment.newInstance(
                 position + 1,//sectionNumber not categoryId
-                mPlacesCategoryActivity.getPlacesCategory()
+                mPlacesSubTypeActivity.getPlacesCategory()
         );
     }
 
     @Override
     public int getCount() {
-        return mPlacesCategoryActivity
+        return mPlacesSubTypeActivity
                 .getPlacesCategory()
                 .getSubTypeListSize();
     }
@@ -40,7 +40,7 @@ public class ViewSectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (position <= getCount()) {
-            return mPlacesCategoryActivity
+            return mPlacesSubTypeActivity
                     .getPlacesCategory()
                     .getSubTypeList()
                     .get(position);
