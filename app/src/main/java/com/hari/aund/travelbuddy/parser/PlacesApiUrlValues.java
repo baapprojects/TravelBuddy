@@ -36,14 +36,20 @@ public interface PlacesApiUrlValues {
     String TAG_RESULTS = "results";
     String TAG_GEOMETRY = "geometry";
     String TAG_LOCATION = "location";
-    String TAG_LATITUDE = "lat";
-    String TAG_LONGITUDE = "lng";
+    String TAG_LAT = "lat";
+    String TAG_LNG = "lng";
     String TAG_ICON = "icon";
     String TAG_NAME = "name";
     String TAG_PLACE_ID = "place_id";
     String TAG_RATING = "rating";
-    String TAG_ADDRESS = "vicinity";
+    String TAG_VICINITY = "vicinity";
     String TAG_PHOTOS = "photos";
     String TAG_PHOTOS_REFERENCE = "photo_reference";
+    String TAG_OPENING_HOURS = "opening_hours";
+    String TAG_FORMATTED_ADDRESS = "formatted_address";
+    String TAG_PHONE_NUMBER = "formatted_phone_number";
+    String TAG_TIMETABLE = "weekday_text";
+    String TAG_USER_RATINGS_TOTAL = "user_ratings_total";
+    String TAG_WEBSITE = "website";
 
 }
