@@ -60,7 +60,7 @@ public class PlacesApiParser implements PlacesApiUrlValues {
                     locationJsonObject.getString(TAG_LONGITUDE));
             mPlacesActivity.getPlacesCategoryAdapter().notifyDataSetChanged();
 
-            Log.d(LOG_TAG, "PlaceId - " + mPlacesActivity.getParent());
+            Log.d(LOG_TAG, "PlaceId - " + mPlacesActivity.getPlaceId());
             Log.d(LOG_TAG, "Place Name - " + mPlacesActivity.getPlaceName());
             Log.d(LOG_TAG, "Latitude - " +
                     mPlacesActivity.getPlacesCategoryAdapter().getLatitude());
