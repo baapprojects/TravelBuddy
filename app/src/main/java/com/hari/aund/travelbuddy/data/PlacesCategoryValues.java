@@ -163,7 +163,7 @@ public class PlacesCategoryValues {
         } else if (categorySubTypeCount < 7) {
             return PLACES_CATEGORY_B_ACTIVITY;
         } else if (categorySubTypeCount < 9) {
-            return PLACES_CATEGORY_C_ACTIVITY;
+            return PLACES_CATEGORY_B_ACTIVITY;
         }
         return PLACES_CATEGORY_INVALID;
     }
