@@ -29,6 +29,7 @@ public class PlacesSubTypeFragment extends Fragment
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_PLACES_CATEGORY_PARCEL = "places_category_parcel";
 
+    private int mCategoryId;
     private int mCategoryActivityId;
     private int mSectionNumber;
     private String mSectionName;
@@ -86,7 +87,7 @@ public class PlacesSubTypeFragment extends Fragment
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
 
         mPlacesListAdapter = new PlacesListAdapter(getActivity(),
-                mPlacesListInfoArray, mCategoryActivityId);
+                mPlacesListInfoArray, mCategoryId, mCategoryName);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(sGridLayoutManager);
@@ -100,15 +101,29 @@ public class PlacesSubTypeFragment extends Fragment
         if (mPlacesCategory != null) {
             setCategoryActivityId();
             setSectionName();
-            setCategoryActivityId();
+            setCategoryId();
             setCategoryName();
             setLatitude();
             setLongitude();
         } else {
-            setSectionName(DEFAULT_CATEGORY_NAME);
+            setSectionName(DEFAULT_SUB_TYPE_NAME);
+            setCategoryId(DEFAULT_CATEGORY_ID);
+            setCategoryName(DEFAULT_CATEGORY_NAME);
             setLatitude(DEFAULT_LATITUDE);
             setLongitude(DEFAULT_LONGITUDE);
         }
+    }
+
+    public int getCategoryId() {
+        return mCategoryId;
+    }
+
+    private void setCategoryId() {
+        this.mCategoryId = mPlacesCategory.getCategoryId();
+    }
+
+    private void setCategoryId(int categoryId) {
+        this.mCategoryId = categoryId;
     }
 
     public String getCategoryName() {
@@ -117,6 +132,10 @@ public class PlacesSubTypeFragment extends Fragment
 
     private void setCategoryName() {
         this.mCategoryName = mPlacesCategory.getCategoryName();
+    }
+
+    private void setCategoryName(String categoryName) {
+        this.mCategoryName = categoryName;
     }
 
     public int getCategoryActivityId() {

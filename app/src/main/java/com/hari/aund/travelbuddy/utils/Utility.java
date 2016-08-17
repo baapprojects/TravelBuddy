@@ -26,6 +26,9 @@ public class Utility {
     public static final String KEY_PLACE_ID = "place_id";
     public static final String KEY_PLACE_NAME = "place_name";
 
+    public static final String KEY_CATEGORY_ID = "category_id";
+    public static final String KEY_CATEGORY_NAME = "category_name";
+
     public static final String KEY_PLACE_CATEGORY_INFO = "places_category_info";
 
     public static final int PLACES_ACTIVITY_COLUMN_COUNT_PORTRAIT = 1;

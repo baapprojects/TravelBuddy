@@ -16,6 +16,7 @@ import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
 import com.hari.aund.travelbuddy.parser.PlacesApiParser;
+import com.hari.aund.travelbuddy.utils.Utility;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -29,15 +30,18 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
     private static final String LOG_TAG = PlacesListAdapter.class.getSimpleName();
 
     private int mCategoryId;
+    private String mCategoryName;
     private Context mContext;
     private ArrayList<PlacesListInfo> mPlacesListInfoArrayList;
 
     public PlacesListAdapter(Context context,
                              ArrayList<PlacesListInfo> placesListInfoArrayList,
-                             int categoryId) {
+                             int categoryId,
+                             String categoryName) {
         mContext = context;
         mPlacesListInfoArrayList = placesListInfoArrayList;
         mCategoryId = categoryId;
+        mCategoryName = categoryName;
     }
 
     @Override
@@ -49,14 +53,17 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View onClickView) {
-                String placeId = mPlacesListInfoArrayList.get(
-                        viewHolder.getAdapterPosition()).getPlaceId();
+                String placeId = mPlacesListInfoArrayList
+                        .get(viewHolder.getAdapterPosition())
+                        .getPlaceId();
 
                 // TODO: Change appropriate class
                 //Intent intent = new Intent(mContext, PlaceDetailActivity.class);
                 Intent intent = new Intent(mContext, MainActivity.class);
-                intent.putExtra("mPlaceId", placeId);
-                intent.putExtra("mCategoryId", mCategoryId);
+                intent.putExtra(Utility.KEY_PLACE_ID, placeId);
+                intent.putExtra(Utility.KEY_CATEGORY_ID, mCategoryId);
+                intent.putExtra(Utility.KEY_CATEGORY_NAME, mCategoryName);
+                Log.d(LOG_TAG, "onCreateViewHolder : Place Id - " + placeId);
                 mContext.startActivity(intent);
             }
         });
