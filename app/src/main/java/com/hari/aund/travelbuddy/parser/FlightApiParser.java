@@ -81,14 +81,18 @@ public class FlightApiParser implements FlightApiUrlValues {
 
                             flightDetail.setPrice(indicativePricesJSONObject.getDouble(TAG_PRICE));
 
-                            JSONArray hopsJSONArray = legsJSONObject.getJSONArray("hopsJSONArray");
+                            JSONArray hopsJSONArray = legsJSONObject.getJSONArray(TAG_HOPS);
                             JSONObject hopsJSONObject = hopsJSONArray.getJSONObject(0);
 
                             flightDetail.setsTime(hopsJSONObject.getString(TAG_S_TIME));
                             flightDetail.settTime(hopsJSONObject.getString(TAG_T_TIME));
                             flightDetail.setFlight(hopsJSONObject.getString(TAG_FLIGHT));
                             flightDetail.setAirline(hopsJSONObject.getString(TAG_AIRLINE));
-                            flightDetail.setTerminal(hopsJSONObject.getString(TAG_S_TERMINAL));
+                            if (hopsJSONObject.has(TAG_S_TERMINAL)) {
+                                flightDetail.setTerminal(hopsJSONObject.getString(TAG_S_TERMINAL));
+                            } else if (hopsJSONObject.has(TAG_S_TERMINAL)) {
+                                flightDetail.setTerminal(hopsJSONObject.getString(TAG_T_TERMINAL));
+                            }
                             flightDetail.setDuration(hopsJSONObject.getDouble(TAG_DURATION));
 
                             mFlightDetailActivity.getFlightDetailList().add(flightDetail);

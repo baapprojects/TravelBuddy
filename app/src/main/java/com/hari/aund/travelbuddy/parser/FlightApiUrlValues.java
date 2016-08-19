@@ -27,10 +27,11 @@ public interface FlightApiUrlValues {
     String TAG_PRICE = "price";
     String TAG_HOPS = "hops";
     String TAG_S_TIME = "sTime";
-    String TAG_T_TIME = "tTIme";
+    String TAG_T_TIME = "tTime";
     String TAG_FLIGHT = "flight";
     String TAG_AIRLINE = "airline";
     String TAG_S_TERMINAL = "sTerminal";
+    String TAG_T_TERMINAL = "tTerminal";
     String TAG_DURATION = "duration";
 
 }
