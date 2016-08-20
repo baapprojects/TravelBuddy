@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.hari.aund.travelbuddy.data.PlacesCategory;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
 import com.hari.aund.travelbuddy.parser.PlacesApiParser;
 import com.hari.aund.travelbuddy.utils.DefaultValues;
+import com.hari.aund.travelbuddy.utils.Utility;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.util.ArrayList;
@@ -25,9 +27,6 @@ public class PlacesSubTypeFragment extends Fragment
         implements DefaultValues {
 
     private static final String LOG_TAG = PlacesSubTypeFragment.class.getSimpleName();
-
-    private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ARG_PLACES_CATEGORY_PARCEL = "places_category_parcel";
 
     private int mCategoryId;
     private int mCategoryActivityId;
@@ -48,8 +47,8 @@ public class PlacesSubTypeFragment extends Fragment
         PlacesSubTypeFragment fragment = new PlacesSubTypeFragment();
 
         Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        args.putParcelable(ARG_PLACES_CATEGORY_PARCEL, placesCategory);
+        args.putInt(Utility.KEY_PLACE_SECTION_NUMBER, sectionNumber);
+        args.putParcelable(Utility.KEY_PLACE_CATEGORY_INFO, placesCategory);
 
         fragment.setArguments(args);
         return fragment;
@@ -60,9 +59,7 @@ public class PlacesSubTypeFragment extends Fragment
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_places_sub_type, container, false);
 
-        setSectionNumber(getArguments());
-        mPlacesCategory = getArguments().getParcelable(ARG_PLACES_CATEGORY_PARCEL);
-        readValues();
+        readValues(savedInstanceState);
 
         new PlacesApiParser(this).getPlaceListDetails();
 
@@ -82,9 +79,8 @@ public class PlacesSubTypeFragment extends Fragment
         }
         */
 
-        int columnCount = 1;
         StaggeredGridLayoutManager sGridLayoutManager =
-                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+                new StaggeredGridLayoutManager(DEFAULT_COLUMN_COUNT_1, StaggeredGridLayoutManager.VERTICAL);
 
         mPlacesListAdapter = new PlacesListAdapter(getActivity(),
                 mPlacesListInfoArray, mCategoryId, mCategoryName);
@@ -96,7 +92,45 @@ public class PlacesSubTypeFragment extends Fragment
         return rootView;
     }
 
-    private void readValues() {
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            mSectionNumber = savedInstanceState.getInt(Utility.KEY_PLACE_SECTION_NUMBER);
+            mPlacesCategory = savedInstanceState.getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
+            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState is Restored!");
+            initValues();
+        } else {
+            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState is Empty!");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Utility.KEY_PLACE_SECTION_NUMBER, mSectionNumber);
+        outState.putParcelable(Utility.KEY_PLACE_CATEGORY_INFO, mPlacesCategory);
+        Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState is Filled!");
+    }
+
+    private void readValues(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mSectionNumber = savedInstanceState.getInt(Utility.KEY_PLACE_SECTION_NUMBER);
+            mPlacesCategory = savedInstanceState.getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
+            Log.d(LOG_TAG, "readValues - savedInstanceState is Restored!");
+        } else if (getArguments() != null){
+            mSectionNumber = getArguments().getInt(Utility.KEY_PLACE_SECTION_NUMBER);;
+            mPlacesCategory = getArguments().getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
+            Log.d(LOG_TAG, "readValues - savedInstanceState : getArguments() is Restored!");
+        } else {
+            mSectionNumber = DefaultValues.DEFAULT_SUB_TYPE_ID;
+            mPlacesCategory = new PlacesCategory(DEFAULT_CATEGORY_ID);
+            Log.d(LOG_TAG, "readValues - savedInstanceState : Default Values is Restored!");
+        }
+        initValues();
+    }
+
+    private void initValues(){
         //Set Default Values if parcel is null; Def Place Kerala
         if (mPlacesCategory != null) {
             setCategoryActivityId();
@@ -150,8 +184,8 @@ public class PlacesSubTypeFragment extends Fragment
         return mSectionNumber;
     }
 
-    private void setSectionNumber(Bundle bundle) {
-        this.mSectionNumber = bundle.getInt(ARG_SECTION_NUMBER);
+    private void setSectionNumber(int sectionNumber) {
+        this.mSectionNumber = sectionNumber;
     }
 
     public String getSectionName() {

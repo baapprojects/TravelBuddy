@@ -99,7 +99,7 @@ public class PlacesCategory implements Parcelable {
         return mCategoryName;
     }
 
-    private void setCategoryName(String mCategoryName) {
+    public void setCategoryName(String mCategoryName) {
         this.mCategoryName = mCategoryName;
     }
 

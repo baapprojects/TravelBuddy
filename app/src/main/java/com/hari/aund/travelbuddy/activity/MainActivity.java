@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_nav_bar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        if (savedInstanceState == null) {
+            navigationView.setCheckedItem(R.id.nav_explore_places);
+        }
     }
 
     @Override
@@ -143,6 +146,9 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState != null) {
             setNavSectionId(savedInstanceState
                     .getInt(Utility.KEY_NAVIGATION_SECTION_ID));
+            Log.d(LOG_TAG, "onRestoreInstanceState - savedInstanceState is Restored!");
+        } else {
+            Log.d(LOG_TAG, "onRestoreInstanceState - savedInstanceState is Empty!");
         }
     }
 
@@ -151,6 +157,7 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
         outState.putInt(Utility.KEY_NAVIGATION_SECTION_ID,
                 getNavSectionId());
+        Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState is Filled!");
     }
 
     private void changeFragment(Fragment fragment) {

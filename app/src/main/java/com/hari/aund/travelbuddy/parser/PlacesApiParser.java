@@ -64,6 +64,9 @@ public class PlacesApiParser implements PlacesApiUrlValues {
             JSONObject geometryJsonObject = resultsJsonObject.getJSONObject(TAG_GEOMETRY);
             JSONObject locationJsonObject = geometryJsonObject.getJSONObject(TAG_LOCATION);
 
+            mPlacesCategoryActivity.setLatitude(locationJsonObject.getString(TAG_LAT));
+            mPlacesCategoryActivity.setLongitude(locationJsonObject.getString(TAG_LNG));
+
             mPlacesCategoryActivity.getPlacesCategoryAdapter().setLatitude(
                     locationJsonObject.getString(TAG_LAT));
             mPlacesCategoryActivity.getPlacesCategoryAdapter().setLongitude(

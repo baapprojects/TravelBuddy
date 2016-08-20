@@ -31,6 +31,7 @@ import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
 import com.hari.aund.travelbuddy.activity.PlacesCategoryActivity;
 import com.hari.aund.travelbuddy.adapter.PlaceAutoCompleteAdapter;
+import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 import com.hari.aund.travelbuddy.utils.gplaces.PlaceAutoComplete;
 
@@ -80,7 +81,7 @@ public class ExplorePlacesFragment extends Fragment
                              Bundle savedInstanceState) {
         mActionBar = ((MainActivity) getActivity()).getSupportActionBar();
 
-        readAndSetNavSectionId();
+        readValues(savedInstanceState);
         setFragmentTitle();
 
         mGoogleApiClient = new GoogleApiClient
@@ -122,9 +123,11 @@ public class ExplorePlacesFragment extends Fragment
             setNavSectionId(savedInstanceState.getInt(Utility.KEY_NAVIGATION_SECTION_ID));
             setNewPlaceId(savedInstanceState.getString(Utility.KEY_PLACE_ID));
             setNewPlaceName(savedInstanceState.getString(Utility.KEY_PLACE_NAME));
-            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState bundle is Read!");
+            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState is Restored!");
+
+            setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
         }else {
-            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState bundle is Empty!");
+            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState is Empty!");
         }
     }
 
@@ -134,7 +137,7 @@ public class ExplorePlacesFragment extends Fragment
         outState.putInt(Utility.KEY_NAVIGATION_SECTION_ID, getNavSectionId());
         outState.putString(Utility.KEY_PLACE_ID, getNewPlaceId());
         outState.putString(Utility.KEY_PLACE_NAME, getNewPlaceName());
-        Log.d(LOG_TAG, "onSaveInstanceState - outInstanceState bundle is Filled!");
+        Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState bundle is Filled!");
     }
 
     @Override
@@ -239,8 +242,21 @@ public class ExplorePlacesFragment extends Fragment
         }
     }
 
-    private void readAndSetNavSectionId() {
-        setNavSectionId(getArguments().getInt(Utility.KEY_NAVIGATION_SECTION_ID));
+    private void readValues(Bundle savedInstanceState) {
+        if (savedInstanceState != null){
+            setNavSectionId(savedInstanceState.getInt(Utility.KEY_NAVIGATION_SECTION_ID));
+            setNewPlaceId(savedInstanceState.getString(Utility.KEY_PLACE_ID));
+            setNewPlaceName(savedInstanceState.getString(Utility.KEY_PLACE_NAME));
+            Log.d(LOG_TAG, "readValues - savedInstanceState is Restored!");
+        } else if (getArguments() != null) {
+            setNavSectionId(getArguments().getInt(Utility.KEY_NAVIGATION_SECTION_ID));
+            Log.d(LOG_TAG, "readValues - getArguments() is Restored!");
+        } else {
+            setNavSectionId(Utility.NAV_SECTION_EXPLORE_PLACES);
+            setNewPlaceId(DefaultValues.DEFAULT_PLACE_ID);
+            setNewPlaceName(DefaultValues.DEFAULT_PLACE_NAME);
+            Log.d(LOG_TAG, "readValues - Default Values is Restored!");
+        }
         setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
         Log.d(LOG_TAG, "NAV SECTION ID - " + getNavSectionId() + " & Name : " + getNavSectionName());
     }
