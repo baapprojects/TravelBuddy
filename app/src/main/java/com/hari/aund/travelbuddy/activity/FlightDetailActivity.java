@@ -13,12 +13,14 @@ import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.FlightListAdapter;
 import com.hari.aund.travelbuddy.data.FlightDetail;
 import com.hari.aund.travelbuddy.parser.FlightApiParser;
+import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.util.ArrayList;
 
-public class FlightDetailActivity extends AppCompatActivity {
+public class FlightDetailActivity extends AppCompatActivity
+        implements DefaultValues{
 
     private static final String LOG_TAG = FlightDetailActivity.class.getSimpleName();
 
@@ -59,9 +61,8 @@ public class FlightDetailActivity extends AppCompatActivity {
         mProgressWheel = (ProgressWheel) findViewById(R.id.progress_wheel);
         mProgressWheel.spin();
 
-        int columnCount = 1;
         StaggeredGridLayoutManager sGridLayoutManager = new StaggeredGridLayoutManager(
-                columnCount, StaggeredGridLayoutManager.VERTICAL);
+                DEFAULT_COLUMN_COUNT_1, StaggeredGridLayoutManager.VERTICAL);
 
         mFlightListAdapter = new FlightListAdapter(this, mFlightDetailList);
 

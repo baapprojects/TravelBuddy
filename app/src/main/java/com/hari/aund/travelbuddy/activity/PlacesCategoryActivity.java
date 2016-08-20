@@ -58,8 +58,8 @@ public class PlacesCategoryActivity extends AppCompatActivity
                 );
         */
 
-        GridLayoutManager gridLayoutManager =
-                new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,
+                DEFAULT_COLUMN_COUNT_3, LinearLayoutManager.VERTICAL, false);
 
         mPlacesCategoryAdapter = new PlacesCategoryAdapter(this);
 
