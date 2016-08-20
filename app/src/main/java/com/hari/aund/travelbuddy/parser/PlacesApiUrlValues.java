@@ -51,5 +51,9 @@ public interface PlacesApiUrlValues {
     String TAG_TIMETABLE = "weekday_text";
     String TAG_USER_RATINGS_TOTAL = "user_ratings_total";
     String TAG_WEBSITE = "website";
+    String TAG_REVIEWS = "reviews";
+    String TAG_REVIEWER_NAME = "author_name";
+    String TAG_REVIEW_CONTENT = "text";
+    String TAG_REVIEW_RATING = "rating";
 
 }

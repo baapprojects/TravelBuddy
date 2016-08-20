@@ -11,6 +11,7 @@ import com.hari.aund.travelbuddy.app.TBConfig;
 import com.hari.aund.travelbuddy.app.TravelBuddyApp;
 import com.hari.aund.travelbuddy.data.PlaceDetail;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
+import com.hari.aund.travelbuddy.data.provider.ReviewDetail;
 import com.hari.aund.travelbuddy.fragment.PlacesSubTypeFragment;
 
 import org.json.JSONArray;
@@ -259,6 +260,23 @@ public class PlacesApiParser implements PlacesApiUrlValues {
                 //Timetable Card View Objects
                 for (int index = 0; index < timesJSONArray.length(); index++) {
                     place.addTimeEntry((String) timesJSONArray.get(index));
+                }
+            }
+
+            //Review Card View Objects
+            if (jsonObject.has(TAG_REVIEWS)) {
+                JSONArray reviews = jsonObject.getJSONArray(TAG_REVIEWS);
+
+                for (int index = 0; index < reviews.length(); index++) {
+                    ReviewDetail reviewDetail = new ReviewDetail();
+                    reviewDetail.setReviewerName(reviews.getJSONObject(index)
+                            .getString(TAG_REVIEWER_NAME));
+                    reviewDetail.setContent(reviews.getJSONObject(index)
+                            .getString(TAG_REVIEW_CONTENT));
+                    reviewDetail.setRating(String.valueOf(reviews.getJSONObject(index)
+                            .getString(TAG_REVIEW_RATING)));
+
+                    place.addReviewEntry(reviewDetail);
                 }
             }
 

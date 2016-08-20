@@ -1,5 +1,7 @@
 package com.hari.aund.travelbuddy.data;
 
+import com.hari.aund.travelbuddy.data.provider.ReviewDetail;
+
 import java.util.ArrayList;
 
 /**
@@ -18,11 +20,13 @@ public class PlaceDetail{
     private double mLongitude;
     private ArrayList<String> mPhotoReference;
     private ArrayList<String> mTimetable;
+    private ArrayList<ReviewDetail> mReviewDetails;
 
     public PlaceDetail(String id) {
         mId = id;
         mPhotoReference = new ArrayList<>();
         mTimetable = new ArrayList<>();
+        mReviewDetails = new ArrayList<>();
     }
 
     public String getId() {
@@ -129,6 +133,22 @@ public class PlaceDetail{
         getTimetable().add(timeEntry);
     }
 
+    public ArrayList<ReviewDetail> getReviewDetails() {
+        return mReviewDetails;
+    }
+
+    public void setReviewDetails(ArrayList<ReviewDetail> reviewDetails) {
+        mReviewDetails = reviewDetails;
+    }
+
+    public ReviewDetail getReviewEntry(int position){
+        return getReviewDetails().get(position);
+    }
+
+    public void addReviewEntry(ReviewDetail reviewDetail){
+        getReviewDetails().add(reviewDetail);
+    }
+
     public boolean hasVicinity(){
         return getVicinity() != null;
     }
@@ -155,5 +175,9 @@ public class PlaceDetail{
     
     public boolean hasTimeTable(){
         return !getTimetable().isEmpty();
+    }
+
+    public boolean hasReviews(){
+        return !getReviewDetails().isEmpty();
     }
 }

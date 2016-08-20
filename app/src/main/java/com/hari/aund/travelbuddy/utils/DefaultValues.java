@@ -21,4 +21,7 @@ public interface DefaultValues {
 
     String DEFAULT_PLACE_ID_TEMPLE = "ChIJS9LI1WGUpzsRnnBIX4GNem8";
     String DEFAULT_PLACE_NAME_TEMPLE = "Guruvayur Temple";
+
+    int DEFAULT_COLUMN_COUNT_1 = 1;
+    int DEFAULT_COLUMN_COUNT_3 = 3;
 }
