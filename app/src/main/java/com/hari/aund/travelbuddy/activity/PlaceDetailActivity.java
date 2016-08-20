@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hari.aund.travelbuddy.R;
+import com.hari.aund.travelbuddy.adapter.ReviewListAdapter;
 import com.hari.aund.travelbuddy.data.PlaceDetail;
 import com.hari.aund.travelbuddy.parser.PlacesApiParser;
 import com.hari.aund.travelbuddy.utils.DefaultValues;
@@ -35,11 +39,12 @@ public class PlaceDetailActivity extends AppCompatActivity
     private int mCategoryId;
     private String mPlaceId, mCategoryName;
     private PlaceDetail mPlaceDetail;
-    public TextView placeName, placeVicinity, placeAddress, placeRating, favouriteText;
-    public ImageView coverImage, shareIcon, favouriteIcon;
-    public CardView addressCard, photosCard, timetableCard;
-    public LinearLayout callNowLayout, websiteLayout, reviewsLayout, favouriteLayout;
-    public LinearLayout photosLayout, timetableLayout;
+    private TextView placeName, placeVicinity, placeAddress, placeRating, favouriteText;
+    private ImageView coverImage, shareIcon, favouriteIcon;
+    private CardView addressCard, photosCard, timetableCard;
+    private LinearLayout callNowLayout, websiteLayout, reviewsLayout, favouriteLayout;
+    private LinearLayout photosLayout, timetableLayout, reviewsRecycleViewLayout;
+    private RecyclerView reviewsRecyclerView;
     private GoogleMap mGoogleMap;
 
     @Override
@@ -54,6 +59,12 @@ public class PlaceDetailActivity extends AppCompatActivity
                 finish();
             }
         });
+
+        ActionBar mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setTitle("");
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         initViewsAndLayout();
 
@@ -144,6 +155,9 @@ public class PlaceDetailActivity extends AppCompatActivity
         favouriteLayout = (LinearLayout) findViewById(R.id.favourite_layout);
         photosLayout = (LinearLayout) findViewById(R.id.photo_layout);
         timetableLayout = (LinearLayout) findViewById(R.id.timetable_layout);
+        reviewsRecycleViewLayout = (LinearLayout) findViewById(R.id.reviews_content_Layout);
+
+        reviewsRecyclerView = (RecyclerView) findViewById(R.id.reviews_recycler_view);
 
         setOnClickListenerToViews();
     }
@@ -214,6 +228,7 @@ public class PlaceDetailActivity extends AppCompatActivity
         createAddressLayout();
         createPhotosLayout();
         createTimeTableLayout();
+        createReviewsRecyclerView();
     }
 
     private void populateHeaderLayout(){
@@ -265,7 +280,7 @@ public class PlaceDetailActivity extends AppCompatActivity
                         .load(placesApiParser.getPhotoUrl(
                                 mPlaceDetail.getPhotoReference().get(index),
                                 heightAndWidthStr, heightAndWidthStr))
-                        .fit()
+                        .resize(300, 300)
                         .into(imageView);
 
                 photosLayout.addView(imageView);
@@ -299,6 +314,15 @@ public class PlaceDetailActivity extends AppCompatActivity
             timetableCard.setVisibility(View.GONE);
             Log.d(LOG_TAG, "No Entries. So, TimeTable Layout is ignored!");
         }
+    }
+
+    private void createReviewsRecyclerView(){
+        StaggeredGridLayoutManager sGridLayoutManager = new StaggeredGridLayoutManager(
+                DEFAULT_COLUMN_COUNT_1, StaggeredGridLayoutManager.VERTICAL);
+        ReviewListAdapter reviewListAdapter = new ReviewListAdapter(this, mPlaceDetail.getReviewDetails());
+
+        reviewsRecyclerView.setLayoutManager(sGridLayoutManager);
+        reviewsRecyclerView.setAdapter(reviewListAdapter);
     }
 
     public PlaceDetail getPlaceDetail() {
