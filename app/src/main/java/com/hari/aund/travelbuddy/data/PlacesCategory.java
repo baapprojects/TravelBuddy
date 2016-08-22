@@ -49,8 +49,16 @@ public class PlacesCategory implements Parcelable {
             mSubTypeList = null;
         }
         setCategoryActivityId(in.readInt());
-        setLatitude(in.readDouble());
-        setLongitude(in.readDouble());
+        if (in.readByte() == SUB_TYPE_LIST_VALID_REF) {
+            setLatitude(in.readDouble());
+        } else {
+            mSubTypeList = null;
+        }
+        if (in.readByte() == SUB_TYPE_LIST_VALID_REF) {
+            setLongitude(in.readDouble());
+        } else {
+            mSubTypeList = null;
+        }
     }
 
     @Override
@@ -69,8 +77,18 @@ public class PlacesCategory implements Parcelable {
             dest.writeList(getSubTypeList());
         }
         dest.writeInt(getCategoryActivityId());
-        dest.writeDouble(getLatitude());
-        dest.writeDouble(getLongitude());
+        if (mLatitude == null) {
+            dest.writeByte((byte) (SUB_TYPE_LIST_INVALID_REF));
+        } else {
+            dest.writeByte((byte) (SUB_TYPE_LIST_VALID_REF));
+            dest.writeDouble(getLatitude());
+        }
+        if (mLongitude == null) {
+            dest.writeByte((byte) (SUB_TYPE_LIST_INVALID_REF));
+        } else {
+            dest.writeByte((byte) (SUB_TYPE_LIST_VALID_REF));
+            dest.writeDouble(getLongitude());
+        }
     }
 
     @SuppressWarnings("unused")
