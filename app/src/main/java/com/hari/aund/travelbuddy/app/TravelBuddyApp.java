@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.facebook.stetho.Stetho;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/15/2016.
@@ -24,6 +25,13 @@ public class TravelBuddyApp extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(
+                                Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(
+                                Stetho.defaultInspectorModulesProvider(this))
+                        .build());
     }
 
     public static synchronized TravelBuddyApp getInstance() {
