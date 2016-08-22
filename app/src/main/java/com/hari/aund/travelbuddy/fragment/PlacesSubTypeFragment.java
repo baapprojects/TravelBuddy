@@ -29,6 +29,8 @@ public class PlacesSubTypeFragment extends Fragment
 
     private static final String LOG_TAG = PlacesSubTypeFragment.class.getSimpleName();
 
+    private static final int PREFERENCE_MODE_PRIVATE = 0;
+
     private int mCategoryId;
     private int mCategoryActivityId;
     private int mSectionNumber;
@@ -39,8 +41,6 @@ public class PlacesSubTypeFragment extends Fragment
     private PlacesListAdapter mPlacesListAdapter;
     private ArrayList<PlacesListInfo> mPlacesListInfoArray = new ArrayList<>();
     private ProgressWheel mProgressWheel;
-
-    private static final int PREFERENCE_MODE_PRIVATE = 0;
     private SharedPreferences mSharedPreferences;
     private RecyclerView mRecyclerView;
 
@@ -65,8 +65,7 @@ public class PlacesSubTypeFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_places_sub_type, container, false);
 
         mSharedPreferences = getActivity().getPreferences(PREFERENCE_MODE_PRIVATE);
-
-        readValues(savedInstanceState);
+        readValues();
 
         setProgressWheel((ProgressWheel) rootView.findViewById(R.id.progress_wheel));
         getProgressWheel().spin();
@@ -174,26 +173,11 @@ public class PlacesSubTypeFragment extends Fragment
         Log.d(LOG_TAG, "inside onSavedInstanceState");
     }
 
-    private void readValues(Bundle savedInstanceState) {
-        /*
-        if (savedInstanceState != null) {
-            mSectionNumber = savedInstanceState.getInt(Utility.KEY_PLACE_SECTION_NUMBER);
-            mPlacesCategory = savedInstanceState.getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
-            Log.d(LOG_TAG, "readValues - savedInstanceState is Restored!");
-        } else */
+    private void readValues() {
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(Utility.KEY_PLACE_SECTION_NUMBER);
-            ;
             mPlacesCategory = getArguments().getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
-            Log.d(LOG_TAG, "readValues - savedInstanceState : getArguments() is Restored!");
-            /*
-        } else {
-            mSectionNumber = DefaultValues.DEFAULT_SUB_TYPE_ID;
-            mPlacesCategory = new PlacesCategory(DEFAULT_CATEGORY_ID);
-            Log.d(LOG_TAG, "readValues - savedInstanceState : Default Values is Restored!");
-            */
         }
-        Log.d(LOG_TAG, "inside readValues");
         initValues();
     }
 
@@ -206,16 +190,7 @@ public class PlacesSubTypeFragment extends Fragment
             setCategoryName();
             setLatitude();
             setLongitude();
-            /*
-        } else {
-            setSectionName(DEFAULT_SUB_TYPE_NAME);
-            setCategoryId(DEFAULT_CATEGORY_ID);
-            setCategoryName(DEFAULT_CATEGORY_NAME);
-            setLatitude(DEFAULT_LATITUDE);
-            setLongitude(DEFAULT_LONGITUDE);
-            */
         }
-        Log.d(LOG_TAG, "inside initValues");
     }
 
     private void createAndAddAdapterToView() {
@@ -224,8 +199,6 @@ public class PlacesSubTypeFragment extends Fragment
         mPlacesListAdapter = new PlacesListAdapter(getActivity(),
                 mPlacesListInfoArray, mCategoryId, mCategoryName);
         mRecyclerView.setAdapter(mPlacesListAdapter);
-
-        Log.d(LOG_TAG, "inside createAndAddAdapterToView");
     }
 
     public int getCategoryId() {

@@ -30,13 +30,13 @@ public class PlacesSubTypeActivity extends AppCompatActivity
 
     private static final String LOG_TAG = PlacesSubTypeActivity.class.getSimpleName();
 
-    private PlacesCategory mPlacesCategory = null;
-
     private static final int PREFERENCE_MODE_PRIVATE = 0;
+
+    private boolean mSaveToPreference = true;
+    private PlacesCategory mPlacesCategory = null;
     private SharedPreferences mSharedPreferences;
     private Toolbar mToolbar;
     private Spinner mSpinner;
-    private boolean mSaveToPreference = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,25 +106,17 @@ public class PlacesSubTypeActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        /*
-        if (savedInstanceState != null) {
-            mPlacesCategory = savedInstanceState.getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
-            Log.d(LOG_TAG, "onRestoreInstanceState - savedInstanceState is Restored!");
-        } else {
-            Log.d(LOG_TAG, "onRestoreInstanceState - savedInstanceState is Empty!");
-        }
-        Log.d(LOG_TAG, "inside onRestoreInstanceState ");
-        */
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        /*
-        outState.putParcelable(Utility.KEY_PLACE_CATEGORY_INFO, getPlacesCategory());
-        Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState is Filled!");
-        Log.d(LOG_TAG, "inside onSaveInstanceState ");
-        */
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mSaveToPreference = false;
     }
 
     @Override
@@ -165,18 +157,9 @@ public class PlacesSubTypeActivity extends AppCompatActivity
     }
 
     private void readValues(Intent intent, Bundle savedInstanceState){
-        /*if (savedInstanceState != null) {
-            mPlacesCategory = savedInstanceState.getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
-            Log.d(LOG_TAG, "readValues - savedInstanceState is Restored!");
-        } else */ if (intent.getExtras() != null) {
-            mPlacesCategory = intent.getParcelableExtra(Utility.KEY_PLACE_CATEGORY_INFO);
-            Log.d(LOG_TAG, "readValues - savedInstanceState : intent.Extras is Restored!");
-            /*
-        } else {
-            mPlacesCategory = new PlacesCategory(DEFAULT_CATEGORY_ID);
-            Log.d(LOG_TAG, "readValues - savedInstanceState : Default Values is Restored!");
-            */
-        }
+        if (intent.getExtras() != null)
+            mPlacesCategory = intent.getParcelableExtra(
+                    Utility.KEY_PLACE_CATEGORY_INFO);
     }
 
     private void initViewObjects(){
@@ -227,12 +210,6 @@ public class PlacesSubTypeActivity extends AppCompatActivity
             if (spinnerSelection != DEFAULT_INVALID_SPINNER_ID)
                 mSpinner.setSelection(spinnerSelection);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mSaveToPreference = false;
     }
 
     public PlacesCategory getPlacesCategory() {

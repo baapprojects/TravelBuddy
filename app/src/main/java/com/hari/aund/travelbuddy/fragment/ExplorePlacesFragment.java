@@ -50,6 +50,7 @@ public class ExplorePlacesFragment extends Fragment
 
     private static final int PLACE_PICKER_REQUEST = 1;
     private static final int RESULTS_OK = -1;
+    private static final int PREFERENCE_MODE_PRIVATE = 0;
 
     private int mNavSectionId;
     private String mNavSectionName;
@@ -62,8 +63,6 @@ public class ExplorePlacesFragment extends Fragment
     private ActionBar mActionBar = null;
     private GoogleApiClient mGoogleApiClient = null;
     private TextView mNewPlaceTextView;
-
-    private static final int PREFERENCE_MODE_PRIVATE = 0;
     private SharedPreferences mSharedPreferences;
 
     public ExplorePlacesFragment() {
@@ -86,8 +85,7 @@ public class ExplorePlacesFragment extends Fragment
         mActionBar = ((MainActivity) getActivity()).getSupportActionBar();
 
         mSharedPreferences = getActivity().getPreferences(PREFERENCE_MODE_PRIVATE);
-        Log.d(LOG_TAG, "inside onCreate");
-        readValues(savedInstanceState);
+        readValues();
         setFragmentTitle();
 
         mGoogleApiClient = new GoogleApiClient
@@ -134,13 +132,11 @@ public class ExplorePlacesFragment extends Fragment
         mPreferenceEditor.putString(Utility.KEY_PLACE_NAME,
                 getNewPlaceName());
         mPreferenceEditor.apply();
-        Log.d(LOG_TAG, "inside onPause");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "1. inside onResume");
         if (getNavSectionId() == 0 || getNewPlaceId() == null ||
                 getNewPlaceName() == null) {
             setNavSectionId(mSharedPreferences.getInt(
@@ -150,37 +146,17 @@ public class ExplorePlacesFragment extends Fragment
             setNewPlaceName(mSharedPreferences.getString(
                     Utility.KEY_PLACE_NAME, DefaultValues.DEFAULT_PLACE_NAME));
             setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
-            Log.d(LOG_TAG, "2. inside onResume");
         }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(LOG_TAG, "inside onActivityCreated");
-        /*
-        if (savedInstanceState != null) {
-            setNavSectionId(savedInstanceState.getInt(Utility.KEY_NAVIGATION_SECTION_ID));
-            setNewPlaceId(savedInstanceState.getString(Utility.KEY_PLACE_ID));
-            setNewPlaceName(savedInstanceState.getString(Utility.KEY_PLACE_NAME));
-            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState is Restored!");
-
-            setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
-        }else {
-            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState is Empty!");
-        }
-        */
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        /*
-        outState.putInt(Utility.KEY_NAVIGATION_SECTION_ID, getNavSectionId());
-        outState.putString(Utility.KEY_PLACE_ID, getNewPlaceId());
-        outState.putString(Utility.KEY_PLACE_NAME, getNewPlaceName());
-        Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState bundle is Filled!");
-        */
     }
 
     @Override
@@ -276,34 +252,18 @@ public class ExplorePlacesFragment extends Fragment
                 if (getView() != null) {
                     Snackbar.make(getView(), place.getAddress().toString(), Snackbar.LENGTH_SHORT)
                             .show();
-                } /*else {
-                    Toast.makeText(getContext(), "getView() is null", Toast.LENGTH_SHORT)
-                        .show();
                 }
-                */
             }
         }
     }
 
-    private void readValues(Bundle savedInstanceState) {
-/*        if (savedInstanceState != null){
-            setNavSectionId(savedInstanceState.getInt(Utility.KEY_NAVIGATION_SECTION_ID));
-            setNewPlaceId(savedInstanceState.getString(Utility.KEY_PLACE_ID));
-            setNewPlaceName(savedInstanceState.getString(Utility.KEY_PLACE_NAME));
-            Log.d(LOG_TAG, "readValues - savedInstanceState is Restored!");
-        } else*/ if (getArguments() != null) {
-            setNavSectionId(getArguments().getInt(Utility.KEY_NAVIGATION_SECTION_ID));
-            Log.d(LOG_TAG, "readValues - getArguments() is Restored!");
-            /*
-        } else {
-            setNavSectionId(Utility.NAV_SECTION_EXPLORE_PLACES);
-            setNewPlaceId(DefaultValues.DEFAULT_PLACE_ID);
-            setNewPlaceName(DefaultValues.DEFAULT_PLACE_NAME);
-            Log.d(LOG_TAG, "readValues - Default Values is Restored!");
-            */
+    private void readValues() {
+        if (getArguments() != null) {
+            setNavSectionId(getArguments().getInt(
+                    Utility.KEY_NAVIGATION_SECTION_ID));
+            setNavSectionName(Utility.getNavSectionName(
+                    getContext(), getNavSectionId()));
         }
-        setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
-        Log.d(LOG_TAG, "NAV SECTION ID - " + getNavSectionId() + " & Name : " + getNavSectionName());
     }
 
     private void setNavSectionId(int navSectionId) {

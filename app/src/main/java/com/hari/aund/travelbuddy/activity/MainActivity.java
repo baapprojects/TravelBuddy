@@ -25,12 +25,11 @@ public class MainActivity extends AppCompatActivity
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int DEFAULT_SECTION_ID =
             Utility.NAV_SECTION_EXPLORE_PLACES;
-    private DrawerLayout mDrawerLayout;
-
     private static final int PREFERENCE_MODE_PRIVATE = 0;
-    private SharedPreferences mSharedPreferences;
 
     private int mNavSectionId = DEFAULT_SECTION_ID;
+    private SharedPreferences mSharedPreferences;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +43,6 @@ public class MainActivity extends AppCompatActivity
                 finish();
             }
         });
-
-        Log.d(LOG_TAG, "inside onCreate");
 
         mSharedPreferences = getPreferences(PREFERENCE_MODE_PRIVATE);
 
@@ -160,7 +157,6 @@ public class MainActivity extends AppCompatActivity
         mPreferenceEditor.putInt(Utility.KEY_NAVIGATION_SECTION_ID,
                 getNavSectionId());
         mPreferenceEditor.apply();
-        Log.d(LOG_TAG, "inside onPause");
     }
 
     @Override
@@ -169,32 +165,16 @@ public class MainActivity extends AppCompatActivity
         setNavSectionId(mSharedPreferences
                 .getInt(Utility.KEY_NAVIGATION_SECTION_ID,
                         DEFAULT_SECTION_ID));
-
-        Log.d(LOG_TAG, "inside onResume");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        /*
-        if (savedInstanceState != null) {
-            setNavSectionId(savedInstanceState
-                    .getInt(Utility.KEY_NAVIGATION_SECTION_ID));
-            Log.d(LOG_TAG, "onRestoreInstanceState - savedInstanceState is Restored!");
-        } else {
-            Log.d(LOG_TAG, "onRestoreInstanceState - savedInstanceState is Empty!");
-        }
-        */
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        /*
-        outState.putInt(Utility.KEY_NAVIGATION_SECTION_ID,
-                getNavSectionId());
-        Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState is Filled!");
-        */
     }
 
     private void changeFragment(Fragment fragment) {
