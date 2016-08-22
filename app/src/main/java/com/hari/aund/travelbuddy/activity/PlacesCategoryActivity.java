@@ -28,6 +28,7 @@ public class PlacesCategoryActivity extends AppCompatActivity
 
     private boolean mActivityTriggerFromMainActivity = false;
     private boolean mSaveToPreference = true;
+    private boolean mFetchingLatLngInProgress = false;
     private String mPlaceId;
     private String mPlaceName;
     private String mLatitude;
@@ -87,7 +88,7 @@ public class PlacesCategoryActivity extends AppCompatActivity
         super.onResume();
         if ((getLatitude() == null ||
                 getLongitude() == null || getPlaceId() == null) &&
-                !mActivityTriggerFromMainActivity){
+                !mActivityTriggerFromMainActivity) {
             setPlaceId(mSharedPreferences.getString(
                     Utility.KEY_PLACE_ID, DEFAULT_PLACE_ID));
             setPlaceName(mSharedPreferences.getString(
@@ -96,10 +97,10 @@ public class PlacesCategoryActivity extends AppCompatActivity
                     Utility.KEY_PLACE_LATITUDE, DEFAULT_LATITUDE.toString()));
             setLongitude(mSharedPreferences.getString(
                     Utility.KEY_PLACE_LONGITUDE, DEFAULT_LONGITUDE.toString()));
-
-            initViewObjects();
-            createAndAddAdapterToView();
         }
+
+        if (!mFetchingLatLngInProgress)
+            createAndAddAdapterToView();
     }
 
     @Override
@@ -177,6 +178,7 @@ public class PlacesCategoryActivity extends AppCompatActivity
         if ((getLatitude() == null || getLatitude().isEmpty()) ||
                 (getLongitude() == null || getLongitude().isEmpty())) {
             new PlacesApiParser(this).getExplorePlaceDetails();
+            mFetchingLatLngInProgress = true;
 
             mPlacesCategoryAdapter = new PlacesCategoryAdapter(this);
         } else {
