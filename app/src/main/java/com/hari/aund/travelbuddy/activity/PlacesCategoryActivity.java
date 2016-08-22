@@ -1,6 +1,7 @@
 package com.hari.aund.travelbuddy.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,6 +31,12 @@ public class PlacesCategoryActivity extends AppCompatActivity
     private String mLongitude;
     private PlacesCategoryAdapter mPlacesCategoryAdapter = null;
 
+    private static final int PREFERENCE_MODE_PRIVATE = 0;
+    private SharedPreferences mSharedPreferences;
+    private boolean mActivityTriggerFromMainActivity = false;
+    private RecyclerView mRecyclerView;
+    private boolean mSaveToPreference = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +46,15 @@ public class PlacesCategoryActivity extends AppCompatActivity
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mSaveToPreference = false;
+                Log.d(LOG_TAG, "just before finish()");
                 finish();
             }
         });
+
+        Log.d(LOG_TAG, "inside onCreate");
+
+        mSharedPreferences = getPreferences(PREFERENCE_MODE_PRIVATE);
 
         readValues(getIntent(), savedInstanceState);
 
@@ -59,33 +72,61 @@ public class PlacesCategoryActivity extends AppCompatActivity
                 );
         */
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,
-                DEFAULT_COLUMN_COUNT_3, LinearLayoutManager.VERTICAL, false);
+        initViewObjects();
+        if (mActivityTriggerFromMainActivity)
+            createAndAddAdapterToView();
+    }
 
-        if ((getLatitude() == null || getLatitude().isEmpty()) ||
-                (getLongitude() == null || getLongitude().isEmpty())) {
-            new PlacesApiParser(this).getExplorePlaceDetails();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(LOG_TAG, "inside onStart");
+    }
 
-            mPlacesCategoryAdapter = new PlacesCategoryAdapter(this);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor mPreferenceEditor = mSharedPreferences.edit();
+        if (mSaveToPreference) {
+            mPreferenceEditor.putString(Utility.KEY_PLACE_ID, getPlaceId());
+            mPreferenceEditor.putString(Utility.KEY_PLACE_NAME, getPlaceName());
+            mPreferenceEditor.putString(Utility.KEY_PLACE_LATITUDE, getLatitude());
+            mPreferenceEditor.putString(Utility.KEY_PLACE_LONGITUDE, getLongitude());
         } else {
-            mPlacesCategoryAdapter = new PlacesCategoryAdapter(this,
-                    Double.parseDouble(getLatitude()),
-                    Double.parseDouble(getLongitude())
-            );
+            mPreferenceEditor.putString(Utility.KEY_PLACE_ID, REST_KEY_VALUE);
+            mPreferenceEditor.putString(Utility.KEY_PLACE_NAME, REST_KEY_VALUE);
+            mPreferenceEditor.putString(Utility.KEY_PLACE_LATITUDE, REST_KEY_VALUE);
+            mPreferenceEditor.putString(Utility.KEY_PLACE_LONGITUDE, REST_KEY_VALUE);
         }
+        mPreferenceEditor.apply();
+        Log.d(LOG_TAG, "inside onPause");
+    }
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(mPlacesCategoryAdapter);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if ((getLatitude() == null || getLongitude() == null || getPlaceId() == null) &&
+                (!mActivityTriggerFromMainActivity)){
+            Log.d(LOG_TAG, "latitude | longitude | placeId is null");
+            setPlaceId(mSharedPreferences.getString(
+                    Utility.KEY_PLACE_ID, DEFAULT_PLACE_ID));
+            setPlaceName(mSharedPreferences.getString(
+                    Utility.KEY_PLACE_NAME, DEFAULT_PLACE_NAME));
+            setLatitude(mSharedPreferences.getString(
+                    Utility.KEY_PLACE_LATITUDE, DEFAULT_LATITUDE.toString()));
+            setLongitude(mSharedPreferences.getString(
+                    Utility.KEY_PLACE_LONGITUDE, DEFAULT_LONGITUDE.toString()));
 
-        FloatingActionButton favouriteFab =
-                (FloatingActionButton) findViewById(R.id.fab_places_favourite);
-        favouriteFab.setOnClickListener(this);
+            initViewObjects();
+            createAndAddAdapterToView();
+        }
+        Log.d(LOG_TAG, "inside onResume");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        /*
         if (savedInstanceState != null) {
             setPlaceId(savedInstanceState.getString(Utility.KEY_PLACE_ID));
             setPlaceName(savedInstanceState.getString(Utility.KEY_PLACE_NAME));
@@ -95,16 +136,21 @@ public class PlacesCategoryActivity extends AppCompatActivity
         } else {
             Log.d(LOG_TAG, "onRestoreInstanceState - savedInstanceState is Empty!");
         }
+        Log.d(LOG_TAG, "inside onRestoreInstanceState");
+        */
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        /*
         outState.putString(Utility.KEY_PLACE_ID, getPlaceId());
         outState.putString(Utility.KEY_PLACE_NAME, getPlaceName());
         outState.putString(Utility.KEY_PLACE_LATITUDE, getLatitude());
         outState.putString(Utility.KEY_PLACE_LONGITUDE, getLongitude());
         Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState is Filled!");
+        Log.d(LOG_TAG, "inside onSaveInstanceState");
+        */
     }
 
     @Override
@@ -117,23 +163,73 @@ public class PlacesCategoryActivity extends AppCompatActivity
 
     private void readValues(Intent intent, Bundle savedInstanceState) {
         //Set Default Values if extras/bundle is null; Def Place Alappuzha
+        /*
         if (savedInstanceState != null) {
             setPlaceId(savedInstanceState.getString(Utility.KEY_PLACE_ID));
             setPlaceName(savedInstanceState.getString(Utility.KEY_PLACE_NAME));
             setLatitude(savedInstanceState.getString(Utility.KEY_PLACE_LATITUDE));
             setLongitude(savedInstanceState.getString(Utility.KEY_PLACE_LONGITUDE));
             Log.d(LOG_TAG, "readValues - savedInstanceState is Restored!");
-        } else if (intent.getExtras() != null) {
+        } else */ if (intent.getExtras() != null) {
             setPlaceId(getIntent());
             setPlaceName(getIntent());
+            if (getPlaceId().equals(mSharedPreferences.getString(
+                    Utility.KEY_PLACE_ID, DEFAULT_PLACE_ID))){
+                setLatitude(mSharedPreferences.getString(
+                        Utility.KEY_PLACE_LATITUDE, DEFAULT_LATITUDE.toString()));
+                setLongitude(mSharedPreferences.getString(
+                        Utility.KEY_PLACE_LONGITUDE, DEFAULT_LONGITUDE.toString()));
+                mActivityTriggerFromMainActivity = false;
+            } else {
+                mActivityTriggerFromMainActivity = true;
+            }
             Log.d(LOG_TAG, "readValues - savedInstanceState : intent.Extras is Restored!");
+            /*
         } else {
             setPlaceId(DEFAULT_PLACE_ID);
             setPlaceName(DEFAULT_PLACE_NAME);
             setLatitude(DEFAULT_LATITUDE.toString());
             setLongitude(DEFAULT_LONGITUDE.toString());
             Log.d(LOG_TAG, "readValues - savedInstanceState : Default Values is Restored!");
+            */
         }
+        Log.d(LOG_TAG, "inside readValues");
+    }
+
+    private void initViewObjects(){
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,
+                DEFAULT_COLUMN_COUNT_3, LinearLayoutManager.VERTICAL, false);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+
+        FloatingActionButton favouriteFab =
+                (FloatingActionButton) findViewById(R.id.fab_places_favourite);
+        favouriteFab.setOnClickListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mSaveToPreference = false;
+        Log.d(LOG_TAG, "inside onBackPressed");
+    }
+
+    private void createAndAddAdapterToView(){
+        if ((getLatitude() == null || getLatitude().isEmpty()) ||
+                (getLongitude() == null || getLongitude().isEmpty())) {
+            Log.d(LOG_TAG, "Latitude || Longitude is null");
+            new PlacesApiParser(this).getExplorePlaceDetails();
+
+            mPlacesCategoryAdapter = new PlacesCategoryAdapter(this);
+        } else {
+            Log.d(LOG_TAG, "Latitude - " + getLatitude() + " Longitude - " + getLongitude());
+            mPlacesCategoryAdapter = new PlacesCategoryAdapter(this,
+                    Double.parseDouble(getLatitude()),
+                    Double.parseDouble(getLongitude())
+            );
+        }
+        mRecyclerView.setAdapter(mPlacesCategoryAdapter);
     }
 
     public String getPlaceId() {

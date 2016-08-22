@@ -28,10 +28,16 @@ public class Utility {
     public static final String KEY_PLACE_ID = "place_id";
     public static final String KEY_PLACE_NAME = "place_name";
 
+    public static final String KEY_PLACE_LATITUDE = "latitude";
+    public static final String KEY_PLACE_LONGITUDE = "longitude";
+
     public static final String KEY_CATEGORY_ID = "category_id";
     public static final String KEY_CATEGORY_NAME = "category_name";
 
+    public static final String KEY_PLACE_SECTION_NUMBER = "places_section_number";
     public static final String KEY_PLACE_CATEGORY_INFO = "places_category_info";
+
+    public static final String KEY_SPINNER_ID = "spinner";
 
     public static final int PLACES_ACTIVITY_COLUMN_COUNT_PORTRAIT = 1;
     public static final int PLACES_ACTIVITY_COLUMN_COUNT_LANDSCAPE = 1;

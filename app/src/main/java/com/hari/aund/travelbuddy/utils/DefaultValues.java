@@ -24,4 +24,7 @@ public interface DefaultValues {
 
     int DEFAULT_COLUMN_COUNT_1 = 1;
     int DEFAULT_COLUMN_COUNT_3 = 3;
+
+    String REST_KEY_VALUE = "";
+    int DEFAULT_INVALID_SPINNER_ID = -1;
 }

@@ -1,5 +1,6 @@
 package com.hari.aund.travelbuddy.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +40,10 @@ public class PlacesSubTypeFragment extends Fragment
     private ArrayList<PlacesListInfo> mPlacesListInfoArray = new ArrayList<>();
     private ProgressWheel mProgressWheel;
 
+    private static final int PREFERENCE_MODE_PRIVATE = 0;
+    private SharedPreferences mSharedPreferences;
+    private RecyclerView mRecyclerView;
+
     public PlacesSubTypeFragment() {
     }
 
@@ -59,9 +64,9 @@ public class PlacesSubTypeFragment extends Fragment
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_places_sub_type, container, false);
 
-        readValues(savedInstanceState);
+        mSharedPreferences = getActivity().getPreferences(PREFERENCE_MODE_PRIVATE);
 
-        new PlacesApiParser(this).getPlaceListDetails();
+        readValues(savedInstanceState);
 
         setProgressWheel((ProgressWheel) rootView.findViewById(R.id.progress_wheel));
         getProgressWheel().spin();
@@ -79,22 +84,73 @@ public class PlacesSubTypeFragment extends Fragment
         }
         */
 
-        StaggeredGridLayoutManager sGridLayoutManager =
-                new StaggeredGridLayoutManager(DEFAULT_COLUMN_COUNT_1, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager sGridLayoutManager = new StaggeredGridLayoutManager(
+                DEFAULT_COLUMN_COUNT_1, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(sGridLayoutManager);
 
-        mPlacesListAdapter = new PlacesListAdapter(getActivity(),
-                mPlacesListInfoArray, mCategoryId, mCategoryName);
-
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(sGridLayoutManager);
-        recyclerView.setAdapter(mPlacesListAdapter);
+        if (mCategoryId != 0 && mCategoryName != null &&
+                mPlacesListInfoArray.isEmpty() &&
+                getLatitude() != null && getLongitude() != null) {
+            createAndAddAdapterToView();
+        }
 
         return rootView;
     }
 
     @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences.Editor mPreferenceEditor = mSharedPreferences.edit();
+        mPreferenceEditor.putInt(Utility.KEY_PLACE_SECTION_NUMBER,
+                getSectionNumber());
+        mPreferenceEditor.putInt(Utility.KEY_CATEGORY_ID,
+                mPlacesCategory.getCategoryId());
+        mPreferenceEditor.putString(Utility.KEY_PLACE_LATITUDE,
+                getLatitude().toString());
+        mPreferenceEditor.putString(Utility.KEY_PLACE_LONGITUDE,
+                getLongitude().toString());
+        mPreferenceEditor.apply();
+        Log.d(LOG_TAG, "inside onPause");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getSectionNumber() == 0 ||
+                getLatitude() == null || getLongitude() == null) {
+            Log.d(LOG_TAG, "section number | latitude | longitude is null");
+            if (getSectionNumber() == 0)
+                setSectionNumber(mSharedPreferences.getInt(
+                        Utility.KEY_PLACE_SECTION_NUMBER, DEFAULT_SUB_TYPE_ID));
+
+            int categoryId = mSharedPreferences.getInt(
+                    Utility.KEY_CATEGORY_ID, DEFAULT_CATEGORY_ID);
+            mPlacesCategory = new PlacesCategory(categoryId);
+
+            mPlacesCategory.setLatitude(Double.valueOf(
+                    mSharedPreferences.getString(
+                            Utility.KEY_PLACE_LATITUDE,
+                            DEFAULT_LATITUDE.toString())));
+            mPlacesCategory.setLongitude(Double.valueOf(
+                    mSharedPreferences.getString(
+                            Utility.KEY_PLACE_LONGITUDE,
+                            DEFAULT_LONGITUDE.toString())));
+            initValues();
+            createAndAddAdapterToView();
+            Log.d(LOG_TAG, "inside onResume");
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        /*
         if (savedInstanceState != null) {
             mSectionNumber = savedInstanceState.getInt(Utility.KEY_PLACE_SECTION_NUMBER);
             mPlacesCategory = savedInstanceState.getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
@@ -103,34 +159,45 @@ public class PlacesSubTypeFragment extends Fragment
         } else {
             Log.d(LOG_TAG, "onActivityCreated - savedInstanceState is Empty!");
         }
+        */
+        Log.d(LOG_TAG, "inside onActivityCreated");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        /*
         outState.putInt(Utility.KEY_PLACE_SECTION_NUMBER, mSectionNumber);
         outState.putParcelable(Utility.KEY_PLACE_CATEGORY_INFO, mPlacesCategory);
         Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState is Filled!");
+        */
+        Log.d(LOG_TAG, "inside onSavedInstanceState");
     }
 
     private void readValues(Bundle savedInstanceState) {
+        /*
         if (savedInstanceState != null) {
             mSectionNumber = savedInstanceState.getInt(Utility.KEY_PLACE_SECTION_NUMBER);
             mPlacesCategory = savedInstanceState.getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
             Log.d(LOG_TAG, "readValues - savedInstanceState is Restored!");
-        } else if (getArguments() != null){
-            mSectionNumber = getArguments().getInt(Utility.KEY_PLACE_SECTION_NUMBER);;
+        } else */
+        if (getArguments() != null) {
+            mSectionNumber = getArguments().getInt(Utility.KEY_PLACE_SECTION_NUMBER);
+            ;
             mPlacesCategory = getArguments().getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
             Log.d(LOG_TAG, "readValues - savedInstanceState : getArguments() is Restored!");
+            /*
         } else {
             mSectionNumber = DefaultValues.DEFAULT_SUB_TYPE_ID;
             mPlacesCategory = new PlacesCategory(DEFAULT_CATEGORY_ID);
             Log.d(LOG_TAG, "readValues - savedInstanceState : Default Values is Restored!");
+            */
         }
+        Log.d(LOG_TAG, "inside readValues");
         initValues();
     }
 
-    private void initValues(){
+    private void initValues() {
         //Set Default Values if parcel is null; Def Place Kerala
         if (mPlacesCategory != null) {
             setCategoryActivityId();
@@ -139,13 +206,26 @@ public class PlacesSubTypeFragment extends Fragment
             setCategoryName();
             setLatitude();
             setLongitude();
+            /*
         } else {
             setSectionName(DEFAULT_SUB_TYPE_NAME);
             setCategoryId(DEFAULT_CATEGORY_ID);
             setCategoryName(DEFAULT_CATEGORY_NAME);
             setLatitude(DEFAULT_LATITUDE);
             setLongitude(DEFAULT_LONGITUDE);
+            */
         }
+        Log.d(LOG_TAG, "inside initValues");
+    }
+
+    private void createAndAddAdapterToView() {
+        new PlacesApiParser(this).getPlaceListDetails();
+
+        mPlacesListAdapter = new PlacesListAdapter(getActivity(),
+                mPlacesListInfoArray, mCategoryId, mCategoryName);
+        mRecyclerView.setAdapter(mPlacesListAdapter);
+
+        Log.d(LOG_TAG, "inside createAndAddAdapterToView");
     }
 
     public int getCategoryId() {

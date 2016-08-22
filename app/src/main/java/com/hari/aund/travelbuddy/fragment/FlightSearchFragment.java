@@ -78,7 +78,20 @@ public class FlightSearchFragment extends Fragment
 
         return rootView;
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

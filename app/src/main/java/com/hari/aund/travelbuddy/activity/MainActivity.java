@@ -1,5 +1,6 @@
 package com.hari.aund.travelbuddy.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity
             Utility.NAV_SECTION_EXPLORE_PLACES;
     private DrawerLayout mDrawerLayout;
 
+    private static final int PREFERENCE_MODE_PRIVATE = 0;
+    private SharedPreferences mSharedPreferences;
+
     private int mNavSectionId = DEFAULT_SECTION_ID;
 
     @Override
@@ -40,6 +44,10 @@ public class MainActivity extends AppCompatActivity
                 finish();
             }
         });
+
+        Log.d(LOG_TAG, "inside onCreate");
+
+        mSharedPreferences = getPreferences(PREFERENCE_MODE_PRIVATE);
 
         if (savedInstanceState == null) {
             changeFragment(ExplorePlacesFragment
@@ -141,8 +149,34 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor mPreferenceEditor = mSharedPreferences.edit();
+        mPreferenceEditor.putInt(Utility.KEY_NAVIGATION_SECTION_ID,
+                getNavSectionId());
+        mPreferenceEditor.apply();
+        Log.d(LOG_TAG, "inside onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setNavSectionId(mSharedPreferences
+                .getInt(Utility.KEY_NAVIGATION_SECTION_ID,
+                        DEFAULT_SECTION_ID));
+
+        Log.d(LOG_TAG, "inside onResume");
+    }
+
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        /*
         if (savedInstanceState != null) {
             setNavSectionId(savedInstanceState
                     .getInt(Utility.KEY_NAVIGATION_SECTION_ID));
@@ -150,14 +184,17 @@ public class MainActivity extends AppCompatActivity
         } else {
             Log.d(LOG_TAG, "onRestoreInstanceState - savedInstanceState is Empty!");
         }
+        */
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        /*
         outState.putInt(Utility.KEY_NAVIGATION_SECTION_ID,
                 getNavSectionId());
         Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState is Filled!");
+        */
     }
 
     private void changeFragment(Fragment fragment) {
