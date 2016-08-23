@@ -240,8 +240,11 @@ public class PlaceDetailActivity extends AppCompatActivity
 
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setData(callUri);
-            //TODO : Add proper Permission and Start the intent
-            //startActivity(callIntent);
+            try {
+                startActivity(callIntent);
+            } catch (SecurityException e){
+                e.printStackTrace();
+            }
         }
     }
 
