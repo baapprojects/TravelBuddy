@@ -197,7 +197,7 @@ public class PlacesSubTypeFragment extends Fragment
         new PlacesApiParser(this).getPlaceListDetails();
 
         mPlacesListAdapter = new PlacesListAdapter(getActivity(),
-                mPlacesListInfoArray, mCategoryId, mCategoryName);
+                mPlacesListInfoArray, mCategoryId, mCategoryName, mSectionName);
         mRecyclerView.setAdapter(mPlacesListAdapter);
     }
 

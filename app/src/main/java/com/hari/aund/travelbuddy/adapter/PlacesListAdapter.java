@@ -28,17 +28,20 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
 
     private int mCategoryId;
     private String mCategoryName;
+    private String mSectionName;
     private Context mContext;
     private ArrayList<PlacesListInfo> mPlacesListInfoArrayList;
 
     public PlacesListAdapter(Context context,
                              ArrayList<PlacesListInfo> placesListInfoArrayList,
                              int categoryId,
-                             String categoryName) {
+                             String categoryName,
+                             String sectionName) {
         mContext = context;
         mPlacesListInfoArrayList = placesListInfoArrayList;
         mCategoryId = categoryId;
         mCategoryName = categoryName;
+        mSectionName = sectionName;
     }
 
     @Override
@@ -58,6 +61,7 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
                 intent.putExtra(Utility.KEY_PLACE_ID, placeId);
                 intent.putExtra(Utility.KEY_CATEGORY_ID, mCategoryId);
                 intent.putExtra(Utility.KEY_CATEGORY_NAME, mCategoryName);
+                intent.putExtra(Utility.KEY_PLACE_SECTION_NAME, mSectionName);
                 Log.d(LOG_TAG, "onCreateViewHolder : Place Id - " + placeId);
                 mContext.startActivity(intent);
             }

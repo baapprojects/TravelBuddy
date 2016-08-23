@@ -1,5 +1,10 @@
 package com.hari.aund.travelbuddy.data;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import com.hari.aund.travelbuddy.data.provider.PlaceColumns;
+
 import java.util.ArrayList;
 
 /**
@@ -177,5 +182,76 @@ public class PlaceDetail{
 
     public boolean hasReviews(){
         return !getReviewDetails().isEmpty();
+    }
+
+    public ContentValues getPlaceDetailsAsContentValues(){
+        ContentValues placeContentValues = new ContentValues();
+
+        placeContentValues.put(PlaceColumns.PLACE_ID, getId());
+        placeContentValues.put(PlaceColumns.NAME, getName());
+        placeContentValues.put(PlaceColumns.LATITUDE, getLatitude());
+        placeContentValues.put(PlaceColumns.LONGITUDE, getLongitude());
+
+        if (hasAddress())
+            placeContentValues.put(PlaceColumns.ADDRESS, getAddress());
+
+        if (hasVicinity())
+            placeContentValues.put(PlaceColumns.VICINITY, getVicinity());
+
+        if (hasPhotoReference())
+            placeContentValues.put(PlaceColumns.PHOTO_COVER_REF, getPhotoRef(0));
+
+        if (hasPhoneNumber())
+            placeContentValues.put(PlaceColumns.PHONE_NUMBER, getPhoneNumber());
+
+        if (hasWebsite())
+            placeContentValues.put(PlaceColumns.WEBSITE, getWebsite());
+
+        if (hasRating())
+            placeContentValues.put(PlaceColumns.RATING, getRating());
+        
+        return placeContentValues;
+    }
+
+    public void updatePlaceDetailsFromCursor(Cursor placeCursor){
+        setName(placeCursor.getString(
+                placeCursor.getColumnIndex(PlaceColumns.NAME)));
+
+        setLatitude(Double.parseDouble(placeCursor.getString(
+                placeCursor.getColumnIndex(PlaceColumns.LATITUDE))));
+
+        setLongitude(Double.parseDouble(placeCursor.getString(
+                placeCursor.getColumnIndex(PlaceColumns.LONGITUDE))));
+
+        setAddress(placeCursor.getString(
+                placeCursor.getColumnIndex(PlaceColumns.ADDRESS)));
+
+        setVicinity(placeCursor.getString(
+                placeCursor.getColumnIndex(PlaceColumns.VICINITY)));
+
+        //TODO: add a new table for photo reference
+        String photoRef = placeCursor.getString(
+                placeCursor.getColumnIndex(PlaceColumns.PHOTO_COVER_REF));
+
+        if (photoRef != null && !photoRef.isEmpty())
+            addPhotoRef(photoRef);
+
+        String phoneNumber = placeCursor.getString(
+                placeCursor.getColumnIndex(PlaceColumns.PHONE_NUMBER));
+
+        if (phoneNumber != null && !phoneNumber.isEmpty())
+            setPhoneNumber(phoneNumber);
+
+        String website = placeCursor.getString(
+                placeCursor.getColumnIndex(PlaceColumns.WEBSITE));
+
+        if (website != null && !website.isEmpty())
+            setWebsite(website);
+
+        String rating = placeCursor.getString(
+                placeCursor.getColumnIndex(PlaceColumns.RATING));
+
+        if (rating != null && !rating.isEmpty())
+            setRating(Double.parseDouble(rating));
     }
 }

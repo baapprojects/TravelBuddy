@@ -34,6 +34,7 @@ public class Utility {
     public static final String KEY_CATEGORY_ID = "category_id";
     public static final String KEY_CATEGORY_NAME = "category_name";
 
+    public static final String KEY_PLACE_SECTION_NAME = "places_section_name";
     public static final String KEY_PLACE_SECTION_NUMBER = "places_section_number";
     public static final String KEY_PLACE_CATEGORY_INFO = "places_category_info";
 

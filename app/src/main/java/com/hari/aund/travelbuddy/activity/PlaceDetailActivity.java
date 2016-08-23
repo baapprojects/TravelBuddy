@@ -1,9 +1,13 @@
 package com.hari.aund.travelbuddy.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -26,6 +30,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.ReviewListAdapter;
 import com.hari.aund.travelbuddy.data.PlaceDetail;
+import com.hari.aund.travelbuddy.data.provider.PlaceColumns;
+import com.hari.aund.travelbuddy.data.provider.Places;
 import com.hari.aund.travelbuddy.parser.PlacesApiParser;
 import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
@@ -36,7 +42,8 @@ public class PlaceDetailActivity extends AppCompatActivity
     private static final String LOG_TAG = PlaceDetailActivity.class.getSimpleName();
 
     private int mCategoryId;
-    private String mPlaceId, mCategoryName;
+    private boolean mMarkAsFavourite = false;
+    private String mPlaceId, mCategoryName, mSectionName;
     private PlaceDetail mPlaceDetail;
     private TextView placeName, placeVicinity, placeAddress, placeRating, favouriteText;
     private ImageView coverImage, shareIcon, favouriteIcon;
@@ -44,6 +51,7 @@ public class PlaceDetailActivity extends AppCompatActivity
     private LinearLayout callNowLayout, websiteLayout, reviewsLayout, favouriteLayout;
     private LinearLayout photosLayout, timetableLayout, reviewsRecycleViewLayout;
     private RecyclerView reviewsRecyclerView;
+    private FloatingActionButton favouriteFAB;
     private GoogleMap mGoogleMap;
 
     @Override
@@ -75,14 +83,53 @@ public class PlaceDetailActivity extends AppCompatActivity
             mPlaceId = intent.getStringExtra(Utility.KEY_PLACE_ID);
             mCategoryId = intent.getIntExtra(Utility.KEY_CATEGORY_ID, DEFAULT_CATEGORY_ID);
             mCategoryName = intent.getStringExtra(Utility.KEY_CATEGORY_NAME);
+            mSectionName = intent.getStringExtra(Utility.KEY_PLACE_SECTION_NAME);
         } else {
             mPlaceId = DEFAULT_PLACE_ID_TEMPLE;
             mCategoryId = DEFAULT_CATEGORY_ID;
             mCategoryName = DEFAULT_CATEGORY_NAME;
+            mSectionName = DEFAULT_CATEGORY_SECTION_NAME;
         }
         mPlaceDetail = new PlaceDetail(mPlaceId);
 
-        new PlacesApiParser(this).getPlaceDetails();
+        Cursor placeCursor = null;
+        try {
+            placeCursor = getContentResolver().query(
+                    Places.CONTENT_URI_PLACES,
+                    null,
+                    PlaceColumns.PLACE_ID + " = ?",
+                    new String[]{mPlaceDetail.getId()},
+                    null);
+            if (placeCursor != null && placeCursor.moveToFirst()) {
+                Log.d(LOG_TAG, "onCreate : Entry[" + mPlaceDetail.getName() +
+                        "] present in DB! So, no network call");
+                mMarkAsFavourite = true;
+                favouriteFAB.setImageResource(R.drawable.ic_favorite_black_24dp);
+
+                mPlaceDetail.updatePlaceDetailsFromCursor(placeCursor);
+
+                populateLayoutsWithData();
+            } else {
+                Log.d(LOG_TAG, "onCreate : Entry[" + mPlaceDetail.getName() +
+                        "] not present in DB! So, do make a network call");
+
+                mMarkAsFavourite = false;
+                favouriteFAB.setImageResource(R.drawable.ic_favorite_white_24dp);
+
+                new PlacesApiParser(this).getPlaceDetails();
+            }
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "onCreate : NullPointerException@try for Cursor!");
+            e.printStackTrace();
+        } finally {
+            try {
+                if (placeCursor != null)
+                    placeCursor.close();
+            } catch (NullPointerException e) {
+                Log.e(LOG_TAG, "onCreate : NullPointerException@finally for Cursor!");
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -93,6 +140,10 @@ public class PlaceDetailActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+        if (mMarkAsFavourite)
+            addPlaceToFavourites();
+        else
+            removePlaceFromFavourites();
     }
 
     @Override
@@ -122,6 +173,7 @@ public class PlaceDetailActivity extends AppCompatActivity
                 triggerReviewActivity();
                 break;
             case R.id.favourite_layout:
+            case R.id.fab_place_detail:
                 saveToDataBase(view);
                 break;
         }
@@ -172,6 +224,7 @@ public class PlaceDetailActivity extends AppCompatActivity
         reviewsRecycleViewLayout = (LinearLayout) findViewById(R.id.reviews_content_Layout);
 
         reviewsRecyclerView = (RecyclerView) findViewById(R.id.reviews_recycler_view);
+        favouriteFAB = (FloatingActionButton) findViewById(R.id.fab_place_detail);
 
         setOnClickListenerToViews();
     }
@@ -183,6 +236,8 @@ public class PlaceDetailActivity extends AppCompatActivity
         websiteLayout.setOnClickListener(this);
         reviewsLayout.setOnClickListener(this);
         favouriteLayout.setOnClickListener(this);
+
+        favouriteFAB.setOnClickListener(this);
     }
 
     private void triggerShareIntent() {
@@ -225,19 +280,22 @@ public class PlaceDetailActivity extends AppCompatActivity
     }
 
     private void saveToDataBase(View view) {
-        /* TODO: Create Database and add to correct table based on mCategoryId
-        if (!db.getPlaces(mPlaceId)) {
-            favouriteIcon.setImageResource(R.drawable.favourite_icon_red);
-            favouriteText.setText("SAVED");
-            favouriteText.setTextColor(Color.RED);
-            db.addPlaces(place_id);
-        } else {
-            Snackbar.make(, "Already Added", Snackbar.LENGTH_SHORT).show();
+        if (view.getId() == R.id.fab_place_detail) {
+            String favSnackBarMessage = mPlaceDetail.getName();
+            if (!mMarkAsFavourite) {
+                favouriteFAB.setImageResource(R.drawable.ic_favorite_black_24dp);
+                favSnackBarMessage += " added to Favourites!";
+            } else {
+                favouriteFAB.setImageResource(R.drawable.ic_favorite_white_24dp);
+                favSnackBarMessage += " removed from Favourites!";
+            }
+            mMarkAsFavourite = !mMarkAsFavourite;
+            Snackbar.make(view, favSnackBarMessage, Snackbar.LENGTH_LONG)
+                    .show();
         }
-        */
     }
 
-    public void populateLayoutsWithData(){
+    public void populateLayoutsWithData() {
         populateHeaderLayout();
         createAddressLayout();
         createPhotosLayout();
@@ -245,7 +303,7 @@ public class PlaceDetailActivity extends AppCompatActivity
         createReviewsRecyclerView();
     }
 
-    private void populateHeaderLayout(){
+    private void populateHeaderLayout() {
         placeName.setText(mPlaceDetail.getName());
         placeVicinity.setText(mPlaceDetail.getVicinity());
 
@@ -271,12 +329,12 @@ public class PlaceDetailActivity extends AppCompatActivity
         }
     }
 
-    private void createAddressLayout(){
+    private void createAddressLayout() {
         placeAddress.setText(mPlaceDetail.getAddress());
         animateToPlaceInMap();
     }
 
-    private void createPhotosLayout(){
+    private void createPhotosLayout() {
         if (mPlaceDetail.hasPhotoReference()) {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -310,7 +368,7 @@ public class PlaceDetailActivity extends AppCompatActivity
         }
     }
 
-    private void createTimeTableLayout(){
+    private void createTimeTableLayout() {
         if (mPlaceDetail.hasTimeTable()) {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -334,13 +392,81 @@ public class PlaceDetailActivity extends AppCompatActivity
         }
     }
 
-    private void createReviewsRecyclerView(){
+    private void createReviewsRecyclerView() {
         StaggeredGridLayoutManager sGridLayoutManager = new StaggeredGridLayoutManager(
                 DEFAULT_COLUMN_COUNT_1, StaggeredGridLayoutManager.VERTICAL);
         ReviewListAdapter reviewListAdapter = new ReviewListAdapter(this, mPlaceDetail.getReviewDetails());
 
         reviewsRecyclerView.setLayoutManager(sGridLayoutManager);
         reviewsRecyclerView.setAdapter(reviewListAdapter);
+    }
+
+    private void addPlaceToFavourites() {
+        Cursor placeCursor = null;
+        Log.d(LOG_TAG, mPlaceDetail.getId() + " - " + mPlaceDetail.getName());
+        try {
+            placeCursor = getContentResolver().query(
+                    Places.CONTENT_URI_PLACES,
+                    new String[]{PlaceColumns.PLACE_ID},
+                    PlaceColumns.PLACE_ID + " = ?",
+                    new String[]{mPlaceDetail.getId()},
+                    null);
+            if (placeCursor != null && placeCursor.moveToFirst()) {
+                Log.d(LOG_TAG, "addToFavourites : Entry[" + mPlaceDetail.getName() + "] already present in DB!");
+            } else {
+                ContentValues placeContentValues =
+                        mPlaceDetail.getPlaceDetailsAsContentValues();
+
+                placeContentValues.put(PlaceColumns.CATEGORY_ID, mCategoryId);
+                placeContentValues.put(PlaceColumns.SUB_TYPE_NAME, mSectionName);
+
+                getContentResolver()
+                        .insert(Places.CONTENT_URI_PLACES, placeContentValues);
+                Log.d(LOG_TAG, "addToFavourites : New Entry[" + mPlaceDetail.getName() + "] added to DB!");
+            }
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "addToFavourites : NullPointerException@try for Cursor!");
+            e.printStackTrace();
+        } finally {
+            try {
+                if (placeCursor != null)
+                    placeCursor.close();
+            } catch (NullPointerException e) {
+                Log.e(LOG_TAG, "addToFavourites : NullPointerException@finally for Cursor!");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void removePlaceFromFavourites() {
+        Cursor placeCursor = null;
+        Log.d(LOG_TAG, mPlaceDetail.getId() + " - " + mPlaceDetail.getName());
+        try {
+            placeCursor = getContentResolver().query(
+                    Places.CONTENT_URI_PLACES,
+                    new String[]{PlaceColumns.PLACE_ID},
+                    PlaceColumns.PLACE_ID + " = ?",
+                    new String[]{mPlaceDetail.getId()},
+                    null);
+            if (placeCursor != null && placeCursor.moveToFirst()) {
+                getContentResolver()
+                        .delete(Places.withPlaceId(mPlaceDetail.getId()), null, null);
+                Log.d(LOG_TAG, "removeFromFavourites : Entry[" + mPlaceDetail.getName() + "] removed from DB!");
+            } else {
+                Log.d(LOG_TAG, "removeFromFavourites : No Entry[" + mPlaceDetail.getName() + "] present in DB!");
+            }
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "removeFromFavourites : NullPointerException@try for Cursor!");
+            e.printStackTrace();
+        } finally {
+            try {
+                if (placeCursor != null)
+                    placeCursor.close();
+            } catch (NullPointerException e) {
+                Log.e(LOG_TAG, "removeFromFavourites : NullPointerException@finally for Cursor!");
+                e.printStackTrace();
+            }
+        }
     }
 
     public PlaceDetail getPlaceDetail() {
