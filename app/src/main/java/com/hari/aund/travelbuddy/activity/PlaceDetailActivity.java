@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -21,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -45,13 +44,12 @@ public class PlaceDetailActivity extends AppCompatActivity
     private boolean mMarkAsFavourite = false;
     private String mPlaceId, mCategoryName, mSectionName;
     private PlaceDetail mPlaceDetail;
-    private TextView placeName, placeVicinity, placeAddress, placeRating, favouriteText;
-    private ImageView coverImage, shareIcon, favouriteIcon;
-    private CardView addressCard, photosCard, timetableCard;
-    private LinearLayout callNowLayout, websiteLayout, reviewsLayout, favouriteLayout;
-    private LinearLayout photosLayout, timetableLayout, reviewsRecycleViewLayout;
+    private TextView placeName, placeVicinity, placeAddress, placeRating;
+    private ImageView coverImage;
+    private CardView photosCard, timetableCard;
+    private LinearLayout photosLayout, timetableLayout;
     private RecyclerView reviewsRecyclerView;
-    private FloatingActionButton favouriteFAB;
+    private FloatingActionButton callFab, webFab, favFab, shareFab;
     private GoogleMap mGoogleMap;
 
     @Override
@@ -104,7 +102,7 @@ public class PlaceDetailActivity extends AppCompatActivity
                 Log.d(LOG_TAG, "onCreate : Entry[" + mPlaceDetail.getName() +
                         "] present in DB! So, no network call");
                 mMarkAsFavourite = true;
-                favouriteFAB.setImageResource(R.drawable.ic_favorite_black_24dp);
+                favFab.setImageResource(R.drawable.ic_favorite_black_24dp);
 
                 mPlaceDetail.updatePlaceDetailsFromCursor(placeCursor);
 
@@ -114,7 +112,7 @@ public class PlaceDetailActivity extends AppCompatActivity
                         "] not present in DB! So, do make a network call");
 
                 mMarkAsFavourite = false;
-                favouriteFAB.setImageResource(R.drawable.ic_favorite_white_24dp);
+                favFab.setImageResource(R.drawable.ic_favorite_white_24dp);
 
                 new PlacesApiParser(this).getPlaceDetails();
             }
@@ -160,21 +158,17 @@ public class PlaceDetailActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.share_icon:
+            case R.id.fab_place_detail_share:
                 triggerShareIntent();
                 break;
-            case R.id.call_now_layout:
-                triggerCallIntent();
+            case R.id.fab_place_detail_fav:
+                saveToDataBase(view);
                 break;
-            case R.id.website_layout:
+            case R.id.fab_place_detail_website:
                 triggerWebViewIntent();
                 break;
-            case R.id.reviews_layout:
-                triggerReviewActivity();
-                break;
-            case R.id.favourite_layout:
-            case R.id.fab_place_detail:
-                saveToDataBase(view);
+            case R.id.fab_place_detail_call:
+                triggerCallIntent();
                 break;
         }
     }
@@ -205,39 +199,28 @@ public class PlaceDetailActivity extends AppCompatActivity
         placeVicinity = (TextView) findViewById(R.id.place_vicinity);
         placeAddress = (TextView) findViewById(R.id.place_address);
         placeRating = (TextView) findViewById(R.id.place_rating);
-        favouriteText = (TextView) findViewById(R.id.favourite_text);
-
         coverImage = (ImageView) findViewById(R.id.cover_image);
-        favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
-        shareIcon = (ImageView) findViewById(R.id.share_icon);
 
-        addressCard = (CardView) findViewById(R.id.card1);
         photosCard = (CardView) findViewById(R.id.card2);
         timetableCard = (CardView) findViewById(R.id.card3);
 
-        callNowLayout = (LinearLayout) findViewById(R.id.call_now_layout);
-        websiteLayout = (LinearLayout) findViewById(R.id.website_layout);
-        reviewsLayout = (LinearLayout) findViewById(R.id.reviews_layout);
-        favouriteLayout = (LinearLayout) findViewById(R.id.favourite_layout);
         photosLayout = (LinearLayout) findViewById(R.id.photo_layout);
         timetableLayout = (LinearLayout) findViewById(R.id.timetable_layout);
-        reviewsRecycleViewLayout = (LinearLayout) findViewById(R.id.reviews_content_Layout);
-
         reviewsRecyclerView = (RecyclerView) findViewById(R.id.reviews_recycler_view);
-        favouriteFAB = (FloatingActionButton) findViewById(R.id.fab_place_detail);
+
+        callFab = (FloatingActionButton) findViewById(R.id.fab_place_detail_call);
+        webFab = (FloatingActionButton) findViewById(R.id.fab_place_detail_website);
+        favFab = (FloatingActionButton) findViewById(R.id.fab_place_detail_fav);
+        shareFab = (FloatingActionButton) findViewById(R.id.fab_place_detail_share);
 
         setOnClickListenerToViews();
     }
 
     private void setOnClickListenerToViews() {
-        shareIcon.setOnClickListener(this);
-
-        callNowLayout.setOnClickListener(this);
-        websiteLayout.setOnClickListener(this);
-        reviewsLayout.setOnClickListener(this);
-        favouriteLayout.setOnClickListener(this);
-
-        favouriteFAB.setOnClickListener(this);
+        callFab.setOnClickListener(this);
+        webFab.setOnClickListener(this);
+        favFab.setOnClickListener(this);
+        shareFab.setOnClickListener(this);
     }
 
     private void triggerShareIntent() {
@@ -272,35 +255,35 @@ public class PlaceDetailActivity extends AppCompatActivity
         }
     }
 
-    private void triggerReviewActivity() {
-        //Intent reviewIntent = new Intent(PlaceDetailActivity.this, ReviewActivity.class);
-        Intent reviewIntent = new Intent(PlaceDetailActivity.this, MainActivity.class);
-        reviewIntent.putExtra(Utility.KEY_PLACE_ID, mPlaceId);
-        startActivity(reviewIntent);
-    }
-
     private void saveToDataBase(View view) {
-        if (view.getId() == R.id.fab_place_detail) {
-            String favSnackBarMessage = mPlaceDetail.getName();
+        if (mPlaceDetail.getName() != null && !mPlaceDetail.getName().isEmpty()) {
             if (!mMarkAsFavourite) {
-                favouriteFAB.setImageResource(R.drawable.ic_favorite_black_24dp);
-                favSnackBarMessage += " added to Favourites!";
+                favFab.setImageResource(R.drawable.ic_favorite_black_24dp);
             } else {
-                favouriteFAB.setImageResource(R.drawable.ic_favorite_white_24dp);
-                favSnackBarMessage += " removed from Favourites!";
+                favFab.setImageResource(R.drawable.ic_favorite_white_24dp);
             }
             mMarkAsFavourite = !mMarkAsFavourite;
-            Snackbar.make(view, favSnackBarMessage, Snackbar.LENGTH_LONG)
-                    .show();
         }
     }
 
     public void populateLayoutsWithData() {
+        setFabViewVisibility();
         populateHeaderLayout();
         createAddressLayout();
         createPhotosLayout();
         createTimeTableLayout();
         createReviewsRecyclerView();
+    }
+
+    private void setFabViewVisibility() {
+        if (!mPlaceDetail.hasPhoneNumber()) {
+            callFab.setVisibility(View.GONE);
+            Log.d(LOG_TAG, "No Phone Number. So, call Fab is hidden!");
+        }
+        if (!mPlaceDetail.hasWebsite()) {
+            webFab.setVisibility(View.GONE);
+            Log.d(LOG_TAG, "No Website Link. So, website Fab is hidden!");
+        }
     }
 
     private void populateHeaderLayout() {
@@ -393,12 +376,17 @@ public class PlaceDetailActivity extends AppCompatActivity
     }
 
     private void createReviewsRecyclerView() {
-        StaggeredGridLayoutManager sGridLayoutManager = new StaggeredGridLayoutManager(
-                DEFAULT_COLUMN_COUNT_1, StaggeredGridLayoutManager.VERTICAL);
-        ReviewListAdapter reviewListAdapter = new ReviewListAdapter(this, mPlaceDetail.getReviewDetails());
+        if (mPlaceDetail.hasReviews()) {
+            StaggeredGridLayoutManager sGridLayoutManager = new StaggeredGridLayoutManager(
+                    DEFAULT_COLUMN_COUNT_1, StaggeredGridLayoutManager.VERTICAL);
+            ReviewListAdapter reviewListAdapter = new ReviewListAdapter(this, mPlaceDetail.getReviewDetails());
 
-        reviewsRecyclerView.setLayoutManager(sGridLayoutManager);
-        reviewsRecyclerView.setAdapter(reviewListAdapter);
+            reviewsRecyclerView.setLayoutManager(sGridLayoutManager);
+            reviewsRecyclerView.setAdapter(reviewListAdapter);
+        } else {
+            reviewsRecyclerView.setVisibility(View.GONE);
+            Log.d(LOG_TAG, "No Reviews. So, Reviews Recycler View is ignored!");
+        }
     }
 
     private void addPlaceToFavourites() {
