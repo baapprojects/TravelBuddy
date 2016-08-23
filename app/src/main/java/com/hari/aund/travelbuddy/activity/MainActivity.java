@@ -16,6 +16,7 @@ import android.view.View;
 
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.fragment.ExplorePlacesFragment;
+import com.hari.aund.travelbuddy.fragment.FavouritesFragment;
 import com.hari.aund.travelbuddy.fragment.FlightSearchFragment;
 import com.hari.aund.travelbuddy.utils.Utility;
 
@@ -129,6 +130,8 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_favourite:
                 setNavSectionId(Utility.NAV_SECTION_FAVOURITES);
+                changeFragment(FavouritesFragment
+                        .getNewInstance(getNavSectionId()));
                 break;
             case R.id.nav_share:
                 setNavSectionId(DEFAULT_SECTION_ID);
