@@ -9,7 +9,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.hari.aund.travelbuddy.R;
-import com.hari.aund.travelbuddy.data.provider.ReviewDetail;
+import com.hari.aund.travelbuddy.data.ReviewDetail;
 
 import java.util.ArrayList;
 

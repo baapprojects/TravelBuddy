@@ -11,7 +11,7 @@ import com.hari.aund.travelbuddy.app.TBConfig;
 import com.hari.aund.travelbuddy.app.TravelBuddyApp;
 import com.hari.aund.travelbuddy.data.PlaceDetail;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
-import com.hari.aund.travelbuddy.data.provider.ReviewDetail;
+import com.hari.aund.travelbuddy.data.ReviewDetail;
 import com.hari.aund.travelbuddy.fragment.PlacesSubTypeFragment;
 
 import org.json.JSONArray;

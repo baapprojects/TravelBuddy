@@ -1,4 +1,4 @@
-package com.hari.aund.travelbuddy.data.provider;
+package com.hari.aund.travelbuddy.data;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/20/2016.

@@ -1,7 +1,5 @@
 package com.hari.aund.travelbuddy.data;
 
-import com.hari.aund.travelbuddy.data.provider.ReviewDetail;
-
 import java.util.ArrayList;
 
 /**
