@@ -47,7 +47,7 @@ public class FavouritesFragment extends Fragment
     private static final String ALL_PLACES_TITLE = "All Places";
 
     private int mNavSectionId;
-    private int mSelectedFilterId = FILTER_ALL_PLACES;
+    private int mSelectedFilterId;
     private String mNavSectionName;
     private String mSelectedCategoryName;
     private String mSelectedSubTypeName;
@@ -80,7 +80,6 @@ public class FavouritesFragment extends Fragment
 
         mSharedPreferences = getActivity().getPreferences(PREFERENCE_MODE_PRIVATE);
         readValues();
-        setFragmentTitle(FILTER_ALL_PLACES, ALL_PLACES_TITLE);
 
 //        mSubTypeArrayAdapter = PlacesCategoryValues.getSubTypeAsArrayAdapter(getContext());
         mSubTypeArrayList = PlacesCategoryValues.getSubTypeAsArrayList();
@@ -117,17 +116,34 @@ public class FavouritesFragment extends Fragment
         SharedPreferences.Editor mPreferenceEditor = mSharedPreferences.edit();
         mPreferenceEditor.putInt(Utility.KEY_NAVIGATION_SECTION_ID,
                 getNavSectionId());
+        mPreferenceEditor.putInt(Utility.KEY_FILTER_ID,
+                getSelectedFilterId());
+        mPreferenceEditor.putString(Utility.KEY_FILTER_NAME,
+                getFilterName());
         mPreferenceEditor.apply();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (getNavSectionId() == 0) {
-            setNavSectionId(mSharedPreferences.getInt(
-                    Utility.KEY_NAVIGATION_SECTION_ID, Utility.NAV_SECTION_EXPLORE_PLACES));
-            setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
+        int filterId = FILTER_ALL_PLACES;
+        String filterName = ALL_PLACES_TITLE;
+
+        if (getNavSectionId() == 0 || getSelectedFilterId() == 0) {
+
+            if (getNavSectionId() == 0) {
+                setNavSectionId(mSharedPreferences.getInt(
+                        Utility.KEY_NAVIGATION_SECTION_ID, Utility.NAV_SECTION_EXPLORE_PLACES));
+                setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
+            }
+
+            filterId = mSharedPreferences.getInt(Utility.KEY_FILTER_ID,
+                    FILTER_ALL_PLACES);
+            filterName = mSharedPreferences.getString(Utility.KEY_FILTER_NAME,
+                    ALL_PLACES_TITLE);
         }
+
+        setFragmentTitle(filterId, filterName);
     }
 
     @Override
@@ -329,6 +345,42 @@ public class FavouritesFragment extends Fragment
 
     private String getNavSectionName() {
         return mNavSectionName;
+    }
+
+    public int getSelectedFilterId() {
+        return mSelectedFilterId;
+    }
+
+    public void setSelectedFilterId(int selectedFilterId) {
+        mSelectedFilterId = selectedFilterId;
+    }
+
+    public String getSelectedCategoryName() {
+        return mSelectedCategoryName;
+    }
+
+    public void setSelectedCategoryName(String selectedCategoryName) {
+        mSelectedCategoryName = selectedCategoryName;
+    }
+
+    public String getSelectedSubTypeName() {
+        return mSelectedSubTypeName;
+    }
+
+    public void setSelectedSubTypeName(String selectedSubTypeName) {
+        mSelectedSubTypeName = selectedSubTypeName;
+    }
+
+    private String getFilterName() {
+        switch (mSelectedFilterId) {
+            case FILTER_ALL_PLACES:
+                return ALL_PLACES_TITLE;
+            case FILTER_CATEGORY:
+                return getSelectedCategoryName();
+            case FILTER_SUB_TYPE:
+                return getSelectedSubTypeName();
+        }
+        return ALL_PLACES_TITLE;
     }
 
     @Override
