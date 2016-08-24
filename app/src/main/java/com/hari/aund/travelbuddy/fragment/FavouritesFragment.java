@@ -7,10 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -22,11 +26,13 @@ import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
+import java.util.ArrayList;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class FavouritesFragment extends Fragment
-        implements View.OnClickListener, DefaultValues {
+        implements View.OnClickListener, DefaultValues, TextWatcher {
 
     private static final String LOG_TAG = FavouritesFragment.class.getSimpleName();
 
@@ -46,6 +52,8 @@ public class FavouritesFragment extends Fragment
     private ProgressWheel mProgressWheel;
     private FloatingActionMenu fabMenu;
     private FloatingActionButton allPlacesFab, categoryFab, subTypeFab;
+    private ArrayAdapter<String> mSubTypeArrayAdapter;
+    private ArrayList<String> mSubTypeArrayList;
 
     public FavouritesFragment() {
     }
@@ -68,6 +76,11 @@ public class FavouritesFragment extends Fragment
         mSharedPreferences = getActivity().getPreferences(PREFERENCE_MODE_PRIVATE);
         readValues();
         setFragmentTitle(FILTER_ALL_PLACES, ALL_PLACES_TITLE);
+
+//        mSubTypeArrayAdapter = PlacesCategoryValues.getSubTypeAsArrayAdapter(getContext());
+        mSubTypeArrayList = PlacesCategoryValues.getSubTypeAsArrayList();
+        mSubTypeArrayAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.select_dialog_singlechoice, mSubTypeArrayList);
 
         View rootView = inflater.inflate(R.layout.fragment_favourites, container, false);
 
@@ -188,40 +201,53 @@ public class FavouritesFragment extends Fragment
 
     private boolean displaySubTypeSelectorList() {
         //TODO: fetch data from Database & display it.
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                getContext(), android.R.layout.select_dialog_singlechoice);
-
-        arrayAdapter.add(PlacesCategoryValues.bankingSubTypes[0]);
-        arrayAdapter.add(PlacesCategoryValues.commuteSubTypes[0]);
-        arrayAdapter.add(PlacesCategoryValues.emergencySubTypes[0]);
-        arrayAdapter.add(PlacesCategoryValues.hangoutSubTypes[0]);
-        arrayAdapter.add(PlacesCategoryValues.healthCareSubTypes[0]);
-        arrayAdapter.add(PlacesCategoryValues.personalCareSubTypes[0]);
-        arrayAdapter.add(PlacesCategoryValues.restaurantSubTypes[0]);
-        arrayAdapter.add(PlacesCategoryValues.shoppingSubTypes[0]);
-        arrayAdapter.add(PlacesCategoryValues.templeSubTypes[0]);
-        arrayAdapter.add(PlacesCategoryValues.touristsSpotSubTypes[0]);
 
         String defaultSubTypeStr = (mSelectedSubTypeName == null ?
                 PlacesCategoryValues.bankingSubTypes[0] : mSelectedSubTypeName);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final EditText editTextSearch = new EditText(getContext());
+        editTextSearch.addTextChangedListener(this);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Select a Sub Type as Filter");
+        builder.setView(editTextSearch);
         builder.setNegativeButton("cancel",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        mSubTypeArrayAdapter.getFilter().filter("");
                         dialog.dismiss();
+                        fabMenu.close(true);
                     }
                 }
         );
-        builder.setSingleChoiceItems(arrayAdapter,
-                arrayAdapter.getPosition(defaultSubTypeStr),
+        builder.setPositiveButton("ok",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String searchText = editTextSearch.getText().toString();
+                        Log.d(LOG_TAG, "Search Text in EditText - " + searchText);
+                        if (mSubTypeArrayList.contains(searchText)) {
+                            setLocalValuesAndUpdateUI(FILTER_SUB_TYPE,
+                                    searchText);
+                        } else {
+                            Log.d(LOG_TAG, "Search Text [" + searchText + "] is not matching");
+                            fabMenu.close(true);
+                            Toast.makeText(getContext(), "No such subType filter", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                        mSubTypeArrayAdapter.getFilter().filter("");
+                    }
+                }
+        );
+        builder.setSingleChoiceItems(mSubTypeArrayAdapter,
+                mSubTypeArrayAdapter.getPosition(defaultSubTypeStr),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         setLocalValuesAndUpdateUI(FILTER_SUB_TYPE,
-                                arrayAdapter.getItem(which));
+                                mSubTypeArrayAdapter.getItem(which));
+                        mSubTypeArrayAdapter.getFilter().filter("");
                         dialog.dismiss();
                     }
                 }
@@ -230,7 +256,7 @@ public class FavouritesFragment extends Fragment
         return true;
     }
 
-    private void setLocalValuesAndUpdateUI(int filterId, String titleStr){
+    private void setLocalValuesAndUpdateUI(int filterId, String titleStr) {
         setFragmentTitle(filterId, titleStr);
         setFabImageResource();
 
@@ -294,5 +320,19 @@ public class FavouritesFragment extends Fragment
 
     private String getNavSectionName() {
         return mNavSectionName;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        mSubTypeArrayAdapter.getFilter().filter(charSequence);
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
     }
 }

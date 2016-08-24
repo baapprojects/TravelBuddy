@@ -1,6 +1,12 @@
 package com.hari.aund.travelbuddy.data;
 
+import android.content.Context;
+import android.widget.ArrayAdapter;
+
 import com.hari.aund.travelbuddy.R;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/15/2016.
@@ -193,5 +199,53 @@ public class PlacesCategoryValues {
                 return R.drawable.ic_tourists;
         }
         return R.drawable.ic_tourists;
+    }
+
+    public static ArrayAdapter getSubTypeAsArrayAdapter(Context context) {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                context, android.R.layout.select_dialog_singlechoice);
+
+        for (String subType : bankingSubTypes) arrayAdapter.add(subType);
+        for (String subType : commuteSubTypes) arrayAdapter.add(subType);
+        for (String subType : emergencySubTypes) arrayAdapter.add(subType);
+        for (String subType : hangoutSubTypes) arrayAdapter.add(subType);
+        for (String subType : healthCareSubTypes) arrayAdapter.add(subType);
+        for (String subType : personalCareSubTypes) arrayAdapter.add(subType);
+        for (String subType : restaurantSubTypes) arrayAdapter.add(subType);
+        for (String subType : shoppingSubTypes) arrayAdapter.add(subType);
+        for (String subType : templeSubTypes) arrayAdapter.add(subType);
+        for (String subType : touristsSpotSubTypes) arrayAdapter.add(subType);
+
+        return arrayAdapter;
+    }
+
+    public static ArrayList<String> getSubTypeAsArrayList() {
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        Collections.addAll(arrayList, bankingSubTypes);
+        Collections.addAll(arrayList, commuteSubTypes);
+        Collections.addAll(arrayList, emergencySubTypes);
+        Collections.addAll(arrayList, hangoutSubTypes);
+        Collections.addAll(arrayList, healthCareSubTypes);
+        Collections.addAll(arrayList, personalCareSubTypes);
+        Collections.addAll(arrayList, restaurantSubTypes);
+        Collections.addAll(arrayList, shoppingSubTypes);
+        Collections.addAll(arrayList, templeSubTypes);
+        Collections.addAll(arrayList, touristsSpotSubTypes);
+
+        /*
+        for (String subType : bankingSubTypes) arrayList.add(subType);
+        for (String subType : commuteSubTypes) arrayList.add(subType);
+        for (String subType : emergencySubTypes) arrayList.add(subType);
+        for (String subType : hangoutSubTypes) arrayList.add(subType);
+        for (String subType : healthCareSubTypes) arrayList.add(subType);
+        for (String subType : personalCareSubTypes) arrayList.add(subType);
+        for (String subType : restaurantSubTypes) arrayList.add(subType);
+        for (String subType : shoppingSubTypes) arrayList.add(subType);
+        for (String subType : templeSubTypes) arrayList.add(subType);
+        for (String subType : touristsSpotSubTypes) arrayList.add(subType);
+        */
+
+        return arrayList;
     }
 }
