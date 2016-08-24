@@ -115,7 +115,6 @@ public class PlacesSubTypeFragment extends Fragment
         mPreferenceEditor.putString(Utility.KEY_PLACE_LONGITUDE,
                 getLongitude().toString());
         mPreferenceEditor.apply();
-        Log.d(LOG_TAG, "inside onPause");
     }
 
     @Override
@@ -142,35 +141,17 @@ public class PlacesSubTypeFragment extends Fragment
                             DEFAULT_LONGITUDE.toString())));
             initValues();
             createAndAddAdapterToView();
-            Log.d(LOG_TAG, "inside onResume");
         }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        /*
-        if (savedInstanceState != null) {
-            mSectionNumber = savedInstanceState.getInt(Utility.KEY_PLACE_SECTION_NUMBER);
-            mPlacesCategory = savedInstanceState.getParcelable(Utility.KEY_PLACE_CATEGORY_INFO);
-            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState is Restored!");
-            initValues();
-        } else {
-            Log.d(LOG_TAG, "onActivityCreated - savedInstanceState is Empty!");
-        }
-        */
-        Log.d(LOG_TAG, "inside onActivityCreated");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        /*
-        outState.putInt(Utility.KEY_PLACE_SECTION_NUMBER, mSectionNumber);
-        outState.putParcelable(Utility.KEY_PLACE_CATEGORY_INFO, mPlacesCategory);
-        Log.d(LOG_TAG, "onSaveInstanceState - savedInstanceState is Filled!");
-        */
-        Log.d(LOG_TAG, "inside onSavedInstanceState");
     }
 
     private void readValues() {
