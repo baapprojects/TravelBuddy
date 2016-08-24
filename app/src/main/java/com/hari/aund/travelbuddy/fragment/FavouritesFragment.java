@@ -2,11 +2,14 @@ package com.hari.aund.travelbuddy.fragment;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,13 +21,17 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
+import com.hari.aund.travelbuddy.adapter.PlacesListAdapter;
 import com.hari.aund.travelbuddy.data.PlacesCategoryValues;
+import com.hari.aund.travelbuddy.data.provider.PlaceColumns;
+import com.hari.aund.travelbuddy.data.provider.Places;
 import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -48,17 +55,22 @@ public class FavouritesFragment extends Fragment
 
     private int mNavSectionId;
     private int mSelectedFilterId;
+    private int mCategoryIndex;
     private String mNavSectionName;
     private String mSelectedCategoryName;
     private String mSelectedSubTypeName;
     private ActionBar mActionBar = null;
     private SharedPreferences mSharedPreferences;
+    private TextView mNoDataTextView;
     private ProgressWheel mProgressWheel;
     private FloatingActionMenu fabMenu;
     private FloatingActionButton allPlacesFab, categoryFab, subTypeFab;
     private ArrayAdapter<String> mSubTypeArrayAdapter;
     private ArrayList<String> mSubTypeArrayList;
-    private AlertDialog mSubTypeAlertDialog = null;
+    private AlertDialog mSubTypeAlertDialog;
+    private PlacesListAdapter mPlacesListAdapter;
+    private RecyclerView mRecyclerView;
+    private Cursor mPlacesListCursor;
 
     public FavouritesFragment() {
     }
@@ -91,6 +103,9 @@ public class FavouritesFragment extends Fragment
         mProgressWheel = (ProgressWheel) rootView.findViewById(R.id.progress_wheel_favourites);
         mProgressWheel.spin();
 
+        mNoDataTextView = (TextView) rootView.findViewById(R.id.no_data_to_display_fav);
+        mNoDataTextView.setVisibility(View.INVISIBLE);
+
         fabMenu = (FloatingActionMenu) rootView.findViewById(R.id.fab_favourites_menu);
         allPlacesFab = (FloatingActionButton) rootView.findViewById(R.id.fab_favourites_all_places);
         categoryFab = (FloatingActionButton) rootView.findViewById(R.id.fab_favourites_category);
@@ -101,6 +116,11 @@ public class FavouritesFragment extends Fragment
         allPlacesFab.setOnClickListener(this);
         categoryFab.setOnClickListener(this);
         subTypeFab.setOnClickListener(this);
+
+        StaggeredGridLayoutManager sGridLayoutManager = new StaggeredGridLayoutManager(
+                DEFAULT_COLUMN_COUNT_1, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(sGridLayoutManager);
 
         return rootView;
     }
@@ -120,6 +140,8 @@ public class FavouritesFragment extends Fragment
                 getSelectedFilterId());
         mPreferenceEditor.putString(Utility.KEY_FILTER_NAME,
                 getFilterName());
+        mPreferenceEditor.putInt(Utility.KEY_CATEGORY_ID,
+                getCategoryIndex());
         mPreferenceEditor.apply();
     }
 
@@ -129,7 +151,8 @@ public class FavouritesFragment extends Fragment
         int filterId = FILTER_ALL_PLACES;
         String filterName = ALL_PLACES_TITLE;
 
-        if (getNavSectionId() == 0 || getSelectedFilterId() == 0) {
+        if (getNavSectionId() == 0 || getSelectedFilterId() == 0 ||
+                getCategoryIndex() == 0) {
 
             if (getNavSectionId() == 0) {
                 setNavSectionId(mSharedPreferences.getInt(
@@ -141,12 +164,15 @@ public class FavouritesFragment extends Fragment
                     FILTER_ALL_PLACES);
             filterName = mSharedPreferences.getString(Utility.KEY_FILTER_NAME,
                     ALL_PLACES_TITLE);
+            setCategoryIndex(mSharedPreferences.getInt(Utility.KEY_CATEGORY_ID,
+                    DEFAULT_CATEGORY_ID));
 
             mProgressWheel.stopSpinning();
         }
 
         setFragmentTitle(filterId, filterName);
         setFabImageResource();
+        createAndAddAdapterToView();
     }
 
     @Override
@@ -215,6 +241,7 @@ public class FavouritesFragment extends Fragment
                     public void onClick(DialogInterface dialog, int which) {
                         setLocalValuesAndUpdateUI(FILTER_CATEGORY,
                                 arrayAdapter.getItem(which));
+                        setCategoryIndex(which);
                         dialog.dismiss();
                     }
                 }
@@ -290,6 +317,8 @@ public class FavouritesFragment extends Fragment
 
         fabMenu.close(true);
         mProgressWheel.stopSpinning();
+
+        createAndAddAdapterToView();
     }
 
     private void setFragmentTitle(int filterId, String titleStr) {
@@ -334,6 +363,67 @@ public class FavouritesFragment extends Fragment
         }
     }
 
+    private void createAndAddAdapterToView() {
+        fetchCursorFromDatabase();
+    }
+
+    private void fetchCursorFromDatabase() {
+        try {
+            mPlacesListCursor = getCursorForFilter();
+            //DatabaseUtils.dumpCursor(mPlacesListCursor);
+            if (mPlacesListCursor != null && mPlacesListCursor.moveToFirst()) {
+                mNoDataTextView.setVisibility(View.INVISIBLE);
+                Log.d(LOG_TAG, "fetchCursorFromDatabase : Entries[" +
+                        mPlacesListCursor.getCount() + "] present in DB!");
+            } else {
+                mNoDataTextView.setVisibility(View.VISIBLE);
+                Log.d(LOG_TAG, "fetchCursorFromDatabase : No Entry present in DB!");
+            }
+            mProgressWheel.stopSpinning();
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "addToFavourites : NullPointerException@try for Cursor!");
+            e.printStackTrace();
+        } finally {
+            try {
+                if (mPlacesListCursor != null)
+                    mPlacesListCursor.close();
+            } catch (NullPointerException e) {
+                Log.e(LOG_TAG, "addToFavourites : NullPointerException@finally for Cursor!");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Cursor getCursorForFilter() {
+        switch (getSelectedFilterId()) {
+            case FILTER_ALL_PLACES:
+                return getActivity().getContentResolver().query(
+                        Places.CONTENT_URI_PLACES,
+                        null,
+                        null,
+                        null,
+                        null);
+            case FILTER_CATEGORY:
+                return getActivity().getContentResolver().query(
+                        Places.CONTENT_URI_CATEGORY,
+                        null,
+                        PlaceColumns.CATEGORY_ID + " = ?",
+                        new String[]{getCategoryIndexStr()},
+                        /*Alternate: PlacesCategoryValues.getPlacesCategoryPosition(
+                                getSelectedCategoryName());*/
+                        null);
+            case FILTER_SUB_TYPE:
+                return getActivity().getContentResolver().query(
+                        Places.CONTENT_URI_SUB_TYPE,
+                        null,
+                        PlaceColumns.SUB_TYPE_NAME + " = ?",
+                        new String[]{mSelectedSubTypeName},
+                        null);
+        }
+
+        return null;
+    }
+
     private void setNavSectionId(int navSectionId) {
         this.mNavSectionId = navSectionId;
     }
@@ -356,6 +446,18 @@ public class FavouritesFragment extends Fragment
 
     public void setSelectedFilterId(int selectedFilterId) {
         mSelectedFilterId = selectedFilterId;
+    }
+
+    public String getCategoryIndexStr() {
+        return mCategoryIndex + "";
+    }
+
+    public int getCategoryIndex() {
+        return mCategoryIndex;
+    }
+
+    public void setCategoryIndex(int categoryIndex) {
+        mCategoryIndex = categoryIndex;
     }
 
     public String getSelectedCategoryName() {
