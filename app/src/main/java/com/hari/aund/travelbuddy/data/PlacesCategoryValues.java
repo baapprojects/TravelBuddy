@@ -28,6 +28,15 @@ public class PlacesCategoryValues {
             "Personal Care", "Restaurant", "Shopping", "Temple", "Tourists Spot"
     };
 
+    public static String getPlacesCategoryPosition(String category){
+        for (int catIdx = 0; catIdx < placesCategories.length; catIdx++) {
+            if (category.equals(placesCategories[catIdx])) {
+                return catIdx + "";
+            }
+        }
+        return PLACES_CATEGORY_BANKING_ID + "";
+    }
+
     public static final String bankingSubTypes[] = new String[]{
             "accounting",
             "atm",
