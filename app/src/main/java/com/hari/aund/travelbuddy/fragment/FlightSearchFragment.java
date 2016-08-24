@@ -2,6 +2,7 @@ package com.hari.aund.travelbuddy.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -20,28 +21,31 @@ import android.widget.TextView;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.FlightDetailActivity;
 import com.hari.aund.travelbuddy.activity.MainActivity;
+import com.hari.aund.travelbuddy.data.FlightValues;
+import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class FlightSearchFragment extends Fragment
-        implements View.OnClickListener {
+        implements View.OnClickListener, DefaultValues {
 
     private static final String LOG_TAG = FlightSearchFragment.class.getSimpleName();
 
     private static final int INDEX_CITIES_FROM = 1;
     private static final int INDEX_CITIES_TO = 2;
+    private static final int PREFERENCE_MODE_PRIVATE = 0;
 
     private int mNavSectionId;
     private String mNavSectionName;
     private String mFromSourceCity;
     private String mToDestinationCity;
     private ActionBar mActionBar;
-
-    RelativeLayout fromLayout, toLayout;
-    TextView fromCityTextView, toCityTextView;
-    Button search;
+    private RelativeLayout fromLayout, toLayout;
+    private TextView fromCityTextView, toCityTextView;
+    private Button search;
+    private SharedPreferences mSharedPreferences;
 
     public FlightSearchFragment() {
     }
@@ -60,6 +64,7 @@ public class FlightSearchFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mActionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        mSharedPreferences = getActivity().getPreferences(PREFERENCE_MODE_PRIVATE);
 
         readAndSetNavSectionId();
         setFragmentTitle();
@@ -78,6 +83,7 @@ public class FlightSearchFragment extends Fragment
 
         return rootView;
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -86,23 +92,46 @@ public class FlightSearchFragment extends Fragment
     @Override
     public void onPause() {
         super.onPause();
+        SharedPreferences.Editor mPreferenceEditor = mSharedPreferences.edit();
+        mPreferenceEditor.putInt(Utility.KEY_NAVIGATION_SECTION_ID,
+                getNavSectionId());
+        mPreferenceEditor.putString(Utility.KEY_CITY_SOURCE,
+                getFromSourceCity());
+        mPreferenceEditor.putString(Utility.KEY_CITY_DESTINATION,
+                getToDestinationCity());
+        mPreferenceEditor.apply();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (getNavSectionId() == 0 || getFromSourceCity() == null ||
+                getToDestinationCity() == null) {
+
+            if (getNavSectionId() == 0) {
+                setNavSectionId(mSharedPreferences.getInt(
+                        Utility.KEY_NAVIGATION_SECTION_ID, Utility.NAV_SECTION_EXPLORE_PLACES));
+                setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
+            }
+
+            setFromSourceCity(mSharedPreferences.getString(
+                    Utility.KEY_CITY_SOURCE, DEFAULT_SOURCE_CITY));
+            setToDestinationCity(mSharedPreferences.getString(
+                    Utility.KEY_CITY_DESTINATION, DEFAULT_DESTINATION_CITY));
+        }
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.from_layout:
-                displayCities(INDEX_CITIES_FROM);
+                displayFlightCities(INDEX_CITIES_FROM);
                 break;
             case R.id.to_layout:
-                displayCities(INDEX_CITIES_TO);
+                displayFlightCities(INDEX_CITIES_TO);
                 break;
             case R.id.search:
-                if (getFromSourceCity().equals(getToDestinationCity())){
+                if (getFromSourceCity().equals(getToDestinationCity())) {
                     Snackbar.make(view, "Source & Destination are Same.!", Snackbar.LENGTH_LONG)
                             .show();
                     return;
@@ -117,28 +146,16 @@ public class FlightSearchFragment extends Fragment
         }
     }
 
-    private void displayCities(final int index) {
+    private void displayFlightCities(final int index) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final ArrayAdapter<String> flightsArrayAdapter = new ArrayAdapter<>(
+                getContext(),
+                android.R.layout.select_dialog_singlechoice,
+                FlightValues.getFlightsAsArrayList()
+        );
 
-        final ArrayAdapter<String> arrayAdapter =
-                new ArrayAdapter<String>(getContext(),
-                        android.R.layout.select_dialog_singlechoice);
-
-        arrayAdapter.add("Bangkok");
-        arrayAdapter.add("Bangalore");
-        arrayAdapter.add("Chennai");
-        arrayAdapter.add("Dubai");
-        arrayAdapter.add("Delhi");
-        arrayAdapter.add("Goa");
-        arrayAdapter.add("Hyderabad");
-        arrayAdapter.add("Kathmandu");
-        arrayAdapter.add("Kolkata");
-        arrayAdapter.add("Mumbai");
-        arrayAdapter.add("Pune");
-        arrayAdapter.add("Singapore");
-
-        builder.setNegativeButton("cancel",
+        AlertDialog.Builder cityChooseBuilder = new AlertDialog.Builder(getContext());
+        cityChooseBuilder.setNegativeButton("cancel",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -146,41 +163,29 @@ public class FlightSearchFragment extends Fragment
                     }
                 }
         );
-
-        builder.setAdapter(arrayAdapter,
+        cityChooseBuilder.setAdapter(flightsArrayAdapter,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                        String strName = arrayAdapter.getItem(which);
-                        if (INDEX_CITIES_FROM == index) {
-                            setFromSourceCity(strName);
-                        } else {
-                            setToDestinationCity(strName);
-                        }
+                        String cityName = flightsArrayAdapter.getItem(which);
+                        if (INDEX_CITIES_FROM == index)
+                            setFromSourceCity(cityName);
+                        else
+                            setToDestinationCity(cityName);
                     }
                 }
         );
-        builder.show();
+        cityChooseBuilder.show();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            setFromSourceCity(savedInstanceState.getString(Utility.KEY_CITY_SOURCE));
-            setToDestinationCity(savedInstanceState.getString(Utility.KEY_CITY_DESTINATION));
-        } else {
-            setFromSourceCity(getContext().getResources().getString(R.string.chennai));
-            setToDestinationCity(getContext().getResources().getString(R.string.delhi));
-        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(Utility.KEY_CITY_SOURCE, getFromSourceCity());
-        outState.putString(Utility.KEY_CITY_DESTINATION, getToDestinationCity());
     }
 
     private void readAndSetNavSectionId() {
@@ -189,20 +194,20 @@ public class FlightSearchFragment extends Fragment
         Log.d(LOG_TAG, "NAV SECTION ID - " + getNavSectionId() + " & Name : " + getNavSectionName());
     }
 
-    private void setNavSectionId(int navSectionId) {
-        this.mNavSectionId = navSectionId;
-    }
-
     private int getNavSectionId() {
         return mNavSectionId;
     }
 
-    private void setNavSectionName(String navSectionName) {
-        this.mNavSectionName = navSectionName;
+    private void setNavSectionId(int navSectionId) {
+        this.mNavSectionId = navSectionId;
     }
 
     private String getNavSectionName() {
         return mNavSectionName;
+    }
+
+    private void setNavSectionName(String navSectionName) {
+        this.mNavSectionName = navSectionName;
     }
 
     private void setFragmentTitle() {

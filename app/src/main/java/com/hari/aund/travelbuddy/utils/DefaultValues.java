@@ -28,4 +28,7 @@ public interface DefaultValues {
 
     String REST_KEY_VALUE = "";
     int DEFAULT_INVALID_SPINNER_ID = -1;
+
+    String DEFAULT_SOURCE_CITY = "Chennai";
+    String DEFAULT_DESTINATION_CITY = "Delhi";
 }
