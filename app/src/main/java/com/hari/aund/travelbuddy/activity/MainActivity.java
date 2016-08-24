@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     private int mNavSectionId = DEFAULT_SECTION_ID;
     private SharedPreferences mSharedPreferences;
     private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +47,6 @@ public class MainActivity extends AppCompatActivity
         });
 
         mSharedPreferences = getPreferences(PREFERENCE_MODE_PRIVATE);
-
-        if (savedInstanceState == null) {
-            changeFragment(ExplorePlacesFragment
-                    .getNewInstance(getNavSectionId()));
-        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -77,10 +73,11 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
+
         if (savedInstanceState == null) {
-            navigationView.setCheckedItem(R.id.nav_explore_places);
+            changeFragment(getNavItemResId());
         }
     }
 
@@ -120,18 +117,15 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.nav_explore_places:
                 setNavSectionId(Utility.NAV_SECTION_EXPLORE_PLACES);
-                changeFragment(ExplorePlacesFragment
-                        .getNewInstance(getNavSectionId()));
+                changeFragment();
                 break;
             case R.id.nav_search_flight:
                 setNavSectionId(Utility.NAV_SECTION_SEARCH_FLIGHTS);
-                changeFragment(FlightSearchFragment
-                        .getNewInstance(getNavSectionId()));
+                changeFragment();
                 break;
             case R.id.nav_favourite:
                 setNavSectionId(Utility.NAV_SECTION_FAVOURITES);
-                changeFragment(FavouritesFragment
-                        .getNewInstance(getNavSectionId()));
+                changeFragment();
                 break;
             case R.id.nav_share:
                 setNavSectionId(DEFAULT_SECTION_ID);
@@ -168,6 +162,7 @@ public class MainActivity extends AppCompatActivity
         setNavSectionId(mSharedPreferences
                 .getInt(Utility.KEY_NAVIGATION_SECTION_ID,
                         DEFAULT_SECTION_ID));
+        changeFragment(getNavItemResId());
     }
 
     @Override
@@ -180,7 +175,45 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
     }
 
-    private void changeFragment(Fragment fragment) {
+    private void changeFragment(){
+        Fragment fragment = null;
+
+        switch (getNavSectionId()){
+            case Utility.NAV_SECTION_EXPLORE_PLACES:
+                fragment = ExplorePlacesFragment
+                        .getNewInstance(getNavSectionId());
+                break;
+            case Utility.NAV_SECTION_SEARCH_FLIGHTS:
+                fragment = FlightSearchFragment
+                        .getNewInstance(getNavSectionId());
+                break;
+            case Utility.NAV_SECTION_FAVOURITES:
+                fragment = FavouritesFragment
+                        .getNewInstance(getNavSectionId());
+                break;
+        }
+
+        if (fragment != null) fragmentTransaction(fragment);
+    }
+
+    private void changeFragment(int navItemResId){
+        changeFragment();
+        mNavigationView.setCheckedItem(navItemResId);
+    }
+
+    private int getNavItemResId(){
+        switch (getNavSectionId()){
+            case Utility.NAV_SECTION_EXPLORE_PLACES:
+                return R.id.nav_explore_places;
+            case Utility.NAV_SECTION_SEARCH_FLIGHTS:
+                return R.id.nav_search_flight;
+            case Utility.NAV_SECTION_FAVOURITES:
+                return R.id.nav_favourite;
+        }
+        return R.id.nav_explore_places;
+    }
+
+    private void fragmentTransaction(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
