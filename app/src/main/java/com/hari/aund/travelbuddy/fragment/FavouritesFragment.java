@@ -141,9 +141,12 @@ public class FavouritesFragment extends Fragment
                     FILTER_ALL_PLACES);
             filterName = mSharedPreferences.getString(Utility.KEY_FILTER_NAME,
                     ALL_PLACES_TITLE);
+
+            mProgressWheel.stopSpinning();
         }
 
         setFragmentTitle(filterId, filterName);
+        setFabImageResource();
     }
 
     @Override
