@@ -13,8 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -32,7 +35,8 @@ import java.util.ArrayList;
  * A placeholder fragment containing a simple view.
  */
 public class FavouritesFragment extends Fragment
-        implements View.OnClickListener, DefaultValues, TextWatcher {
+        implements View.OnClickListener, DefaultValues, TextWatcher,
+        AdapterView.OnItemClickListener {
 
     private static final String LOG_TAG = FavouritesFragment.class.getSimpleName();
 
@@ -54,6 +58,7 @@ public class FavouritesFragment extends Fragment
     private FloatingActionButton allPlacesFab, categoryFab, subTypeFab;
     private ArrayAdapter<String> mSubTypeArrayAdapter;
     private ArrayList<String> mSubTypeArrayList;
+    private AlertDialog mSubTypeAlertDialog = null;
 
     public FavouritesFragment() {
     }
@@ -202,16 +207,29 @@ public class FavouritesFragment extends Fragment
     private boolean displaySubTypeSelectorList() {
         //TODO: fetch data from Database & display it.
 
-        String defaultSubTypeStr = (mSelectedSubTypeName == null ?
-                PlacesCategoryValues.bankingSubTypes[0] : mSelectedSubTypeName);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
 
         final EditText editTextSearch = new EditText(getContext());
         editTextSearch.addTextChangedListener(this);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Select a Sub Type as Filter");
-        builder.setView(editTextSearch);
-        builder.setNegativeButton("cancel",
+        ListView listView = new ListView(getContext());
+        listView.setAdapter(mSubTypeArrayAdapter);
+        listView.setOnItemClickListener(this);
+
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(editTextSearch);
+        linearLayout.addView(listView);
+
+        /*
+        String defaultSubTypeStr = (mSelectedSubTypeName == null ?
+                PlacesCategoryValues.bankingSubTypes[0] : mSelectedSubTypeName);
+        listView.setItemChecked(mSubTypeArrayAdapter.getPosition(defaultSubTypeStr), true);
+        */
+
+        alertDialogBuilder.setTitle("Select a Sub Type as Filter");
+        alertDialogBuilder.setView(linearLayout);
+        alertDialogBuilder.setNegativeButton("cancel",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -221,7 +239,7 @@ public class FavouritesFragment extends Fragment
                     }
                 }
         );
-        builder.setPositiveButton("ok",
+        alertDialogBuilder.setPositiveButton("ok",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -233,26 +251,17 @@ public class FavouritesFragment extends Fragment
                         } else {
                             Log.d(LOG_TAG, "Search Text [" + searchText + "] is not matching");
                             fabMenu.close(true);
-                            Toast.makeText(getContext(), "No such subType filter", Toast.LENGTH_SHORT)
-                                    .show();
+
+                            if (!searchText.isEmpty())
+                                Toast.makeText(getContext(), "No such subType filter", Toast.LENGTH_SHORT)
+                                        .show();
                         }
                         mSubTypeArrayAdapter.getFilter().filter("");
                     }
                 }
         );
-        builder.setSingleChoiceItems(mSubTypeArrayAdapter,
-                mSubTypeArrayAdapter.getPosition(defaultSubTypeStr),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setLocalValuesAndUpdateUI(FILTER_SUB_TYPE,
-                                mSubTypeArrayAdapter.getItem(which));
-                        mSubTypeArrayAdapter.getFilter().filter("");
-                        dialog.dismiss();
-                    }
-                }
-        );
-        builder.show();
+
+        mSubTypeAlertDialog = alertDialogBuilder.show();
         return true;
     }
 
@@ -334,5 +343,13 @@ public class FavouritesFragment extends Fragment
 
     @Override
     public void afterTextChanged(Editable editable) {
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        setLocalValuesAndUpdateUI(FILTER_SUB_TYPE,
+                mSubTypeArrayAdapter.getItem(position));
+        mSubTypeArrayAdapter.getFilter().filter("");
+        mSubTypeAlertDialog.dismiss();
     }
 }
