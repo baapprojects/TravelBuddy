@@ -52,8 +52,9 @@ public class FavouritesFragment extends Fragment
 
     private static final String LOG_TAG = FavouritesFragment.class.getSimpleName();
 
-    private static final int FAVOURITES_CURSOR_LOADER_ID = 0;
     private static final int PREFERENCE_MODE_PRIVATE = 0;
+    private static final int FAVOURITES_CURSOR_LOADER_ID = 0;
+    private static final int CATEGORY_INDEX_INVALID = -1;
     private static final int FILTER_ALL_PLACES = 1;
     private static final int FILTER_CATEGORY = 2;
     private static final int FILTER_SUB_TYPE = 3;
@@ -154,11 +155,11 @@ public class FavouritesFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        int filterId = FILTER_ALL_PLACES;
-        String filterName = ALL_PLACES_TITLE;
+        int filterId = getSelectedFilterId();
+        String filterName = getFilterName();
 
         if (getNavSectionId() == 0 || getSelectedFilterId() == 0 ||
-                getCategoryIndex() == 0) {
+                getCategoryIndex() == CATEGORY_INDEX_INVALID) {
 
             if (getNavSectionId() == 0) {
                 setNavSectionId(mSharedPreferences.getInt(
@@ -171,7 +172,7 @@ public class FavouritesFragment extends Fragment
             filterName = mSharedPreferences.getString(Utility.KEY_FILTER_NAME,
                     ALL_PLACES_TITLE);
             setCategoryIndex(mSharedPreferences.getInt(Utility.KEY_CATEGORY_ID,
-                    DEFAULT_CATEGORY_ID));
+                    CATEGORY_INDEX_INVALID));
 
             mProgressWheel.stopSpinning();
         }
@@ -186,6 +187,7 @@ public class FavouritesFragment extends Fragment
         switch (view.getId()) {
             case R.id.fab_favourites_all_places:
                 setLocalValuesAndUpdateUI(FILTER_ALL_PLACES, ALL_PLACES_TITLE);
+                setCategoryIndex(CATEGORY_INDEX_INVALID);
                 break;
             case R.id.fab_favourites_category:
                 if (!displayCategorySelectorList())
@@ -310,6 +312,7 @@ public class FavouritesFragment extends Fragment
                                         .show();
                         }
                         mSubTypeArrayAdapter.getFilter().filter("");
+                        setCategoryIndex(CATEGORY_INDEX_INVALID);
                     }
                 }
         );
