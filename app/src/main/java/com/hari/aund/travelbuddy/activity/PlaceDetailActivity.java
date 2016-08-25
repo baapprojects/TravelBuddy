@@ -107,6 +107,7 @@ public class PlaceDetailActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+        getSupportLoaderManager().destroyLoader(PLACE_DETAIL_CURSOR_LOADER_ID);
         if (mMarkAsFavourite)
             addPlaceToFavourites();
         else
