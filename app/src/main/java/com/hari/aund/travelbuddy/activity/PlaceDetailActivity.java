@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -36,9 +39,11 @@ import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 
 public class PlaceDetailActivity extends AppCompatActivity
-        implements OnMapReadyCallback, DefaultValues, View.OnClickListener {
+        implements OnMapReadyCallback, DefaultValues,
+        View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = PlaceDetailActivity.class.getSimpleName();
+    private static final int PLACE_DETAIL_CURSOR_LOADER_ID = 0;
 
     private int mCategoryId;
     private boolean mMarkAsFavourite = false;
@@ -90,44 +95,8 @@ public class PlaceDetailActivity extends AppCompatActivity
         }
         mPlaceDetail = new PlaceDetail(mPlaceId);
 
-        Cursor placeCursor = null;
-        try {
-            placeCursor = getContentResolver().query(
-                    Places.CONTENT_URI_PLACES,
-                    null,
-                    PlaceColumns.PLACE_ID + " = ?",
-                    new String[]{mPlaceDetail.getId()},
-                    null);
-            if (placeCursor != null && placeCursor.moveToFirst()) {
-                Log.d(LOG_TAG, "onCreate : Entry[" + mPlaceDetail.getName() +
-                        "] present in DB! So, no network call");
-                mMarkAsFavourite = true;
-                favFab.setImageResource(R.drawable.ic_favorite_black_24dp);
-
-                mPlaceDetail.updatePlaceDetailsFromCursor(placeCursor);
-
-                populateLayoutsWithData();
-            } else {
-                Log.d(LOG_TAG, "onCreate : Entry[" + mPlaceDetail.getName() +
-                        "] not present in DB! So, do make a network call");
-
-                mMarkAsFavourite = false;
-                favFab.setImageResource(R.drawable.ic_favorite_white_24dp);
-
-                new PlacesApiParser(this).getPlaceDetails();
-            }
-        } catch (NullPointerException e) {
-            Log.e(LOG_TAG, "onCreate : NullPointerException@try for Cursor!");
-            e.printStackTrace();
-        } finally {
-            try {
-                if (placeCursor != null)
-                    placeCursor.close();
-            } catch (NullPointerException e) {
-                Log.e(LOG_TAG, "onCreate : NullPointerException@finally for Cursor!");
-                e.printStackTrace();
-            }
-        }
+        getSupportLoaderManager().initLoader(
+                PLACE_DETAIL_CURSOR_LOADER_ID, null, this);
     }
 
     @Override
@@ -242,7 +211,7 @@ public class PlaceDetailActivity extends AppCompatActivity
             callIntent.setData(callUri);
             try {
                 startActivity(callIntent);
-            } catch (SecurityException e){
+            } catch (SecurityException e) {
                 e.printStackTrace();
             }
         }
@@ -466,5 +435,47 @@ public class PlaceDetailActivity extends AppCompatActivity
 
     private void setPlaceDetail(PlaceDetail placeDetail) {
         mPlaceDetail = placeDetail;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
+        Uri uri = null;
+        if (loaderId == PLACE_DETAIL_CURSOR_LOADER_ID) {
+            uri = Places.withPlaceId(mPlaceDetail.getId());
+
+            Log.d(LOG_TAG, "onCreateLoader : PlaceId  - " +
+                    mPlaceDetail.getId() + "\n Uri - " + uri);
+        }
+        return new CursorLoader(this, uri, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> placeDetailLoader, Cursor placeCursor) {
+        if (placeDetailLoader.getId() == PLACE_DETAIL_CURSOR_LOADER_ID) {
+            if (placeCursor != null && placeCursor.moveToFirst()) {
+                mMarkAsFavourite = true;
+                favFab.setImageResource(R.drawable.ic_favorite_black_24dp);
+
+                mPlaceDetail.updatePlaceDetailsFromCursor(placeCursor);
+                populateLayoutsWithData();
+
+                Log.d(LOG_TAG, "onLoadFinished : Entry[" + mPlaceDetail.getName() +
+                        "] present in DB! So, no network call");
+            } else {
+                mMarkAsFavourite = false;
+                favFab.setImageResource(R.drawable.ic_favorite_white_24dp);
+
+                new PlacesApiParser(this).getPlaceDetails();
+
+                Log.d(LOG_TAG, "onLoadFinished : Entry for Id[" + mPlaceDetail.getId() +
+                        "] not present in DB! So, do make a network call");
+
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> placeDetailLoader) {
+        placeDetailLoader.reset();
     }
 }
