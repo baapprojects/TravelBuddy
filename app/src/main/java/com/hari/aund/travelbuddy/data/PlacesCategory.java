@@ -134,7 +134,9 @@ public class PlacesCategory implements Parcelable {
     }
 
     public int getSubTypeListSize() {
-        return mSubTypeList.size();
+        return mSubTypeList != null ?
+                mSubTypeList.size() :
+                PlacesCategoryValues.categoriesSubTypeCount[mCategoryId];
     }
 
     public int getCategoryActivityId() {
