@@ -37,7 +37,7 @@ public class PlaceProvider extends ContentProvider {
         MATCHER.addURI(AUTHORITY, "category", PLACES_CONTENT_URI_CATEGORY);
         MATCHER.addURI(AUTHORITY, "category/#", PLACES_CATEGORY_ID);
         MATCHER.addURI(AUTHORITY, "subtype", PLACES_CONTENT_URI_SUB_TYPE);
-        MATCHER.addURI(AUTHORITY, "subtype/#", PLACES_SUB_TYPE_ID);
+        MATCHER.addURI(AUTHORITY, "subtype/*", PLACES_SUB_TYPE_ID);
     }
 
     private SQLiteOpenHelper database;
