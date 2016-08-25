@@ -571,8 +571,11 @@ public class FavouritesFragment extends Fragment
                 Log.d(LOG_TAG, "onLoadFinished : Entries[" + placeCursor.getCount()
                         + "] present in DB!");
             } else {
-                mPlacesListAdapter.clearAdapterData();
-                mPlacesListAdapter.notifyDataSetChanged();
+
+                if (mPlacesListAdapter != null) {
+                    mPlacesListAdapter.clearAdapterData();
+                    mPlacesListAdapter.notifyDataSetChanged();
+                }
 
                 mNoDataTextView.setVisibility(View.VISIBLE);
                 Log.d(LOG_TAG, "onLoadFinished : No Entry present in DB!");
