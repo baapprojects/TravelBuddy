@@ -40,6 +40,7 @@ public class Places {
     public static final Uri CONTENT_URI_SUB_TYPE = buildUri(Path.SUB_TYPE);
 
     public static Uri withSubTypeName(String subTypeName) {
-        return CONTENT_URI_SUB_TYPE.buildUpon().appendPath(subTypeName).build();
+        String queryStr = subTypeName.replaceAll(" ","_").toLowerCase();
+        return CONTENT_URI_SUB_TYPE.buildUpon().appendPath(queryStr).build();
     }
 }

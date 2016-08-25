@@ -197,9 +197,7 @@ public class PlacesSubTypeActivity extends AppCompatActivity
 
             ViewSpinnerAdapter viewSpinnerAdapter = new ViewSpinnerAdapter(this,
                     mToolbar.getContext(),
-                    mPlacesCategory.getSubTypeList().toArray(
-                            new String[mPlacesCategory.getSubTypeListSize()]
-                    )
+                    PlacesCategoryValues.displayNameSubTypes[mPlacesCategory.getCategoryId()]
             );
 
             mSpinner.setAdapter(viewSpinnerAdapter);

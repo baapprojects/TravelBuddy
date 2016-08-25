@@ -28,7 +28,7 @@ public class PlacesCategoryValues {
             "Personal Care", "Restaurant", "Shopping", "Temple", "Tourists Spot"
     };
 
-    public static String getPlacesCategoryPosition(String category){
+    public static String getPlacesCategoryPosition(String category) {
         for (int catIdx = 0; catIdx < placesCategories.length; catIdx++) {
             if (category.equals(placesCategories[catIdx])) {
                 return catIdx + "";
@@ -116,6 +116,80 @@ public class PlacesCategoryValues {
             "art_gallery",
             "museum",
             "zoo"
+    };
+
+    public static final String displayNameSubTypes[][] = new String[][]{
+            {
+                    "Accounting",
+                    "ATM",
+                    "Bank"
+            },
+            {
+                    "Subway Station",
+                    "Taxi Stand",
+                    "Airport",
+                    "Bus Station",
+                    "Car Rental",
+                    "Gas Station",
+                    "Parking",
+                    "Train Station"
+            },
+            {
+                    "Fire Station",
+                    "Lawyer",
+                    "Police",
+                    "Post Office"
+            },
+            {
+                    "Bowling Alley",
+                    "Casino",
+                    "Movie Theater",
+                    "Night Club",
+                    "Park"
+            },
+            {
+                    "Dentist",
+                    "Doctor",
+                    "Hospital",
+                    "Pharmacy",
+                    "Physiotherapist",
+                    "Veterinary Care"
+            },
+            {
+                    "Beauty Salon",
+                    "Gym",
+                    "Hair Care",
+                    "Spa"
+            },
+            {
+                    "Bakery",
+                    "Bar",
+                    "Cafe",
+                    "Liquor Store",
+                    "Restaurant"
+            },
+            {
+                    "Book Store",
+                    "City Hall",
+                    "Clothing Store",
+                    "Department Store",
+                    "Electronics Store",
+                    "Jewelry Store",
+                    "Shoe Store",
+                    "Shopping Mall"
+            },
+            {
+                    "Church",
+                    "Hindu Temple",
+                    "Mosque"
+            },
+            {
+                    "Amusement Park",
+                    "Aquarium",
+                    "Art Gallery",
+                    "Museum",
+                    "Zoo"
+            }
     };
 
     public static final int categoriesSubTypeCountDef[] = new int[]{
@@ -209,16 +283,8 @@ public class PlacesCategoryValues {
     public static ArrayList<String> getSubTypeAsArrayList() {
         ArrayList<String> arrayList = new ArrayList<>();
 
-        Collections.addAll(arrayList, bankingSubTypes);
-        Collections.addAll(arrayList, commuteSubTypes);
-        Collections.addAll(arrayList, emergencySubTypes);
-        Collections.addAll(arrayList, hangoutSubTypes);
-        Collections.addAll(arrayList, healthCareSubTypes);
-        Collections.addAll(arrayList, personalCareSubTypes);
-        Collections.addAll(arrayList, restaurantSubTypes);
-        Collections.addAll(arrayList, shoppingSubTypes);
-        Collections.addAll(arrayList, templeSubTypes);
-        Collections.addAll(arrayList, touristsSpotSubTypes);
+        for (String[] subTypeCategory : displayNameSubTypes)
+            Collections.addAll(arrayList, subTypeCategory);
 
         return arrayList;
     }
