@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.FlightListAdapter;
@@ -51,11 +50,12 @@ public class FlightDetailActivity extends AppCompatActivity
             mFromSourceCity = getIntent().getStringExtra(Utility.KEY_CITY_SOURCE);
             mToDestinationCity = getIntent().getStringExtra(Utility.KEY_CITY_DESTINATION);
 
-            //TODO: Toast to be removed
+            /*
             String toastStr = "Please, wait! searching flights between \n" +
                     "'" + mFromSourceCity.toUpperCase() + "' & '"
                     + mToDestinationCity.toUpperCase() + "'";
             Toast.makeText(this, toastStr, Toast.LENGTH_LONG).show();
+            */
         }
 
         mProgressWheel = (ProgressWheel) findViewById(R.id.progress_wheel);

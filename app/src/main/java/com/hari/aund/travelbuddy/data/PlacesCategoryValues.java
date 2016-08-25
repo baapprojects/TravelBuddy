@@ -94,15 +94,14 @@ public class PlacesCategoryValues {
     };
 
     public static final String shoppingSubTypes[] = new String[]{
-            //TODO: to be removed later
-            "shopping_mall",
+            "book_store",
             "city_hall",
             "clothing_store",
             "department_store",
             "electronics_store",
             "jewelry_store",
             "shoe_store",
-            "book_store"
+            "shopping_mall"
     };
 
     public static final String templeSubTypes[] = new String[]{

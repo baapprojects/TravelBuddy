@@ -135,7 +135,6 @@ public class PlacesCategoryActivity extends AppCompatActivity
     public void onClick(View view) {
         if (view.getId() == R.id.fab_places_favourite) {
             String favSnackBarMessage;
-            //TODO Favourites code goes here
             if (!mMarkAsFavourite) {
                 mFavouriteFab.setImageResource(R.drawable.ic_favorite_black_24dp);
                 favSnackBarMessage = mPlaceName + " added to Favourites!";

@@ -58,14 +58,12 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                // TODO Auto-generated method stub
                 Utility.hideSoftKeyboard(MainActivity.this);
                 super.onDrawerOpened(drawerView);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                // TODO Auto-generated method stub
                 Utility.hideSoftKeyboard(MainActivity.this);
                 super.onDrawerClosed(drawerView);
             }

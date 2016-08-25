@@ -222,7 +222,6 @@ public class FavouritesFragment extends Fragment
     }
 
     private boolean displayCategorySelectorList() {
-        //TODO: fetch data from Database & display it.
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                 getContext(), android.R.layout.select_dialog_singlechoice);
 
@@ -259,8 +258,6 @@ public class FavouritesFragment extends Fragment
     }
 
     private boolean displaySubTypeSelectorList() {
-        //TODO: fetch data from Database & display it.
-
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
 
         final EditText editTextSearch = new EditText(getContext());
