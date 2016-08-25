@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,23 +24,44 @@ import java.util.ArrayList;
 public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.ViewHolder> {
 
     private static final String LOG_TAG = PlacesListAdapter.class.getSimpleName();
+    private static final int SINGLE_CATEGORY_SECTION_INDEX = 0;
 
-    private int mCategoryId;
-    private String mCategoryName;
-    private String mSectionName;
     private Context mContext;
+    private ArrayList<Integer> mCategoryIdAL;
+    private ArrayList<String> mCategoryNameAL;
+    private ArrayList<String> mSectionNameAL;
     private ArrayList<PlacesListInfo> mPlacesListInfoArrayList;
+    private boolean mSingleCategoryAndSection;
 
     public PlacesListAdapter(Context context,
-                             ArrayList<PlacesListInfo> placesListInfoArrayList,
+                             ArrayList<PlacesListInfo> placesListInfoAL,
+                             ArrayList<Integer> categoryIdAL,
+                             ArrayList<String> categoryNameAL,
+                             ArrayList<String> sectionNameAL) {
+        mContext = context;
+        mPlacesListInfoArrayList = placesListInfoAL;
+        mCategoryIdAL = categoryIdAL;
+        mCategoryNameAL = categoryNameAL;
+        mSectionNameAL = sectionNameAL;
+        mSingleCategoryAndSection = false;
+    }
+
+    public PlacesListAdapter(Context context,
+                             ArrayList<PlacesListInfo> placesListInfoAL,
                              int categoryId,
                              String categoryName,
                              String sectionName) {
         mContext = context;
-        mPlacesListInfoArrayList = placesListInfoArrayList;
-        mCategoryId = categoryId;
-        mCategoryName = categoryName;
-        mSectionName = sectionName;
+        mPlacesListInfoArrayList = placesListInfoAL;
+
+        mCategoryIdAL = new ArrayList<>();
+        mCategoryIdAL.add(categoryId);
+        mCategoryNameAL = new ArrayList<>();
+        mCategoryNameAL.add(categoryName);
+        mSectionNameAL = new ArrayList<>();
+        mSectionNameAL.add(sectionName);
+
+        mSingleCategoryAndSection = true;
     }
 
     @Override
@@ -53,16 +73,18 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View onClickView) {
-                String placeId = mPlacesListInfoArrayList
-                        .get(viewHolder.getAdapterPosition())
-                        .getPlaceId();
+                int position = mSingleCategoryAndSection ?
+                        SINGLE_CATEGORY_SECTION_INDEX : viewHolder.getAdapterPosition();
 
                 Intent intent = new Intent(mContext, PlaceDetailActivity.class);
-                intent.putExtra(Utility.KEY_PLACE_ID, placeId);
-                intent.putExtra(Utility.KEY_CATEGORY_ID, mCategoryId);
-                intent.putExtra(Utility.KEY_CATEGORY_NAME, mCategoryName);
-                intent.putExtra(Utility.KEY_PLACE_SECTION_NAME, mSectionName);
-                Log.d(LOG_TAG, "onCreateViewHolder : Place Id - " + placeId);
+                intent.putExtra(Utility.KEY_PLACE_ID,
+                        mPlacesListInfoArrayList.get(viewHolder.getAdapterPosition()).getPlaceId());
+                intent.putExtra(Utility.KEY_CATEGORY_ID,
+                        mCategoryIdAL.get(position));
+                intent.putExtra(Utility.KEY_CATEGORY_NAME,
+                        mCategoryNameAL.get(position));
+                intent.putExtra(Utility.KEY_PLACE_SECTION_NAME,
+                        mSectionNameAL.get(position));
                 mContext.startActivity(intent);
             }
         });
@@ -130,5 +152,23 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
             place_pic = (ImageView) itemView.findViewById(R.id.place_pic);
             rating = (RatingBar) itemView.findViewById(R.id.rating);
         }
+    }
+
+    public void clearAdapterData(){
+        mPlacesListInfoArrayList.clear();
+        mCategoryIdAL.clear();
+        mCategoryNameAL.clear();
+        mSectionNameAL.clear();
+    }
+
+    public void updateAdapterData(ArrayList<PlacesListInfo> placesListInfoAL,
+                                  ArrayList<Integer> categoryIdAL,
+                                  ArrayList<String> categoryNameAL,
+                                  ArrayList<String> sectionNameAL) {
+        clearAdapterData();
+        mPlacesListInfoArrayList = placesListInfoAL;
+        mCategoryIdAL = categoryIdAL;
+        mCategoryNameAL = categoryNameAL;
+        mSectionNameAL = sectionNameAL;
     }
 }

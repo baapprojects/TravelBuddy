@@ -3,9 +3,13 @@ package com.hari.aund.travelbuddy.fragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +34,7 @@ import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
 import com.hari.aund.travelbuddy.adapter.PlacesListAdapter;
 import com.hari.aund.travelbuddy.data.PlacesCategoryValues;
+import com.hari.aund.travelbuddy.data.PlacesListInfo;
 import com.hari.aund.travelbuddy.data.provider.PlaceColumns;
 import com.hari.aund.travelbuddy.data.provider.Places;
 import com.hari.aund.travelbuddy.utils.DefaultValues;
@@ -43,10 +48,11 @@ import java.util.ArrayList;
  */
 public class FavouritesFragment extends Fragment
         implements View.OnClickListener, DefaultValues, TextWatcher,
-        AdapterView.OnItemClickListener {
+        AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = FavouritesFragment.class.getSimpleName();
 
+    private static final int FAVOURITES_CURSOR_LOADER_ID = 0;
     private static final int PREFERENCE_MODE_PRIVATE = 0;
     private static final int FILTER_ALL_PLACES = 1;
     private static final int FILTER_CATEGORY = 2;
@@ -172,7 +178,7 @@ public class FavouritesFragment extends Fragment
 
         setFragmentTitle(filterId, filterName);
         setFabImageResource();
-        createAndAddAdapterToView();
+        loadDataToRecyclerView();
     }
 
     @Override
@@ -239,10 +245,10 @@ public class FavouritesFragment extends Fragment
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        setCategoryIndex(which);
                         setLocalValuesAndUpdateUI(FILTER_CATEGORY,
                                 arrayAdapter.getItem(which));
-                        setCategoryIndex(which);
-                        dialog.dismiss();
                     }
                 }
         );
@@ -289,6 +295,7 @@ public class FavouritesFragment extends Fragment
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
                         String searchText = editTextSearch.getText().toString();
                         Log.d(LOG_TAG, "Search Text in EditText - " + searchText);
                         if (mSubTypeArrayList.contains(searchText)) {
@@ -312,13 +319,11 @@ public class FavouritesFragment extends Fragment
     }
 
     private void setLocalValuesAndUpdateUI(int filterId, String titleStr) {
+        mProgressWheel.spin();
         setFragmentTitle(filterId, titleStr);
         setFabImageResource();
-
-        fabMenu.close(true);
-        mProgressWheel.stopSpinning();
-
-        createAndAddAdapterToView();
+//        fetchCursorFromDatabase();
+        loadDataToRecyclerView();
     }
 
     private void setFragmentTitle(int filterId, String titleStr) {
@@ -361,10 +366,7 @@ public class FavouritesFragment extends Fragment
                 subTypeFab.setImageResource(enabledDrawableId);
                 break;
         }
-    }
-
-    private void createAndAddAdapterToView() {
-        fetchCursorFromDatabase();
+        fabMenu.close(true);
     }
 
     private void fetchCursorFromDatabase() {
@@ -392,6 +394,10 @@ public class FavouritesFragment extends Fragment
                 e.printStackTrace();
             }
         }
+    }
+
+    private void loadDataToRecyclerView() {
+        getLoaderManager().restartLoader(FAVOURITES_CURSOR_LOADER_ID, null, this);
     }
 
     private Cursor getCursorForFilter() {
@@ -508,5 +514,105 @@ public class FavouritesFragment extends Fragment
                 mSubTypeArrayAdapter.getItem(position));
         mSubTypeArrayAdapter.getFilter().filter("");
         mSubTypeAlertDialog.dismiss();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
+        Uri uri = null;
+        if (loaderId == FAVOURITES_CURSOR_LOADER_ID) {
+            switch (getSelectedFilterId()) {
+                case FILTER_ALL_PLACES:
+                    uri = Places.CONTENT_URI_PLACES;
+                    break;
+                case FILTER_CATEGORY:
+                    uri = Places.withCategoryId(getCategoryIndexStr());
+                    break;
+                case FILTER_SUB_TYPE:
+                    uri = Places.withSubTypeName(getSelectedSubTypeName());
+                    break;
+            }
+
+            Log.d(LOG_TAG, "onCreateLoader : FilterId[" + getSelectedFilterId()
+                    + "] | Uri[" + uri + "]");
+        }
+        return new CursorLoader(getContext(), uri, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> placeDetailLoader, Cursor placeCursor) {
+        if (placeDetailLoader.getId() == FAVOURITES_CURSOR_LOADER_ID) {
+            ArrayList<Integer> categoryIdAL = new ArrayList<>();
+            ArrayList<String> categoryNameAL = new ArrayList<>();
+            ArrayList<String> sectionNameAL = new ArrayList<>();
+            ArrayList<PlacesListInfo> placesListInfoAL = new ArrayList<>();
+
+            if (placeCursor != null && placeCursor.moveToFirst()) {
+                //DatabaseUtils.dumpCursor(placeCursor);
+                do {
+                    int categoryId = getCategoryId(placeCursor);
+
+                    placesListInfoAL.add(getPlacesListInfo(placeCursor));
+                    categoryIdAL.add(categoryId);
+                    categoryNameAL.add(getCategoryName(categoryId));
+                    sectionNameAL.add(getSectionName(placeCursor));
+                } while (placeCursor.moveToNext());
+
+                if (mPlacesListAdapter == null) {
+                    mPlacesListAdapter = new PlacesListAdapter(getActivity(), placesListInfoAL,
+                            categoryIdAL, categoryNameAL, sectionNameAL);
+                    mRecyclerView.setAdapter(mPlacesListAdapter);
+                } else {
+                    mPlacesListAdapter.updateAdapterData(placesListInfoAL,
+                            categoryIdAL, categoryNameAL, sectionNameAL);
+                    mPlacesListAdapter.notifyDataSetChanged();
+                }
+
+                mNoDataTextView.setVisibility(View.INVISIBLE);
+                Log.d(LOG_TAG, "onLoadFinished : Entries[" + placeCursor.getCount()
+                        + "] present in DB!");
+            } else {
+                mPlacesListAdapter.clearAdapterData();
+                mPlacesListAdapter.notifyDataSetChanged();
+
+                mNoDataTextView.setVisibility(View.VISIBLE);
+                Log.d(LOG_TAG, "onLoadFinished : No Entry present in DB!");
+            }
+            mProgressWheel.stopSpinning();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> placeDetailLoader) {
+        if (placeDetailLoader.getId() == FAVOURITES_CURSOR_LOADER_ID)
+            placeDetailLoader.reset();
+    }
+
+    private PlacesListInfo getPlacesListInfo(Cursor cursor) {
+        PlacesListInfo placesListInfo = new PlacesListInfo();
+
+        placesListInfo.setPlaceId(cursor.getString(
+                cursor.getColumnIndex(PlaceColumns.PLACE_ID)));
+        placesListInfo.setPlaceName(cursor.getString(
+                cursor.getColumnIndex(PlaceColumns.NAME)));
+        placesListInfo.setPlaceAddress(cursor.getString(
+                cursor.getColumnIndex(PlaceColumns.ADDRESS)));
+        placesListInfo.setPhotoReference(cursor.getString(
+                cursor.getColumnIndex(PlaceColumns.PHOTO_COVER_REF)));
+        placesListInfo.setPlaceRating(cursor.getDouble(
+                cursor.getColumnIndex(PlaceColumns.RATING)));
+
+        return placesListInfo;
+    }
+
+    private String getCategoryName(int categoryId) {
+        return PlacesCategoryValues.placesCategories[categoryId];
+    }
+
+    private int getCategoryId(Cursor cursor) {
+        return cursor.getInt(cursor.getColumnIndex(PlaceColumns.CATEGORY_ID));
+    }
+
+    private String getSectionName(Cursor cursor) {
+        return cursor.getString(cursor.getColumnIndex(PlaceColumns.SUB_TYPE_NAME));
     }
 }
