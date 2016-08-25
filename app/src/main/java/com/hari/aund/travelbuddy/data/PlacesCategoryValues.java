@@ -257,27 +257,27 @@ public class PlacesCategoryValues {
     public static int getCategoryImageResourceId(int categoryId) {
         switch (categoryId) {
             case PLACES_CATEGORY_BANKING_ID:
-                return R.drawable.ic_restaurant;
+                return R.drawable.ic_account_balance_black_24dp;
             case PLACES_CATEGORY_COMMUTE_ID:
-                return R.drawable.ic_movie;
+                return R.drawable.ic_directions_transit_black_24dp;
             case PLACES_CATEGORY_EMERGENCY_ID:
-                return R.drawable.ic_food_court;
+                return R.drawable.ic_local_hospital_black_24dp;
             case PLACES_CATEGORY_HANGOUT_ID:
-                return R.drawable.ic_movie;
+                return R.drawable.ic_food_court;
             case PLACES_CATEGORY_HEALTH_CARE_ID:
-                return R.drawable.ic_hotel;
+                return R.drawable.ic_hearing_black_24dp;
             case PLACES_CATEGORY_PERSONAL_CARE_ID:
-                return R.drawable.ic_hotel;
+                return R.drawable.ic_local_play_black_24dp;
             case PLACES_CATEGORY_RESTAURANT_ID:
                 return R.drawable.ic_restaurant;
             case PLACES_CATEGORY_SHOPPING_ID:
                 return R.drawable.ic_shopping;
             case PLACES_CATEGORY_TEMPLE_ID:
-                return R.drawable.ic_tourists;
+                return R.drawable.ic_temple;
             case PLACES_CATEGORY_TOURISTS_SPOT_ID:
-                return R.drawable.ic_tourists;
+                return R.drawable.ic_store_mall_directory_black_24dp;
         }
-        return R.drawable.ic_tourists;
+        return R.drawable.ic_restaurant;
     }
 
     public static ArrayList<String> getSubTypeAsArrayList() {

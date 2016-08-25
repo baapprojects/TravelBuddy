@@ -25,7 +25,7 @@
             android:layout_height="55dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
-            android:src="@drawable/ic_tourists"/>
+            android:src="@drawable/ic_temple"/>
 
         <!-- TODO: Consider Using it for Tablets
         <TextView
