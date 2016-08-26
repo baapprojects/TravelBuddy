@@ -144,24 +144,26 @@ public class PlaceDetailActivity extends AppCompatActivity
     }
 
     public void animateToPlaceInMap() {
-        LatLng placeLatLng = new LatLng(mPlaceDetail.getLatitude(),
-                mPlaceDetail.getLongitude());
+        if (mGoogleMap != null) {
+            LatLng placeLatLng = new LatLng(mPlaceDetail.getLatitude(),
+                    mPlaceDetail.getLongitude());
 
-        mGoogleMap.addMarker(
-                new MarkerOptions()
-                        .position(placeLatLng)
-                        .title("Here")
-        );
+            mGoogleMap.addMarker(
+                    new MarkerOptions()
+                            .position(placeLatLng)
+                            .title("Here")
+            );
 
-        mGoogleMap.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(
-                                mPlaceDetail.getLatitude(),
-                                mPlaceDetail.getLongitude()
-                        ),
-                        12.0f
-                )
-        );
+            mGoogleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(
+                                    mPlaceDetail.getLatitude(),
+                                    mPlaceDetail.getLongitude()
+                            ),
+                            12.0f
+                    )
+            );
+        }
     }
 
     private void initViewsAndLayout() {
