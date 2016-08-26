@@ -245,7 +245,7 @@ public class PlacesCategoryValues {
 
     public static int getCategoryActivityId(int categorySubTypeCount) {
         if (categorySubTypeCount > 2 && categorySubTypeCount < 5) {
-            return PLACES_CATEGORY_A_ACTIVITY;
+            return PLACES_CATEGORY_B_ACTIVITY;
         } else if (categorySubTypeCount < 7) {
             return PLACES_CATEGORY_B_ACTIVITY;
         } else if (categorySubTypeCount < 9) {
