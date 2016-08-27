@@ -131,6 +131,15 @@ public class PlacesApiParser implements PlacesApiUrlValues {
         try {
             //Log.d(LOG_TAG, "parsePlaceListDetails : jsonObjectIn - " + jsonObjectIn);
 
+            String responseStatus = jsonObjectIn.getString(TAG_STATUS);
+
+            if (responseStatus.equals(STATUS_ZERO_RESULTS)){
+                Log.d(LOG_TAG, "parsePlaceListDetails : responseStatus - " + responseStatus);
+                mPlacesSubTypeFragment
+                        .updateErrorMessageToUser(ERROR_CODE_ZERO_RESULTS);
+                return;
+            }
+
             JSONArray jsonArray = jsonObjectIn.getJSONArray(TAG_RESULTS);
             for (int index = 0; index < jsonArray.length(); index++) {
 
@@ -189,7 +198,10 @@ public class PlacesApiParser implements PlacesApiUrlValues {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError volleyError) {
-                                Log.e(LOG_TAG, "VolleyError : " + volleyError.getMessage());
+                                Log.e(LOG_TAG, "Volley : onErrorResponse - " +
+                                        volleyError.getMessage());
+                                mPlacesSubTypeFragment
+                                        .updateErrorMessageToUser(ERROR_CODE_NETWORK_FAILURE);
                             }
                         }
                 );

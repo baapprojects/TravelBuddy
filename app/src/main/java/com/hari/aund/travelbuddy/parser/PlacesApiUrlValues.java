@@ -32,8 +32,10 @@ public interface PlacesApiUrlValues {
     String PLACES_URL_SUFFIX_MAX_HEIGHT_DEF = "220";
     String PLACES_URL_SUFFIX_MAX_WIDTH_DEF = "220";
 
-    String TAG_RESULT = "result";
     String TAG_RESULTS = "results";
+    String TAG_STATUS = "status";
+
+    String TAG_RESULT = "result";
     String TAG_GEOMETRY = "geometry";
     String TAG_LOCATION = "location";
     String TAG_LAT = "lat";
@@ -56,4 +58,10 @@ public interface PlacesApiUrlValues {
     String TAG_REVIEW_CONTENT = "text";
     String TAG_REVIEW_RATING = "rating";
 
+
+    String STATUS_OK = "OK";
+    String STATUS_ZERO_RESULTS = "ZERO_RESULTS";
+
+    int ERROR_CODE_ZERO_RESULTS = 1;
+    int ERROR_CODE_NETWORK_FAILURE = 2;
 }

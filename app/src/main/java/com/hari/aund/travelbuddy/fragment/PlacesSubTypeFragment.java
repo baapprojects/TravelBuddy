@@ -9,12 +9,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.PlacesListAdapter;
 import com.hari.aund.travelbuddy.data.PlacesCategory;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
 import com.hari.aund.travelbuddy.parser.PlacesApiParser;
+import com.hari.aund.travelbuddy.parser.PlacesApiUrlValues;
 import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -25,7 +28,7 @@ import java.util.ArrayList;
  * Created by Hari Nivas Kumar R P on 8/16/2016.
  */
 public class PlacesSubTypeFragment extends Fragment
-        implements DefaultValues {
+        implements DefaultValues, View.OnClickListener {
 
     private static final String LOG_TAG = PlacesSubTypeFragment.class.getSimpleName();
 
@@ -40,6 +43,8 @@ public class PlacesSubTypeFragment extends Fragment
     private PlacesCategory mPlacesCategory;
     private PlacesListAdapter mPlacesListAdapter;
     private ArrayList<PlacesListInfo> mPlacesListInfoArray = new ArrayList<>();
+    private TextView mErrorMessageTextView;
+    private Button mTryAgainButton;
     private ProgressWheel mProgressWheel;
     private SharedPreferences mSharedPreferences;
     private RecyclerView mRecyclerView;
@@ -66,6 +71,13 @@ public class PlacesSubTypeFragment extends Fragment
 
         mSharedPreferences = getActivity().getPreferences(PREFERENCE_MODE_PRIVATE);
         readValues();
+
+        mErrorMessageTextView = (TextView) rootView.findViewById(R.id.error_message_sub_type);
+        mErrorMessageTextView.setVisibility(View.INVISIBLE);
+
+        mTryAgainButton = (Button) rootView.findViewById(R.id.retry_sub_type);
+        mTryAgainButton.setOnClickListener(this);
+        mTryAgainButton.setVisibility(View.INVISIBLE);
 
         setProgressWheel((ProgressWheel) rootView.findViewById(R.id.progress_wheel));
         getProgressWheel().spin();
@@ -155,6 +167,16 @@ public class PlacesSubTypeFragment extends Fragment
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.retry_sub_type) {
+            new PlacesApiParser(this).getPlaceListDetails();
+            mProgressWheel.spin();
+            mErrorMessageTextView.setVisibility(View.INVISIBLE);
+            mTryAgainButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void readValues() {
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(Utility.KEY_PLACE_SECTION_NUMBER);
@@ -181,6 +203,19 @@ public class PlacesSubTypeFragment extends Fragment
         mPlacesListAdapter = new PlacesListAdapter(getActivity(),
                 mPlacesListInfoArray, getCategoryId(), mCategoryName, mSectionName);
         mRecyclerView.setAdapter(mPlacesListAdapter);
+    }
+
+    public void updateErrorMessageToUser(int errorCode) {
+        int stringResId = errorCode == PlacesApiUrlValues.ERROR_CODE_ZERO_RESULTS ?
+                R.string.no_places_data_in_sub_type:
+                R.string.network_error_try_again;
+
+        String errorMsg = getResources().getString(stringResId);
+        mErrorMessageTextView.setText(errorMsg);
+        mErrorMessageTextView.setVisibility(View.VISIBLE);
+
+        if (errorCode == PlacesApiUrlValues.ERROR_CODE_NETWORK_FAILURE)
+            mTryAgainButton.setVisibility(View.VISIBLE);
     }
 
     public int getCategoryId() {
