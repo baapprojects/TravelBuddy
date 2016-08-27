@@ -169,6 +169,12 @@ public class ExplorePlacesFragment extends Fragment
 
     @Override
     public void onClick(View view) {
+
+        if (!Utility.isNetworkAvailable(getContext())){
+            Log.d(LOG_TAG, "You are Offline! : onClick!");
+            return;
+        }
+
         if (view.getId() == R.id.find_place_on_map) {
             try {
                 setNewPlaceId(getString(R.string.def_no_place_selected));
@@ -201,6 +207,12 @@ public class ExplorePlacesFragment extends Fragment
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+        if (!Utility.isNetworkAvailable(getContext())){
+            Log.d(LOG_TAG, "You are Offline! : onItemClick!");
+            return;
+        }
+
         String placeId = null, placeName = null;
 
         if (adapterView.getAdapter() instanceof PlaceAutoCompleteAdapter) {
@@ -412,6 +424,12 @@ public class ExplorePlacesFragment extends Fragment
     }
 
     private void startPlacesCategoryActivity(String placeId, String placeName){
+
+        if (!Utility.isNetworkAvailable(getContext())){
+            Log.d(LOG_TAG, "You are Offline! : startPlacesCategoryActivity!");
+            return;
+        }
+
         Intent placesIntent = new Intent(getActivity(), PlacesCategoryActivity.class);
         placesIntent.putExtra(Utility.KEY_PLACE_ID, placeId);
         placesIntent.putExtra(Utility.KEY_PLACE_NAME, placeName);

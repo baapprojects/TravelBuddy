@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,11 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
     }
 
     private void startPlacesSubTypeActivity(PlacesCategory placesCategory){
+        if (!Utility.isNetworkAvailable(mContext)){
+            Log.d(LOG_TAG, "You are Offline! : startPlacesSubTypeActivity!");
+            return;
+        }
+
         Intent placesCategoryIntent = new Intent(mContext, PlacesSubTypeActivity.class);
         placesCategoryIntent.putExtra(Utility.KEY_PLACE_CATEGORY_INFO, placesCategory);
         mContext.startActivity(placesCategoryIntent);

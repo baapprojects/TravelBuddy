@@ -208,8 +208,14 @@ public class PlacesCategoryActivity extends AppCompatActivity
 
         if ((getLatitude() == null || getLatitude().isEmpty()) ||
                 (getLongitude() == null || getLongitude().isEmpty())) {
-            new PlacesApiParser(this).getExplorePlaceDetails();
-            mFetchingLatLngInProgress = true;
+
+            if (!Utility.isNetworkAvailable(this)){
+                Log.d(LOG_TAG, "You are Offline! : !");
+                return;
+            } else {
+                new PlacesApiParser(this).getExplorePlaceDetails();
+                mFetchingLatLngInProgress = true;
+            }
 
             mPlacesCategoryAdapter = new PlacesCategoryAdapter(this);
         } else {

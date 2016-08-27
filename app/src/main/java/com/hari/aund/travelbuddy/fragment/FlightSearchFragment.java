@@ -190,6 +190,11 @@ public class FlightSearchFragment extends Fragment
     }
 
     private void startFlightDetailActivity(){
+        if (!Utility.isNetworkAvailable(getContext())){
+            Log.d(LOG_TAG, "You are Offline! : startFlightDetailActivity!");
+            return;
+        }
+
         Intent intent = new Intent(getActivity(), FlightDetailActivity.class);
         intent.putExtra(Utility.KEY_CITY_SOURCE, getFromSourceCity());
         intent.putExtra(Utility.KEY_CITY_DESTINATION, getToDestinationCity());

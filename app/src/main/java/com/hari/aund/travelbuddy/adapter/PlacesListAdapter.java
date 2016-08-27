@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +90,8 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
 
         //TODO : to be removed later
         /*
-        if (placesListInfo.isPhotoReferenceAvailable()) {
+        if (placesListInfo.isPhotoReferenceAvailable() &&
+                !Utility.isNetworkAvailable(mContext)) {
             //Log.d(LOG_TAG, "ImageUrl - " + new PlacesApiParser().getPhotoUrl(placesListInfo.getPhotoReference()));
             Picasso.with(mContext)
                     .load(new PlacesApiParser().getPhotoUrl(placesListInfo.getPhotoReference()))
@@ -163,7 +165,14 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
         mSectionNameAL = sectionNameAL;
     }
 
-    private void startPlaceDetailActivity(int placesPosition, int othersPosition){
+    private void startPlaceDetailActivity(int placesPosition, int othersPosition) {
+        if (!Utility.isNetworkAvailable(mContext)){
+            Log.d(LOG_TAG, "You are Offline! : startPlaceDetailActivity!");
+
+            //When invoking from Favourites, we should start PlaceDetailActivity.
+            if (mSingleCategoryAndSection) return;
+        }
+
         Intent intent = new Intent(mContext, PlaceDetailActivity.class);
         intent.putExtra(Utility.KEY_PLACE_ID,
                 mPlacesListInfoArrayList.get(placesPosition).getPlaceId());

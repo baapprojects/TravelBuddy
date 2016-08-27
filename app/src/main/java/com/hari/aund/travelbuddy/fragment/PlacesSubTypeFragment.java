@@ -169,6 +169,11 @@ public class PlacesSubTypeFragment extends Fragment
 
     @Override
     public void onClick(View view) {
+        if (!Utility.isNetworkAvailable(getContext())){
+            Log.d(LOG_TAG, "You are Offline! : onClick!");
+            return;
+        }
+
         if (view.getId() == R.id.retry_sub_type) {
             new PlacesApiParser(this).getPlaceListDetails();
             mProgressWheel.spin();
@@ -198,6 +203,11 @@ public class PlacesSubTypeFragment extends Fragment
     }
 
     private void createAndAddAdapterToView() {
+        if (!Utility.isNetworkAvailable(getContext())){
+            Log.d(LOG_TAG, "You are Offline! : createAndAddAdapterToView!");
+            return;
+        }
+
         new PlacesApiParser(this).getPlaceListDetails();
 
         mPlacesListAdapter = new PlacesListAdapter(getActivity(),

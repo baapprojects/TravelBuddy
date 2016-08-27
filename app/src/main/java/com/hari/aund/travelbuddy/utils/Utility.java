@@ -2,10 +2,13 @@ package com.hari.aund.travelbuddy.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
@@ -50,6 +53,21 @@ public class Utility {
     public static final String KEY_CITY_DESTINATION = "to_destination_city";
 
     public static final String ACTION_DATA_UPDATE = "com.hari.aund.travelbuddy.app.ACTION_DATA_UPDATED";
+
+    // Added from StackOverFlow
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager)context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+            return true;
+        }
+
+        Toast.makeText(context, "You are Offline!", Toast.LENGTH_SHORT).show();
+        Log.e(LOG_TAG, "No Internet Connection available.");
+        return false;
+    }
 
     /**
      * Hides the soft keyboard

@@ -274,7 +274,8 @@ public class PlaceDetailActivity extends AppCompatActivity
         placeName.setText(mPlaceDetail.getName());
         placeVicinity.setText(mPlaceDetail.getVicinity());
 
-        if (mPlaceDetail.hasPhotoReference()) {
+        if (mPlaceDetail.hasPhotoReference() &&
+                !Utility.isNetworkAvailable(this)){
             String heightAndWidthStr = 500 + "";
             //TODO: to be removed later
 /*            Picasso.with(this)
@@ -302,7 +303,17 @@ public class PlaceDetailActivity extends AppCompatActivity
     }
 
     private void createPhotosLayout() {
-        if (mPlaceDetail.hasPhotoReference()) {
+
+        if (!Utility.isNetworkAvailable(this)){
+            Log.d(LOG_TAG, "You are Offline! : createPhotosLayout!");
+            photosCard.setVisibility(View.GONE);
+            return;
+        } else {
+            photosCard.setVisibility(View.VISIBLE);
+        }
+
+        if (mPlaceDetail.hasPhotoReference() &&
+                mPlaceDetail.getPhotoReference().size() > 1) {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
@@ -474,24 +485,30 @@ public class PlaceDetailActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<Cursor> placeDetailLoader, Cursor placeCursor) {
         if (placeDetailLoader.getId() == PLACE_DETAIL_CURSOR_LOADER_ID) {
-            if (placeCursor != null && placeCursor.moveToFirst()) {
+            if (placeCursor != null && placeCursor.moveToFirst()){
                 mMarkAsFavourite = true;
                 favFab.setImageResource(R.drawable.ic_favorite_black_24dp);
-
-                mPlaceDetail.updatePlaceDetailsFromCursor(placeCursor);
-                populateLayoutsWithData();
-
-                Log.d(LOG_TAG, "onLoadFinished : Entry[" + mPlaceDetail.getName() +
-                        "] present in DB! So, no network call");
+                Log.d(LOG_TAG, "onLoadFinished : Entry for Id[" + mPlaceDetail.getId() +
+                        "] present in DB!");
+                Log.d(LOG_TAG, "onLoadFinished : Name[" + mPlaceDetail.getName() + "]");
             } else {
                 mMarkAsFavourite = false;
                 favFab.setImageResource(R.drawable.ic_favorite_white_24dp);
-
-                new PlacesApiParser(this).getPlaceDetails();
-
                 Log.d(LOG_TAG, "onLoadFinished : Entry for Id[" + mPlaceDetail.getId() +
-                        "] not present in DB! So, do make a network call");
+                        "] not present in DB!");
+            }
 
+            if (!Utility.isNetworkAvailable(this)){
+                Log.d(LOG_TAG, "You are Offline! : onLoadFinished!");
+
+                if (placeCursor != null && placeCursor.moveToFirst()) {
+                    mPlaceDetail.updatePlaceDetailsFromCursor(placeCursor);
+                    populateLayoutsWithData();
+                }
+                Log.d(LOG_TAG, "You are Offline! So, no network call");
+            } else {
+                new PlacesApiParser(this).getPlaceDetails();
+                Log.d(LOG_TAG, "You are Offline! So, make a network call");
             }
         }
     }

@@ -13,6 +13,7 @@ import com.hari.aund.travelbuddy.data.PlaceDetail;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
 import com.hari.aund.travelbuddy.data.ReviewDetail;
 import com.hari.aund.travelbuddy.fragment.PlacesSubTypeFragment;
+import com.hari.aund.travelbuddy.utils.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,6 +88,11 @@ public class PlacesApiParser implements PlacesApiUrlValues {
     }
 
     public void getExplorePlaceDetails() {
+        if (!Utility.isNetworkAvailable(mPlacesCategoryActivity.getApplicationContext())){
+            Log.d(LOG_TAG, "You are Offline! : getExplorePlaceDetails!");
+            return;
+        }
+
         String placesReqUrl = getPlaceDetailsUrl(mPlacesCategoryActivity.getPlaceId());
         Log.d(LOG_TAG, "getExplorePlaceDetails : URL - " + placesReqUrl);
 
@@ -174,6 +180,11 @@ public class PlacesApiParser implements PlacesApiUrlValues {
     }
 
     public void getPlaceListDetails() {
+        if (!Utility.isNetworkAvailable(mPlacesSubTypeFragment.getContext())){
+            Log.d(LOG_TAG, "You are Offline! : getPlaceListDetails!");
+            return;
+        }
+
         String latitudeAndLongitude =
                 mPlacesSubTypeFragment.getLatitude() + "," +
                         mPlacesSubTypeFragment.getLongitude();
@@ -303,6 +314,11 @@ public class PlacesApiParser implements PlacesApiUrlValues {
     }
 
     public void getPlaceDetails() {
+        if (!Utility.isNetworkAvailable(mPlaceDetailActivity.getApplicationContext())){
+            Log.d(LOG_TAG, "You are Offline! : getPlaceDetails!");
+            return;
+        }
+
         String placesReqUrl = getPlaceDetailsUrl(mPlaceDetailActivity.getPlaceDetail().getId());
         Log.d(LOG_TAG, "getPlaceDetails : URL - " + placesReqUrl);
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Binder;
-import android.os.Build;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -80,19 +79,14 @@ public class FavouritePlacesWidgetDataProvider
         int categoryId = getCategoryId(mFavPlacesCursor);
         PlacesListInfo placesListInfo = getPlacesListInfo(mFavPlacesCursor);
 
-        if (placesListInfo.isPhotoReferenceAvailable()) {
-            /*
+        /*
+        if (placesListInfo.isPhotoReferenceAvailable() &&
+                !Utility.isNetworkAvailable(mContext)) {
             Uri imageUri = Uri.parse(new PlacesApiParser()
                             .getPhotoUrl(placesListInfo.getPhotoReference()));
             remoteViews.setImageViewUri(R.id.place_pic, imageUri);
-             */
-
-            // Content Description for Non-text elements
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                remoteViews.setContentDescription(R.id.place_pic,
-                        "Image of - " + placesListInfo.getPlaceName());
-            }
         }
+        */
 
         remoteViews.setTextViewText(R.id.place_id, placesListInfo.getPlaceId());
         remoteViews.setTextViewText(R.id.place_name, placesListInfo.getPlaceName());
