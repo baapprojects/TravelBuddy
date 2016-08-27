@@ -44,5 +44,6 @@
     <string name="no_data_to_display">No Data to Display</string>
     <string name="title_activity_flight_detail">Flight Details</string>
 
+    <string name="places_api_key">GOOGLE_PLACES-API-KEY</string>
     <string name="ad_smart_banner_unit_id">GOOGLE_AD_SMART-UNIT_ID</string>
 </resources>
