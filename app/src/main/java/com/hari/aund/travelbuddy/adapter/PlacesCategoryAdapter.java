@@ -55,11 +55,7 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
                 placesCategory.setLatitude(getLatitude());
                 placesCategory.setLongitude(getLongitude());
 
-                Intent placesCategoryIntent = new Intent(mContext, PlacesSubTypeActivity.class);
-                placesCategoryIntent.putExtra(Utility.KEY_PLACE_CATEGORY_INFO, placesCategory);
-                mContext.startActivity(placesCategoryIntent);
-                ((Activity)mContext).overridePendingTransition(
-                        R.animator.activity_open_translate, R.animator.activity_close_translate);
+                startPlacesSubTypeActivity(placesCategory);
             }
         });
 
@@ -82,6 +78,14 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
     @Override
     public int getItemCount() {
         return mPlacesCategoryList.size();
+    }
+
+    private void startPlacesSubTypeActivity(PlacesCategory placesCategory){
+        Intent placesCategoryIntent = new Intent(mContext, PlacesSubTypeActivity.class);
+        placesCategoryIntent.putExtra(Utility.KEY_PLACE_CATEGORY_INFO, placesCategory);
+        mContext.startActivity(placesCategoryIntent);
+        ((Activity)mContext).overridePendingTransition(
+                R.animator.activity_open_translate, R.animator.activity_close_translate);
     }
 
     public ArrayList<PlacesCategory> getPlacesCategoryList() {
