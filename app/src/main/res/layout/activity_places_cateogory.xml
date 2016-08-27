@@ -43,4 +43,12 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end" />
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad_places_category"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:adSize="SMART_BANNER"
+        app:adUnitId="@string/ad_smart_banner_unit_id"/>
+
 </android.support.design.widget.CoordinatorLayout>

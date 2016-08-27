@@ -8,6 +8,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.FlightListAdapter;
 import com.hari.aund.travelbuddy.data.FlightDetail;
@@ -47,6 +49,12 @@ public class FlightDetailActivity extends AppCompatActivity
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        AdView adView = (AdView) findViewById(R.id.ad_flight_detail);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        adView.loadAd(adRequest);
 
         if (getIntent().getExtras() != null) {
             mFromSourceCity = getIntent().getStringExtra(Utility.KEY_CITY_SOURCE);

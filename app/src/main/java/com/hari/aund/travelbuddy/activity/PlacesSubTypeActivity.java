@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.ViewSectionsPagerAdapter;
 import com.hari.aund.travelbuddy.adapter.ViewSpinnerAdapter;
@@ -172,6 +174,12 @@ public class PlacesSubTypeActivity extends AppCompatActivity
             actionBar.setTitle(mPlacesCategory.getCategoryName());
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        AdView adView = (AdView) findViewById(R.id.ad_places_sub_type);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        adView.loadAd(adRequest);
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.places_category_appbar);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);

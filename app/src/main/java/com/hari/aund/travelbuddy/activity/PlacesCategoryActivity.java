@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.PlacesCategoryAdapter;
 import com.hari.aund.travelbuddy.data.provider.PlaceColumns;
@@ -176,6 +178,12 @@ public class PlacesCategoryActivity extends AppCompatActivity
         mActionBar = getSupportActionBar();
         if (mActionBar != null)
             mActionBar.setDisplayHomeAsUpEnabled(true);
+
+        AdView adView = (AdView) findViewById(R.id.ad_places_category);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        adView.loadAd(adRequest);
 
         /* TODO: Consider Using it for Tablets
         StaggeredGridLayoutManager sGridLayoutManager =
