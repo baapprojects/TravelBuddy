@@ -31,9 +31,9 @@ public class PlacesSubTypeFragment extends Fragment
 
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
-    private int mCategoryId;
+    private int mCategoryId = DEFAULT_INVALID_CATEGORY_ID;
     private int mCategoryActivityId;
-    private int mSectionNumber;
+    private int mSectionNumber = DEFAULT_INVALID_SUB_TYPE_ID;
     private String mSectionName;
     private String mCategoryName;
     private Double mLatitude, mLongitude;
@@ -88,8 +88,8 @@ public class PlacesSubTypeFragment extends Fragment
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(sGridLayoutManager);
 
-        if (mCategoryId != 0 && mCategoryName != null &&
-                mPlacesListInfoArray.isEmpty() &&
+        if (mCategoryId != DEFAULT_INVALID_CATEGORY_ID &&
+                mCategoryName != null && mPlacesListInfoArray.isEmpty() &&
                 getLatitude() != null && getLongitude() != null) {
             createAndAddAdapterToView();
         }
@@ -120,10 +120,10 @@ public class PlacesSubTypeFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        if (getSectionNumber() == 0 ||
+        if (getSectionNumber() == DEFAULT_INVALID_SUB_TYPE_ID ||
                 getLatitude() == null || getLongitude() == null) {
             Log.d(LOG_TAG, "section number | latitude | longitude is null");
-            if (getSectionNumber() == 0)
+            if (getSectionNumber() == DEFAULT_INVALID_SUB_TYPE_ID)
                 setSectionNumber(mSharedPreferences.getInt(
                         Utility.KEY_PLACE_SECTION_NUMBER, DEFAULT_SUB_TYPE_ID));
 
