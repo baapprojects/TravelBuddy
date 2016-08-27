@@ -395,6 +395,8 @@ public class PlaceDetailActivity extends AppCompatActivity
                 getContentResolver()
                         .insert(Places.CONTENT_URI_PLACES, placeContentValues);
                 Log.d(LOG_TAG, "addToFavourites : New Entry[" + mPlaceDetail.getName() + "] added to DB!");
+
+                informDataUpdatedToWidgets();
             }
         } catch (NullPointerException e) {
             Log.e(LOG_TAG, "addToFavourites : NullPointerException@try for Cursor!");
@@ -424,6 +426,8 @@ public class PlaceDetailActivity extends AppCompatActivity
                 getContentResolver()
                         .delete(Places.withPlaceId(mPlaceDetail.getId()), null, null);
                 Log.d(LOG_TAG, "removeFromFavourites : Entry[" + mPlaceDetail.getName() + "] removed from DB!");
+
+                informDataUpdatedToWidgets();
             } else {
                 Log.d(LOG_TAG, "removeFromFavourites : No Entry[" + mPlaceDetail.getName() + "] present in DB!");
             }
@@ -439,6 +443,12 @@ public class PlaceDetailActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+    }
+
+    private void informDataUpdatedToWidgets(){
+        Intent newIntent = new Intent(Utility.ACTION_DATA_UPDATE)
+                .setPackage(getApplicationContext().getPackageName());
+        getApplicationContext().sendBroadcast(newIntent);
     }
 
     public PlaceDetail getPlaceDetail() {

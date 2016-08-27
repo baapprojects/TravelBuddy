@@ -25,6 +25,7 @@
 
     <string name="title_activity_places_category">Places Category Activity</string>
     <string name="title_activity_places_sub_type">Places Sub Type Activity</string>
+    <string name="title_activity_flight_detail">Flight Details</string>
 
     <string name="call">CALL</string>
     <string name="website">WEBSITE</string>
@@ -35,7 +36,6 @@
     <string name="time">TIME</string>
     <string name="title_activity_place_detail">Place Detail</string>
     <string name="title_activity_flight">FlightActivity</string>
-    <string name="f">Flights</string>
     <string name="from">From</string>
     <string name="chennai">Chennai</string>
     <string name="to">To</string>
@@ -45,7 +45,8 @@
     <string name="no_places_data_in_sub_type">No Places</string>
     <string name="network_error_try_again">Network Error!</string>
     <string name="retry_button_text">Try Again</string>
-    <string name="title_activity_flight_detail">Flight Details</string>
+    <string name="favourite_places">Favourite Places</string>
+    <string name="add_widget">Add widget</string>
 
     <string name="places_api_key">GOOGLE_PLACES-API-KEY</string>
     <string name="ad_smart_banner_unit_id">GOOGLE_AD_SMART-UNIT_ID</string>

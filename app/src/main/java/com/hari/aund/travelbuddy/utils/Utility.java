@@ -49,6 +49,8 @@ public class Utility {
     public static final String KEY_CITY_SOURCE = "from_source_city";
     public static final String KEY_CITY_DESTINATION = "to_destination_city";
 
+    public static final String ACTION_DATA_UPDATE = "com.hari.aund.travelbuddy.app.ACTION_DATA_UPDATED";
+
     /**
      * Hides the soft keyboard
      */

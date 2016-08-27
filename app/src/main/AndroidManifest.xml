@@ -93,6 +93,24 @@
             android:name=".data.provider.PlaceProvider"
             android:authorities="com.hari.aund.data.provider.PlaceProvider"
             android:exported="true" />
+
+        <receiver
+            android:name=".widget.FavouritePlacesWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.hari.aund.travelbuddy.app.ACTION_DATA_UPDATED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_favourites" />
+        </receiver>
+
+        <service
+            android:name=".widget.FavouritePlacesWidgetService"
+            android:exported="true"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>
