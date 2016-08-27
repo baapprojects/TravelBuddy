@@ -88,7 +88,6 @@ public class PlacesSubTypeFragment extends Fragment
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(sGridLayoutManager);
 
-        Log.d(LOG_TAG, "onCreateView - CategoryId - " + getCategoryId());
         setCategoryId(mSharedPreferences.getInt(
                 Utility.KEY_CATEGORY_ID, DEFAULT_CATEGORY_ID));
         if (mCategoryName != null && mPlacesListInfoArray.isEmpty() &&
@@ -169,7 +168,6 @@ public class PlacesSubTypeFragment extends Fragment
         if (mPlacesCategory != null) {
             setCategoryActivityId();
             setSectionName();
-            Log.d(LOG_TAG, "initValues() - invoking - setCategoryId()");
             setCategoryId();
             setCategoryName();
             setLatitude();
@@ -180,32 +178,23 @@ public class PlacesSubTypeFragment extends Fragment
     private void createAndAddAdapterToView() {
         new PlacesApiParser(this).getPlaceListDetails();
 
-        Log.d(LOG_TAG, "createAndAddAdapterToView() : mCategoryId - " + getCategoryId());
         mPlacesListAdapter = new PlacesListAdapter(getActivity(),
                 mPlacesListInfoArray, getCategoryId(), mCategoryName, mSectionName);
         mRecyclerView.setAdapter(mPlacesListAdapter);
     }
 
     public int getCategoryId() {
-        Log.d(LOG_TAG, "getCategoryId() : categoryId - " + mCategoryId);
         return mCategoryId;
     }
 
     private void setCategoryId() {
-        Log.d(LOG_TAG, "Before : setCategoryId() : categoryId - " + mCategoryId);
-        if (mCategoryId == DEFAULT_INVALID_CATEGORY_ID) {
-            Log.d(LOG_TAG, "Before : setCategoryId() : categoryId is -1. So resetting it.");
+        if (mCategoryId == DEFAULT_INVALID_CATEGORY_ID)
             this.mCategoryId = mPlacesCategory.getCategoryId();
-        }
-        Log.d(LOG_TAG, "After : setCategoryId() : categoryId - " + mCategoryId);
     }
 
     private void setCategoryId(int categoryId) {
-        Log.d(LOG_TAG, "Before : setCategoryId(id) : categoryId - " + mCategoryId);
-        if (categoryId != DEFAULT_INVALID_CATEGORY_ID) {
+        if (categoryId != DEFAULT_INVALID_CATEGORY_ID)
             this.mCategoryId = categoryId;
-        }
-        Log.d(LOG_TAG, "After : setCategoryId(id) : categoryId - " + mCategoryId);
     }
 
     public String getCategoryName() {
@@ -241,19 +230,9 @@ public class PlacesSubTypeFragment extends Fragment
     }
 
     private void setSectionName() {
-        Log.d(LOG_TAG, "i have sectionNumber - " + mSectionNumber);
-
-        if (mPlacesCategory != null) {
-            Log.d(LOG_TAG, "i have mPlacesCategory : Id   - " + mPlacesCategory.getCategoryId());
-            Log.d(LOG_TAG, "i have mPlacesCategory : Name - " + mPlacesCategory.getCategoryName());
-            if (mPlacesCategory.getSubTypeList() != null) {
-                Log.d(LOG_TAG, "i have subTypeList size - " + mPlacesCategory.getSubTypeList().size());
-                this.mSectionName = mPlacesCategory.getSubTypeList().get(mSectionNumber - 1);
-            } else {
-                Log.d(LOG_TAG, "i have subTypeList - as null ");
-            }
-        } else {
-            Log.d(LOG_TAG, "i have mPlacesCategory - as null ");
+        if (mPlacesCategory != null && mPlacesCategory.getSubTypeList() != null) {
+            this.mSectionName = mPlacesCategory
+                    .getSubTypeList().get(mSectionNumber - 1);
         }
     }
 
