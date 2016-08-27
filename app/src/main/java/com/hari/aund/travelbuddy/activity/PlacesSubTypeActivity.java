@@ -50,6 +50,8 @@ public class PlacesSubTypeActivity extends AppCompatActivity
             public void onClick(View view) {
                 mSaveToPreference = false;
                 finish();
+                overridePendingTransition(
+                        R.animator.activity_open_translate, R.animator.activity_close_translate);
             }
         });
 
@@ -117,6 +119,8 @@ public class PlacesSubTypeActivity extends AppCompatActivity
     public void onBackPressed() {
         super.onBackPressed();
         mSaveToPreference = false;
+        overridePendingTransition(
+                R.animator.activity_open_translate, R.animator.activity_close_translate);
     }
 
     @Override

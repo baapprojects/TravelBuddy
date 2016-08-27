@@ -56,6 +56,8 @@ public class PlacesCategoryActivity extends AppCompatActivity
             public void onClick(View view) {
                 mSaveToPreference = false;
                 finish();
+                overridePendingTransition(
+                        R.animator.activity_open_scale, R.animator.activity_close_translate);
             }
         });
 
@@ -129,6 +131,8 @@ public class PlacesCategoryActivity extends AppCompatActivity
     public void onBackPressed() {
         super.onBackPressed();
         mSaveToPreference = false;
+        overridePendingTransition(
+                R.animator.activity_open_scale, R.animator.activity_close_translate);
     }
 
     @Override

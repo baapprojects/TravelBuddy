@@ -1,9 +1,11 @@
 package com.hari.aund.travelbuddy.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +88,9 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
                 intent.putExtra(Utility.KEY_PLACE_SECTION_NAME,
                         mSectionNameAL.get(position));
                 mContext.startActivity(intent);
+
+                ((Activity) mContext).overridePendingTransition(
+                        R.animator.activity_open_translate, R.animator.activity_close_translate);
             }
         });
 
@@ -154,7 +159,7 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
         }
     }
 
-    public void clearAdapterData(){
+    public void clearAdapterData() {
         mPlacesListInfoArrayList.clear();
         mCategoryIdAL.clear();
         mCategoryNameAL.clear();
@@ -170,5 +175,16 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
         mCategoryIdAL = categoryIdAL;
         mCategoryNameAL = categoryNameAL;
         mSectionNameAL = sectionNameAL;
+    }
+
+    private int getExitAnim(){
+        if (mSingleCategoryAndSection) {
+            Log.d(LOG_TAG, "Close Scale Animation!");
+        } else {
+            Log.d(LOG_TAG, "Close Translate Animation!");
+        }
+        return mSingleCategoryAndSection ?
+                R.animator.activity_close_scale :   //From Categories to Details
+                R.animator.activity_close_translate;        //From Favourites to Details
     }
 }

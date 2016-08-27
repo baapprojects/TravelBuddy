@@ -67,6 +67,8 @@ public class PlaceDetailActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(
+                        R.animator.activity_open_scale, R.animator.activity_close_translate);
             }
         });
 
@@ -117,6 +119,13 @@ public class PlaceDetailActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(
+                R.animator.activity_open_scale, R.animator.activity_close_translate);
     }
 
     @Override

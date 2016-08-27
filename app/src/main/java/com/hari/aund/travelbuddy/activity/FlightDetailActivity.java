@@ -38,6 +38,8 @@ public class FlightDetailActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(
+                        R.animator.activity_open_scale, R.animator.activity_close_translate);
             }
         });
 
@@ -71,6 +73,13 @@ public class FlightDetailActivity extends AppCompatActivity
         recyclerView.setAdapter(mFlightListAdapter);
 
         new FlightApiParser(this).getFlightDetails();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(
+                R.animator.activity_open_scale, R.animator.activity_close_translate);
     }
 
     public String getFromSourceCity() {

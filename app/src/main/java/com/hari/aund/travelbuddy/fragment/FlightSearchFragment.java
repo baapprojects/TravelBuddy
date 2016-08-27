@@ -141,6 +141,8 @@ public class FlightSearchFragment extends Fragment
                 intent.putExtra(Utility.KEY_CITY_SOURCE, getFromSourceCity());
                 intent.putExtra(Utility.KEY_CITY_DESTINATION, getToDestinationCity());
                 startActivity(intent);
+                getActivity().overridePendingTransition(
+                        R.animator.activity_open_translate, R.animator.activity_close_scale);
 
                 break;
         }

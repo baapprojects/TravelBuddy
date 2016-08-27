@@ -197,6 +197,8 @@ public class ExplorePlacesFragment extends Fragment
             placesIntent.putExtra(Utility.KEY_PLACE_ID, getNewPlaceId());
             placesIntent.putExtra(Utility.KEY_PLACE_NAME, getNewPlaceName());
             startActivity(placesIntent);
+            getActivity().overridePendingTransition(
+                    R.animator.activity_open_translate, R.animator.activity_close_scale);
         }
     }
 
@@ -229,6 +231,8 @@ public class ExplorePlacesFragment extends Fragment
             placesIntent.putExtra(Utility.KEY_PLACE_ID, placeId);
             placesIntent.putExtra(Utility.KEY_PLACE_NAME, placeName);
             startActivity(placesIntent);
+            getActivity().overridePendingTransition(
+                    R.animator.activity_open_translate, R.animator.activity_close_scale);
         }
     }
 

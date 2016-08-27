@@ -1,5 +1,6 @@
 package com.hari.aund.travelbuddy.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -57,6 +58,8 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
                 Intent placesCategoryIntent = new Intent(mContext, PlacesSubTypeActivity.class);
                 placesCategoryIntent.putExtra(Utility.KEY_PLACE_CATEGORY_INFO, placesCategory);
                 mContext.startActivity(placesCategoryIntent);
+                ((Activity)mContext).overridePendingTransition(
+                        R.animator.activity_open_translate, R.animator.activity_close_translate);
             }
         });
 
