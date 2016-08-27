@@ -48,6 +48,23 @@
     <string name="favourite_places">Favourite Places</string>
     <string name="add_widget">Add widget</string>
 
+    <!-- Content Descriptions -->
+    <string name="image_for_place">Image for Place</string>
+    <string name="place_detail_cover_image">Place Cover Image</string>
+    <string name="place_detail_place_rating">Place Rating</string>
+    <string name="place_detail_photo_slide">Showing Photo slide %1$d out of %2$d</string>
+    <string name="place_detail_place_rating_with_value">Place Rating value of %1$f out of 5</string>
+    <string name="place_detail_place_location_on_map">Showing, Place location in Google Map</string>
+    <string name="cd_places_menu_fab">Menu Options</string>
+    <string name="cd_place_detail_call_fab">Make a call to enquire about the Place</string>
+    <string name="cd_place_detail_web_fab">Open the Place Website</string>
+    <string name="cd_place_detail_fav_fab">Mark Place as Favourite</string>
+    <string name="cd_place_detail_share_fab">Share with Others</string>
+    <string name="cd_please_wait_content_loading">Please, wait while loading the content</string>
+    <string name="cd_fav_all_places">Display all Favourite Places</string>
+    <string name="cd_fav_category_filter">Display places by filtering places category</string>
+    <string name="cd_fav_sub_type_filter">Display places by filtering places sub-type</string>
+
     <string name="places_api_key">GOOGLE_PLACES-API-KEY</string>
     <string name="ad_smart_banner_unit_id">GOOGLE_AD_SMART-UNIT_ID</string>
 </resources>
