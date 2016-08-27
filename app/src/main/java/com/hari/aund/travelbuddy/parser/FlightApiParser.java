@@ -38,7 +38,6 @@ public class FlightApiParser implements FlightApiUrlValues {
 
     private void parseFlightDetails(JSONObject jsonObjectIn) {
         try {
-            FlightDetail flightDetail = new FlightDetail();
 
             JSONArray routesJSONArray =
                     jsonObjectIn.getJSONArray(TAG_ROUTES);
@@ -79,6 +78,7 @@ public class FlightApiParser implements FlightApiUrlValues {
                             JSONObject indicativePricesJSONObject =
                                     legsJSONObject.getJSONObject(TAG_INDICATIVE_PRICE);
 
+                            FlightDetail flightDetail = new FlightDetail();
                             flightDetail.setPrice(indicativePricesJSONObject.getDouble(TAG_PRICE));
 
                             JSONArray hopsJSONArray = legsJSONObject.getJSONArray(TAG_HOPS);
