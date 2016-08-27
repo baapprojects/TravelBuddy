@@ -33,8 +33,8 @@ public class FlightSearchFragment extends Fragment
 
     private static final String LOG_TAG = FlightSearchFragment.class.getSimpleName();
 
-    private static final int INDEX_CITIES_FROM = 1;
-    private static final int INDEX_CITIES_TO = 2;
+    private static final int INDEX_CITIES_SOURCE = 1;
+    private static final int INDEX_CITIES_DESTINATION = 2;
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
     private int mNavSectionId;
@@ -42,9 +42,9 @@ public class FlightSearchFragment extends Fragment
     private String mFromSourceCity;
     private String mToDestinationCity;
     private ActionBar mActionBar;
-    private RelativeLayout fromLayout, toLayout;
+    private RelativeLayout sourceCityLayout, destinationCityLayout;
     private TextView fromCityTextView, toCityTextView;
-    private Button search;
+    private Button searchFlightButton;
     private SharedPreferences mSharedPreferences;
 
     public FlightSearchFragment() {
@@ -71,15 +71,15 @@ public class FlightSearchFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_flight_search, container, false);
 
-        fromLayout = (RelativeLayout) rootView.findViewById(R.id.from_layout);
-        toLayout = (RelativeLayout) rootView.findViewById(R.id.to_layout);
+        sourceCityLayout = (RelativeLayout) rootView.findViewById(R.id.from_layout);
+        destinationCityLayout = (RelativeLayout) rootView.findViewById(R.id.to_layout);
         fromCityTextView = (TextView) rootView.findViewById(R.id.from_name);
         toCityTextView = (TextView) rootView.findViewById(R.id.to_name);
-        search = (Button) rootView.findViewById(R.id.search);
+        searchFlightButton = (Button) rootView.findViewById(R.id.search);
 
-        fromLayout.setOnClickListener(this);
-        toLayout.setOnClickListener(this);
-        search.setOnClickListener(this);
+        sourceCityLayout.setOnClickListener(this);
+        destinationCityLayout.setOnClickListener(this);
+        searchFlightButton.setOnClickListener(this);
 
         return rootView;
     }
@@ -125,10 +125,10 @@ public class FlightSearchFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.from_layout:
-                displayFlightCities(INDEX_CITIES_FROM);
+                displayFlightCities(INDEX_CITIES_SOURCE);
                 break;
             case R.id.to_layout:
-                displayFlightCities(INDEX_CITIES_TO);
+                displayFlightCities(INDEX_CITIES_DESTINATION);
                 break;
             case R.id.search:
                 if (getFromSourceCity().equals(getToDestinationCity())) {
@@ -136,14 +136,7 @@ public class FlightSearchFragment extends Fragment
                             .show();
                     return;
                 }
-
-                Intent intent = new Intent(getActivity(), FlightDetailActivity.class);
-                intent.putExtra(Utility.KEY_CITY_SOURCE, getFromSourceCity());
-                intent.putExtra(Utility.KEY_CITY_DESTINATION, getToDestinationCity());
-                startActivity(intent);
-                getActivity().overridePendingTransition(
-                        R.animator.activity_open_translate, R.animator.activity_close_scale);
-
+                startFlightDetailActivity();
                 break;
         }
     }
@@ -170,7 +163,7 @@ public class FlightSearchFragment extends Fragment
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String cityName = flightsArrayAdapter.getItem(which);
-                        if (INDEX_CITIES_FROM == index)
+                        if (INDEX_CITIES_SOURCE == index)
                             setFromSourceCity(cityName);
                         else
                             setToDestinationCity(cityName);
@@ -194,6 +187,15 @@ public class FlightSearchFragment extends Fragment
         setNavSectionId(getArguments().getInt(Utility.KEY_NAVIGATION_SECTION_ID));
         setNavSectionName(Utility.getNavSectionName(getContext(), getNavSectionId()));
         Log.d(LOG_TAG, "NAV SECTION ID - " + getNavSectionId() + " & Name : " + getNavSectionName());
+    }
+
+    private void startFlightDetailActivity(){
+        Intent intent = new Intent(getActivity(), FlightDetailActivity.class);
+        intent.putExtra(Utility.KEY_CITY_SOURCE, getFromSourceCity());
+        intent.putExtra(Utility.KEY_CITY_DESTINATION, getToDestinationCity());
+        startActivity(intent);
+        getActivity().overridePendingTransition(
+                R.animator.activity_open_translate, R.animator.activity_close_scale);
     }
 
     private int getNavSectionId() {
