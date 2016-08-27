@@ -41,7 +41,7 @@
     <string name="to">To</string>
     <string name="delhi">Delhi</string>
     <string name="search">SEARCH</string>
-    <string name="no_data_to_display">No Data to Display</string>
+    <string name="no_favourites_data">No Favourites</string>
     <string name="title_activity_flight_detail">Flight Details</string>
 
     <string name="places_api_key">GOOGLE_PLACES-API-KEY</string>
