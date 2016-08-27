@@ -115,7 +115,6 @@ public class ExplorePlacesFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(LOG_TAG, "inside onStart");
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
@@ -161,7 +160,8 @@ public class ExplorePlacesFragment extends Fragment
 
     @Override
     public void onStop() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient != null &&
+                mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
         super.onStop();
@@ -182,7 +182,9 @@ public class ExplorePlacesFragment extends Fragment
             }
         } else if (view.getId() == R.id.new_place_found_on_map) {
 
-            if (getNewPlaceName() == null){
+            if (getNewPlaceName() == null ||
+                    getNewPlaceName().equals(getResources()
+                            .getString(R.string.def_no_place_selected))){
                 Toast.makeText(getContext(),
                         "No New Place Selected.\nChoose one from the List!",
                         Toast.LENGTH_LONG)
@@ -192,13 +194,8 @@ public class ExplorePlacesFragment extends Fragment
 
             Toast.makeText(getContext(), getNewPlaceName(), Toast.LENGTH_LONG)
                     .show();
+            startPlacesCategoryActivity(getNewPlaceId(), getNewPlaceName());
 
-            Intent placesIntent = new Intent(getActivity(), PlacesCategoryActivity.class);
-            placesIntent.putExtra(Utility.KEY_PLACE_ID, getNewPlaceId());
-            placesIntent.putExtra(Utility.KEY_PLACE_NAME, getNewPlaceName());
-            startActivity(placesIntent);
-            getActivity().overridePendingTransition(
-                    R.animator.activity_open_translate, R.animator.activity_close_scale);
         }
     }
 
@@ -227,12 +224,7 @@ public class ExplorePlacesFragment extends Fragment
         if ((placeId != null) && (placeName != null)) {
             Log.d(LOG_TAG, "PlaceId - " + placeId + " Name - " + placeName);
 
-            Intent placesIntent = new Intent(getActivity(), PlacesCategoryActivity.class);
-            placesIntent.putExtra(Utility.KEY_PLACE_ID, placeId);
-            placesIntent.putExtra(Utility.KEY_PLACE_NAME, placeName);
-            startActivity(placesIntent);
-            getActivity().overridePendingTransition(
-                    R.animator.activity_open_translate, R.animator.activity_close_scale);
+            startPlacesCategoryActivity(placeId, placeName);
         }
     }
 
@@ -241,16 +233,10 @@ public class ExplorePlacesFragment extends Fragment
             if (resultCode == RESULTS_OK) {
                 Place place = PlacePicker.getPlace(data, getContext());
 
-                //mPlacesIdAL.add(place.getId());
-                //mPlacesNameAL.add(place.getName().toString());
-                //mPlacesNameAL.add(place.getAddress().toString());
-                //mDefaultPlacesArrayAdapter.notifyDataSetChanged();
-                //setPlaceNameToTextView(place.getAddress().toString());
                 setNewPlaceId(place.getId());
                 setNewPlaceName(place.getAddress().toString());
 
                 Log.d(LOG_TAG, "PlaceId - " + place.getId());
-                Log.d(LOG_TAG, "PlaceName - " + place.getName().toString());
                 Log.d(LOG_TAG, "PlaceAddress - " + place.getAddress().toString());
 
                 if (getView() != null) {
@@ -314,6 +300,7 @@ public class ExplorePlacesFragment extends Fragment
     }
 
     private void setDefaultPlacesIdAL() {
+        //TODO - move this to data
         mPlacesIdAL = new ArrayList<>();
 
         mPlacesIdAL.add("ChIJSdRbuoqEXjkRFmVPYRHdzk8");
@@ -343,6 +330,7 @@ public class ExplorePlacesFragment extends Fragment
     }
 
     private void setUpDefaultPlacesNameAL() {
+        //TODO - move this to data
         mPlacesNameAL = new ArrayList<>();
 
         mPlacesNameAL.add("Ahmedabad, Gujarat, India");
@@ -421,6 +409,15 @@ public class ExplorePlacesFragment extends Fragment
             searchPlace.setAdapter(getPlaceAutoCompleteAdapter());
             searchPlace.setOnItemClickListener(this);
         }
+    }
+
+    private void startPlacesCategoryActivity(String placeId, String placeName){
+        Intent placesIntent = new Intent(getActivity(), PlacesCategoryActivity.class);
+        placesIntent.putExtra(Utility.KEY_PLACE_ID, placeId);
+        placesIntent.putExtra(Utility.KEY_PLACE_NAME, placeName);
+        startActivity(placesIntent);
+        getActivity().overridePendingTransition(
+                R.animator.activity_open_translate, R.animator.activity_close_scale);
     }
 
     public String getNewPlaceName() {
