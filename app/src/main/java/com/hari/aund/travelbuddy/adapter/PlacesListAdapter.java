@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,22 +74,9 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View onClickView) {
-                int position = mSingleCategoryAndSection ?
+                int othersPosition = mSingleCategoryAndSection ?
                         SINGLE_CATEGORY_SECTION_INDEX : viewHolder.getAdapterPosition();
-
-                Intent intent = new Intent(mContext, PlaceDetailActivity.class);
-                intent.putExtra(Utility.KEY_PLACE_ID,
-                        mPlacesListInfoArrayList.get(viewHolder.getAdapterPosition()).getPlaceId());
-                intent.putExtra(Utility.KEY_CATEGORY_ID,
-                        mCategoryIdAL.get(position));
-                intent.putExtra(Utility.KEY_CATEGORY_NAME,
-                        mCategoryNameAL.get(position));
-                intent.putExtra(Utility.KEY_PLACE_SECTION_NAME,
-                        mSectionNameAL.get(position));
-                mContext.startActivity(intent);
-
-                ((Activity) mContext).overridePendingTransition(
-                        R.animator.activity_open_translate, R.animator.activity_close_translate);
+                startPlaceDetailActivity(viewHolder.getAdapterPosition(), othersPosition);
             }
         });
 
@@ -177,14 +163,16 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
         mSectionNameAL = sectionNameAL;
     }
 
-    private int getExitAnim(){
-        if (mSingleCategoryAndSection) {
-            Log.d(LOG_TAG, "Close Scale Animation!");
-        } else {
-            Log.d(LOG_TAG, "Close Translate Animation!");
-        }
-        return mSingleCategoryAndSection ?
-                R.animator.activity_close_scale :   //From Categories to Details
-                R.animator.activity_close_translate;        //From Favourites to Details
+    private void startPlaceDetailActivity(int placesPosition, int othersPosition){
+        Intent intent = new Intent(mContext, PlaceDetailActivity.class);
+        intent.putExtra(Utility.KEY_PLACE_ID,
+                mPlacesListInfoArrayList.get(placesPosition).getPlaceId());
+        intent.putExtra(Utility.KEY_CATEGORY_ID, mCategoryIdAL.get(othersPosition));
+        intent.putExtra(Utility.KEY_CATEGORY_NAME, mCategoryNameAL.get(othersPosition));
+        intent.putExtra(Utility.KEY_PLACE_SECTION_NAME, mSectionNameAL.get(othersPosition));
+        mContext.startActivity(intent);
+
+        ((Activity) mContext).overridePendingTransition(
+                R.animator.activity_open_translate, R.animator.activity_close_translate);
     }
 }
