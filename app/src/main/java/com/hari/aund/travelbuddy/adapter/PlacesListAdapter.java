@@ -112,6 +112,10 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
         }
         */
 
+        // Content Description for Non-text elements
+        viewHolder.place_pic.setContentDescription(
+                mContext.getResources().getString(R.string.image_for_place));
+
         Typeface typefaceName = Typeface.createFromAsset(mContext.getAssets(), "Rosario-Bold.ttf");
         Typeface typefaceAddress = Typeface.createFromAsset(mContext.getAssets(), "Rosario-Regular.ttf");
 
@@ -123,6 +127,9 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
 
         if (placesListInfo.getPlaceRating() != null) {
             viewHolder.rating.setRating(Float.parseFloat(String.valueOf(placesListInfo.getPlaceRating())));
+            // Content Description for Non-text elements
+            viewHolder.rating.setContentDescription(mContext.getString(
+                    R.string.place_detail_place_rating_with_value, placesListInfo.getPlaceRating()));
         }
     }
 

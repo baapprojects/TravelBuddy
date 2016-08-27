@@ -200,6 +200,8 @@ public class PlacesCategoryActivity extends AppCompatActivity
 
         mFavouriteFab = (FloatingActionButton) findViewById(R.id.fab_places_favourite);
         mFavouriteFab.setOnClickListener(this);
+        mFavouriteFab.setContentDescription(getResources()
+                .getString(R.string.cd_place_detail_fav_fab));
     }
 
     private void createAndAddAdapterToView(){

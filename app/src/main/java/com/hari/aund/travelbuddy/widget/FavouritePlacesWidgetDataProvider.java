@@ -88,6 +88,10 @@ public class FavouritePlacesWidgetDataProvider
         }
         */
 
+        // Content Description for Non-text elements
+        remoteViews.setContentDescription(R.id.place_pic,
+                mContext.getResources().getString(R.string.image_for_place));
+
         remoteViews.setTextViewText(R.id.place_id, placesListInfo.getPlaceId());
         remoteViews.setTextViewText(R.id.place_name, placesListInfo.getPlaceName());
         remoteViews.setTextViewText(R.id.place_address, placesListInfo.getPlaceAddress());

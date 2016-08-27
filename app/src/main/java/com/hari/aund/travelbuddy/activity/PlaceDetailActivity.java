@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -54,6 +55,7 @@ public class PlaceDetailActivity extends AppCompatActivity
     private CardView photosCard, timetableCard;
     private LinearLayout photosLayout, timetableLayout;
     private RecyclerView reviewsRecyclerView;
+    private FloatingActionMenu fabMenu;
     private FloatingActionButton callFab, webFab, favFab, shareFab;
     private GoogleMap mGoogleMap;
 
@@ -172,6 +174,10 @@ public class PlaceDetailActivity extends AppCompatActivity
                             12.0f
                     )
             );
+
+            // Content Description for Non-text elements
+            mGoogleMap.setContentDescription(getResources()
+            .getString(R.string.place_detail_place_location_on_map));
         }
     }
 
@@ -189,12 +195,17 @@ public class PlaceDetailActivity extends AppCompatActivity
         timetableLayout = (LinearLayout) findViewById(R.id.timetable_layout);
         reviewsRecyclerView = (RecyclerView) findViewById(R.id.reviews_recycler_view);
 
+        fabMenu = (FloatingActionMenu) findViewById(R.id.fab_place_detail_menu);
         callFab = (FloatingActionButton) findViewById(R.id.fab_place_detail_call);
         webFab = (FloatingActionButton) findViewById(R.id.fab_place_detail_website);
         favFab = (FloatingActionButton) findViewById(R.id.fab_place_detail_fav);
         shareFab = (FloatingActionButton) findViewById(R.id.fab_place_detail_share);
 
         setOnClickListenerToViews();
+
+        // Content Description for Non-text elements
+        fabMenu.getMenuIconView().setContentDescription(getResources()
+                .getString(R.string.cd_places_menu_fab));
     }
 
     private void setOnClickListenerToViews() {
@@ -288,10 +299,16 @@ public class PlaceDetailActivity extends AppCompatActivity
                     */
             coverImage.setAlpha(0.6f);
         }
+        // Content Description for Non-text elements
+        coverImage.setContentDescription(getResources()
+                .getString(R.string.place_detail_cover_image));
 
         if (mPlaceDetail.hasRating()) {
             String ratingStr = mPlaceDetail.getRating() + " user ratings";
             placeRating.setText(ratingStr);
+            // Content Description for Non-text elements
+            placeRating.setContentDescription(getResources()
+                    .getString(R.string.place_detail_place_rating));
         } else {
             placeRating.setVisibility(View.GONE);
         }
@@ -322,7 +339,9 @@ public class PlaceDetailActivity extends AppCompatActivity
             ImageView imageView;
             PlacesApiParser placesApiParser = new PlacesApiParser(this);
 
-            for (int index = 0; index < mPlaceDetail.getPhotoReference().size(); index++) {
+            int photoCount = mPlaceDetail.getPhotoReference().size();
+
+            for (int index = 0; index < photoCount; index++) {
                 imageView = new ImageView(this);
 
                 imageView.setPadding(5, 0, 5, 0);
@@ -337,6 +356,9 @@ public class PlaceDetailActivity extends AppCompatActivity
                         .into(imageView);
                         */
 
+                // Content Description for Non-text elements
+                imageView.setContentDescription(
+                        getString(R.string.place_detail_photo_slide, index, photoCount));
                 photosLayout.addView(imageView);
                 Log.d(LOG_TAG, "Photo Reference : " + mPlaceDetail.getPhotoReference().get(index));
             }

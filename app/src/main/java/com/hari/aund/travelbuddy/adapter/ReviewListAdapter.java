@@ -44,6 +44,9 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Vi
         viewHolder.reviewerName.setText(reviewDetail.getReviewerName());
         viewHolder.reviewContent.setText(reviewDetail.getContent());
         viewHolder.reviewerRating.setRating(reviewDetail.getRatingValue());
+        // Content Description for Non-text elements
+        viewHolder.reviewerRating.setContentDescription(mContext.getString(
+                R.string.place_detail_place_rating_with_value, reviewDetail.getRatingValue()));
     }
 
     @Override

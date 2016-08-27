@@ -74,6 +74,8 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
         //TODO: Consider Using it for Tablets
         //viewHolder.categoryName.setText(placesCategory.getCategoryName());
         viewHolder.categoryImage.setImageResource(placesCategory.getImageResourceId());
+        // Content Description for Non-text elements
+        viewHolder.categoryImage.setContentDescription(placesCategory.getCategoryName());
     }
 
     @Override
