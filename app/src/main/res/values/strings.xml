@@ -15,7 +15,7 @@
     <string name="unknown">Unknown</string>
     <string name="communicate">Communicate</string>
     <string name="share">Share</string>
-    <string name="contact_us">Contact us!</string>
+    <string name="contact_us">Contact us</string>
 
     <string name="content_desc_back_drop">BackDrop</string>
     <string name="content_desc_find_place_on_map">Click! to find place on map.</string>
@@ -53,6 +53,9 @@
     <string name="fav_sub_type_fab_label">Sub Type</string>
     <string name="hyphen_character">&#45;</string>
     <string name="ad_type">SMART_BANNER</string>
+
+    <string name="contact_message">Travel Buddy App, developed by github@harinivaskumar.\n\n\nFor any queries, please write to me"</string>
+    <string name="dev_email">"harinivaskumar@gmail.com"</string>
 
     <!-- Content Descriptions -->
     <string name="cd_nav_header_image">Travel Buddy App icon</string>

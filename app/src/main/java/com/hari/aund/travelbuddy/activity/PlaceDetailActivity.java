@@ -217,7 +217,7 @@ public class PlaceDetailActivity extends AppCompatActivity
     }
 
     private void triggerShareIntent() {
-        Utility.shareInfoTrigger(this, new ShareInfo(
+        Utility.shareIntentTrigger(this, new ShareInfo(
                 mPlaceDetail.getPlaceTitle(), mPlaceDetail.toString()));
     }
 

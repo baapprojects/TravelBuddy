@@ -108,14 +108,16 @@ public class Utility {
         }
     }
 
-    public static void shareInfoTrigger(Context context,
-                                        ShareInfo shareInfo){
+    public static void shareIntentTrigger(Context context,
+                                          ShareInfo shareInfo){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-        shareIntent.setType(shareInfo.getType());
+        if (shareInfo.hasEmail())
+            shareIntent.putExtra(Intent.EXTRA_EMAIL, shareInfo.getEmail());
         shareIntent.putExtra(Intent.EXTRA_TITLE, shareInfo.getTitle());
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareInfo.getTitle());
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareInfo.getContent());
+        shareIntent.setType(shareInfo.getType());
 
         context.startActivity(Intent.createChooser(shareIntent, shareInfo.getIntentTitle()));
     }
