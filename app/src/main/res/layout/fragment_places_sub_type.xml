@@ -35,7 +35,7 @@
                 android:layout_marginBottom="4dp"
                 android:text="@string/no_places_data_in_sub_type"
                 android:textSize="22sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/retry_sub_type"
@@ -43,10 +43,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/colorAccent"
+                android:clickable="false"
                 android:text="@string/retry_button_text"
-                android:textSize="15sp"
                 android:textColor="#fff"
-                android:clickable="false" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <com.pnikosis.materialishprogress.ProgressWheel

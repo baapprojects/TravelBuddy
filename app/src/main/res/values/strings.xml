@@ -2,7 +2,7 @@
     <string name="app_name">TravelBuddy</string>
     <string name="title">Travel Buddy</string>
     <string name="sub_title">Search local places with ease!</string>
-    <string name="go_in">go&#8230;</string>
+    <string name="start">Start</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -36,19 +36,26 @@
     <string name="time">TIME</string>
     <string name="title_activity_place_detail">Place Detail</string>
     <string name="title_activity_flight">FlightActivity</string>
-    <string name="from">From</string>
-    <string name="chennai">Chennai</string>
-    <string name="to">To</string>
-    <string name="delhi">Delhi</string>
-    <string name="search">SEARCH</string>
+    <string name="from_label">From</string>
+    <string name="source_place_default">Chennai</string>
+    <string name="to_label">To</string>
+    <string name="destination_place_default">Delhi</string>
+    <string name="search_btn_string">SEARCH</string>
     <string name="no_favourites_data">No Favourites</string>
     <string name="no_places_data_in_sub_type">No Places</string>
     <string name="network_error_try_again">Network Error!</string>
     <string name="retry_button_text">Try Again</string>
     <string name="favourite_places">Favourite Places</string>
     <string name="add_widget">Add widget</string>
+    <string name="fav_fab_menu_label">Filter</string>
+    <string name="fav_all_places_fab_label">All Places</string>
+    <string name="fav_category_fab_label">Category</string>
+    <string name="fav_sub_type_fab_label">Sub Type</string>
+    <string name="hyphen_character">&#45;</string>
+    <string name="ad_type">SMART_BANNER</string>
 
     <!-- Content Descriptions -->
+    <string name="cd_nav_header_image">Travel Buddy App icon</string>
     <string name="image_for_place">Image for Place</string>
     <string name="place_detail_cover_image">Place Cover Image</string>
     <string name="place_detail_place_rating">Place Rating</string>
@@ -64,6 +71,8 @@
     <string name="cd_fav_all_places">Display all Favourite Places</string>
     <string name="cd_fav_category_filter">Display places by filtering places category</string>
     <string name="cd_fav_sub_type_filter">Display places by filtering places sub-type</string>
+    <string name="cd_source_place_drop_down">Check to, Select the desired Flight Source Place</string>
+    <string name="cd_destination_place_drop_down">Check to, Select the desired Flight Destination Place</string>
 
     <string name="places_api_key">GOOGLE_PLACES-API-KEY</string>
     <string name="ad_smart_banner_unit_id">GOOGLE_AD_SMART-UNIT_ID</string>

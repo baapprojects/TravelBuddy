@@ -33,7 +33,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Vi
     @Override
     public ReviewListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.recycler_view_reviews, viewGroup, false);
+        View view = layoutInflater.inflate(R.layout.recycler_view_places_reviews, viewGroup, false);
         return new ViewHolder(view);
     }
 

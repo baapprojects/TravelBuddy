@@ -45,7 +45,7 @@ public class PlacesCategoryAdapter extends RecyclerView.Adapter<PlacesCategoryAd
     @Override
     public PlacesCategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parentViewGroup, int viewType) {
         LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View newView = layoutInflater.inflate(R.layout.recycler_view_places, parentViewGroup, false);
+        View newView = layoutInflater.inflate(R.layout.recycler_view_places_category, parentViewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(newView);
 
         newView.setOnClickListener(new View.OnClickListener() {

@@ -21,13 +21,13 @@ public class SplashActivity extends AppCompatActivity
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash);
 
-        TextView goIn = (TextView) findViewById(R.id.goIn);
-        goIn.setOnClickListener(this);
+        TextView startTextView = (TextView) findViewById(R.id.start_text_id);
+        startTextView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.goIn) {
+        if (view.getId() == R.id.start_text_id) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             Log.d(LOG_TAG, "onClick : Intent Triggered " + "MainActivity");

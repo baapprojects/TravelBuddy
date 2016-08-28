@@ -71,11 +71,11 @@ public class FlightSearchFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_flight_search, container, false);
 
-        sourceCityLayout = (RelativeLayout) rootView.findViewById(R.id.from_layout);
-        destinationCityLayout = (RelativeLayout) rootView.findViewById(R.id.to_layout);
-        fromCityTextView = (TextView) rootView.findViewById(R.id.from_name);
-        toCityTextView = (TextView) rootView.findViewById(R.id.to_name);
-        searchFlightButton = (Button) rootView.findViewById(R.id.search);
+        sourceCityLayout = (RelativeLayout) rootView.findViewById(R.id.source_layout);
+        destinationCityLayout = (RelativeLayout) rootView.findViewById(R.id.destination_layout);
+        fromCityTextView = (TextView) rootView.findViewById(R.id.source_place_id);
+        toCityTextView = (TextView) rootView.findViewById(R.id.destination_place_id);
+        searchFlightButton = (Button) rootView.findViewById(R.id.flight_search_btn_id);
 
         sourceCityLayout.setOnClickListener(this);
         destinationCityLayout.setOnClickListener(this);
@@ -124,13 +124,13 @@ public class FlightSearchFragment extends Fragment
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.from_layout:
+            case R.id.source_layout:
                 displayFlightCities(INDEX_CITIES_SOURCE);
                 break;
-            case R.id.to_layout:
+            case R.id.destination_layout:
                 displayFlightCities(INDEX_CITIES_DESTINATION);
                 break;
-            case R.id.search:
+            case R.id.flight_search_btn_id:
                 if (getFromSourceCity().equals(getToDestinationCity())) {
                     Snackbar.make(view, "Source & Destination are Same.!", Snackbar.LENGTH_LONG)
                             .show();

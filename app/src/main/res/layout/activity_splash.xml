@@ -8,11 +8,11 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/colorPrimary"
-        android:contentDescription="@string/content_desc_back_drop"/>
+        android:contentDescription="@string/content_desc_back_drop" />
 
     <TextView
-        android:layout_width="wrap_content"
         android:id="@+id/title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="100dp"
@@ -37,16 +37,16 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/goIn"
+            android:id="@+id/start_text_id"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:padding="16dp"
-            android:text="@string/go_in"
+            android:text="@string/start"
             android:textColor="#fff"
-            android:textSize="20sp"
-            android:textStyle="italic"/>
+            android:textSize="24sp" />
 
     </LinearLayout>
 

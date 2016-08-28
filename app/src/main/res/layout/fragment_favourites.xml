@@ -58,7 +58,7 @@
             android:layout_margin="@dimen/fab_margin"
             android:contentDescription="@string/cd_places_menu_fab"
             app:menu_colorNormal="@color/colorAccent"
-            app:menu_fab_label="Filter"
+            app:menu_fab_label="@string/fav_fab_menu_label"
             app:menu_icon="@drawable/ic_filter_list_white_24dp">
 
             <com.github.clans.fab.FloatingActionButton
@@ -68,7 +68,7 @@
                 android:src="@drawable/ic_filter_list_white_24dp"
                 android:contentDescription="@string/cd_fav_sub_type_filter"
                 app:fab_colorNormal="@color/colorAccent"
-                app:fab_label="Sub Type"
+                app:menu_fab_label="@string/fav_sub_type_fab_label"
                 app:fab_showShadow="true" />
 
             <com.github.clans.fab.FloatingActionButton
@@ -78,7 +78,7 @@
                 android:src="@drawable/ic_filter_list_white_24dp"
                 android:contentDescription="@string/cd_fav_category_filter"
                 app:fab_colorNormal="@color/colorAccent"
-                app:fab_label="Category"
+                app:menu_fab_label="@string/fav_sub_type_fab_label"
                 app:fab_showShadow="true" />
 
             <com.github.clans.fab.FloatingActionButton
@@ -88,7 +88,7 @@
                 android:src="@drawable/ic_filter_list_black_24dp"
                 android:contentDescription="@string/cd_fav_all_places"
                 app:fab_colorNormal="@color/colorAccent"
-                app:fab_label="All Places"
+                app:fab_label="@string/fav_all_places_fab_label"
                 app:fab_showShadow="true"
                 app:fab_size="normal" />
 
