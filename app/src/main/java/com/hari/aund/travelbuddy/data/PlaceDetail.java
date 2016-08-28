@@ -10,7 +10,15 @@ import java.util.ArrayList;
 /**
  * Created by Hari Nivas Kumar R P on 8/17/2016.
  */
-public class PlaceDetail{
+public class PlaceDetail {
+
+    private static final String PLACE_INFO_SUFFIX = " - Place Information";
+    private static final String NAME_PREFIX = "Name - ";
+    private static final String ADDRESS_PREFIX = "\nAddress - ";
+    private static final String PHONE_PREFIX = "\nContact No. - ";
+    private static final String WEBSITE_PREFIX = "\nWebsite - ";
+    private static final String NEARBY_PREFIX = "\n\nVicinity - ";
+    private static final String EMPTY_STR = "";
 
     private String mId;
     private String mName;
@@ -112,11 +120,11 @@ public class PlaceDetail{
         mPhotoReference = photoReference;
     }
 
-    public String getPhotoRef(int position){
+    public String getPhotoRef(int position) {
         return getPhotoReference().get(position);
     }
 
-    public void addPhotoRef(String photoRef){
+    public void addPhotoRef(String photoRef) {
         getPhotoReference().add(photoRef);
     }
 
@@ -128,11 +136,11 @@ public class PlaceDetail{
         mTimetable = timetable;
     }
 
-    public String getTimeEntry(int position){
+    public String getTimeEntry(int position) {
         return getTimetable().get(position);
     }
 
-    public void addTimeEntry(String timeEntry){
+    public void addTimeEntry(String timeEntry) {
         getTimetable().add(timeEntry);
     }
 
@@ -144,47 +152,80 @@ public class PlaceDetail{
         mReviewDetails = reviewDetails;
     }
 
-    public ReviewDetail getReviewEntry(int position){
+    public ReviewDetail getReviewEntry(int position) {
         return getReviewDetails().get(position);
     }
 
-    public void addReviewEntry(ReviewDetail reviewDetail){
+    public void addReviewEntry(ReviewDetail reviewDetail) {
         getReviewDetails().add(reviewDetail);
     }
 
-    public boolean hasVicinity(){
+    public boolean hasVicinity() {
         return getVicinity() != null;
     }
 
-    public boolean hasWebsite(){
+    public boolean hasWebsite() {
         return getWebsite() != null;
     }
 
-    public boolean hasPhoneNumber(){
+    public boolean hasPhoneNumber() {
         return getPhoneNumber() != null;
     }
 
-    public boolean hasAddress(){
+    public boolean hasAddress() {
         return getAddress() != null;
     }
 
-    public boolean hasRating(){
+    public boolean hasRating() {
         return mRating != null;
     }
-    
-    public boolean hasPhotoReference(){
+
+    public boolean hasPhotoReference() {
         return !getPhotoReference().isEmpty();
     }
-    
-    public boolean hasTimeTable(){
+
+    public boolean hasTimeTable() {
         return !getTimetable().isEmpty();
     }
 
-    public boolean hasReviews(){
+    public boolean hasReviews() {
         return !getReviewDetails().isEmpty();
     }
 
-    public ContentValues getPlaceDetailsAsContentValues(){
+    public String toString() {
+        String placeInfoStr = getShareName();
+        placeInfoStr += getShareAddress();
+        placeInfoStr += getShareContact();
+        placeInfoStr += getShareWebsite();
+        placeInfoStr += getShareVicinity();
+        return placeInfoStr;
+    }
+
+    public String getPlaceTitle() {
+        return getName() + PLACE_INFO_SUFFIX;
+    }
+
+    private String getShareName() {
+        return NAME_PREFIX + getName();
+    }
+
+    private String getShareAddress() {
+        return ADDRESS_PREFIX + getAddress();
+    }
+
+    private String getShareContact() {
+        return hasPhoneNumber() ? PHONE_PREFIX + getPhoneNumber() : EMPTY_STR;
+    }
+
+    private String getShareWebsite() {
+        return hasWebsite() ? WEBSITE_PREFIX + getWebsite() : EMPTY_STR;
+    }
+
+    private String getShareVicinity() {
+        return hasVicinity() ? NEARBY_PREFIX + getVicinity() : EMPTY_STR;
+    }
+
+    public ContentValues getPlaceDetailsAsContentValues() {
         ContentValues placeContentValues = new ContentValues();
 
         placeContentValues.put(PlaceColumns.PLACE_ID, getId());
@@ -209,11 +250,11 @@ public class PlaceDetail{
 
         if (hasRating())
             placeContentValues.put(PlaceColumns.RATING, getRating());
-        
+
         return placeContentValues;
     }
 
-    public void updatePlaceDetailsFromCursor(Cursor placeCursor){
+    public void updatePlaceDetailsFromCursor(Cursor placeCursor) {
         setName(placeCursor.getString(
                 placeCursor.getColumnIndex(PlaceColumns.NAME)));
 
