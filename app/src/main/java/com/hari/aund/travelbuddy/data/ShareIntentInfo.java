@@ -3,7 +3,7 @@ package com.hari.aund.travelbuddy.data;
 /**
  * Created by Hari Nivas Kumar R P on 8/28/2016.
  */
-public class ShareInfo {
+public class ShareIntentInfo {
 
     private static final String SHARE_INTENT_TITLE = "Share using";
     private static final String EMAIL_INTENT_TITLE = "Send Mail";
@@ -25,14 +25,14 @@ public class ShareInfo {
     private String mContent;
     private String mType;
 
-    public ShareInfo(){
+    public ShareIntentInfo(){
         setIntentTitle(SHARE_INTENT_TITLE);
         setTitle(SHARE_TITLE);
         setContent(SHARE_CONTENT);
         setType(SHARE_CONTENT_TYPE);
     }
 
-    public ShareInfo(String title, String content){
+    public ShareIntentInfo(String title, String content){
         title = SHARE_TITLE + title;
         content = content + "\n\n" + SHARE_CONTENT;
 
@@ -42,7 +42,7 @@ public class ShareInfo {
         setType(SHARE_CONTENT_TYPE);
     }
 
-    public ShareInfo(String emailId){
+    public ShareIntentInfo(String emailId){
         setIntentTitle(EMAIL_INTENT_TITLE);
         setEmail(emailId);
         setTitle(EMAIL_SUBJECT);

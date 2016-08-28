@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.ReviewListAdapter;
 import com.hari.aund.travelbuddy.data.PlaceDetail;
-import com.hari.aund.travelbuddy.data.ShareInfo;
+import com.hari.aund.travelbuddy.data.ShareIntentInfo;
 import com.hari.aund.travelbuddy.data.provider.PlaceColumns;
 import com.hari.aund.travelbuddy.data.provider.Places;
 import com.hari.aund.travelbuddy.parser.PlacesApiParser;
@@ -217,7 +217,7 @@ public class PlaceDetailActivity extends AppCompatActivity
     }
 
     private void triggerShareIntent() {
-        Utility.shareIntentTrigger(this, new ShareInfo(
+        Utility.shareIntentTrigger(this, new ShareIntentInfo(
                 mPlaceDetail.getPlaceTitle(), mPlaceDetail.toString()));
     }
 

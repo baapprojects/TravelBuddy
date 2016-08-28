@@ -20,7 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.hari.aund.travelbuddy.R;
-import com.hari.aund.travelbuddy.data.ShareInfo;
+import com.hari.aund.travelbuddy.data.ShareIntentInfo;
 import com.hari.aund.travelbuddy.fragment.ExplorePlacesFragment;
 import com.hari.aund.travelbuddy.fragment.FavouritesFragment;
 import com.hari.aund.travelbuddy.fragment.FlightSearchFragment;
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
                 changeFragment();
                 break;
             case R.id.nav_share:
-                Utility.shareIntentTrigger(this, new ShareInfo());
+                Utility.shareIntentTrigger(this, new ShareIntentInfo());
                 break;
             case R.id.nav_contact_us:
                 showContactUs();
@@ -235,9 +235,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void emailTrigger() {
-        String emailId = getResources().getString(R.string.dev_email);
-        Log.d(LOG_TAG, "i have emailId - " + emailId);
-        Utility.shareIntentTrigger(this, new ShareInfo(emailId));
+        Utility.shareIntentTrigger(this, new ShareIntentInfo(
+                getResources().getString(R.string.dev_email)));
     }
 
     private int getNavItemResId() {

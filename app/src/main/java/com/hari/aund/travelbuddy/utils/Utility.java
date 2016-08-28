@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
-import com.hari.aund.travelbuddy.data.ShareInfo;
+import com.hari.aund.travelbuddy.data.ShareIntentInfo;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/13/2016.
@@ -109,16 +109,16 @@ public class Utility {
     }
 
     public static void shareIntentTrigger(Context context,
-                                          ShareInfo shareInfo){
+                                          ShareIntentInfo shareIntentInfo){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-        if (shareInfo.hasEmail())
-            shareIntent.putExtra(Intent.EXTRA_EMAIL, shareInfo.getEmail());
-        shareIntent.putExtra(Intent.EXTRA_TITLE, shareInfo.getTitle());
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareInfo.getTitle());
-        shareIntent.putExtra(Intent.EXTRA_TEXT, shareInfo.getContent());
-        shareIntent.setType(shareInfo.getType());
+        if (shareIntentInfo.hasEmail())
+            shareIntent.putExtra(Intent.EXTRA_EMAIL, shareIntentInfo.getEmail());
+        shareIntent.putExtra(Intent.EXTRA_TITLE, shareIntentInfo.getTitle());
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareIntentInfo.getTitle());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareIntentInfo.getContent());
+        shareIntent.setType(shareIntentInfo.getType());
 
-        context.startActivity(Intent.createChooser(shareIntent, shareInfo.getIntentTitle()));
+        context.startActivity(Intent.createChooser(shareIntent, shareIntentInfo.getIntentTitle()));
     }
 }
