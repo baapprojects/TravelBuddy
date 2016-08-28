@@ -11,10 +11,17 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            keyAlias 'c8-travel-buddy'
+            keyPassword 'mypassword'
+            storeFile file('../keystore.jks')
+            storePassword 'mypassword'
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
