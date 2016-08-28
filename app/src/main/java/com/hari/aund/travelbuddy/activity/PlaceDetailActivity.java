@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.adapter.ReviewListAdapter;
 import com.hari.aund.travelbuddy.data.PlaceDetail;
+import com.hari.aund.travelbuddy.data.ShareInfo;
 import com.hari.aund.travelbuddy.data.provider.PlaceColumns;
 import com.hari.aund.travelbuddy.data.provider.Places;
 import com.hari.aund.travelbuddy.parser.PlacesApiParser;
@@ -216,14 +217,8 @@ public class PlaceDetailActivity extends AppCompatActivity
     }
 
     private void triggerShareIntent() {
-        String shareText = "Download Travel Buddy to help find places with ease.";
-        String shareIntentTitle = "Share using";
-
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
-
-        startActivity(Intent.createChooser(shareIntent, shareIntentTitle));
+        Utility.shareInfoTrigger(this, new ShareInfo(
+                mPlaceDetail.getPlaceTitle(), mPlaceDetail.toString()));
     }
 
     private void triggerCallIntent() {

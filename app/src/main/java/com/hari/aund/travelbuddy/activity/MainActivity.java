@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.hari.aund.travelbuddy.R;
+import com.hari.aund.travelbuddy.data.ShareInfo;
 import com.hari.aund.travelbuddy.fragment.ExplorePlacesFragment;
 import com.hari.aund.travelbuddy.fragment.FavouritesFragment;
 import com.hari.aund.travelbuddy.fragment.FlightSearchFragment;
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity
                 changeFragment();
                 break;
             case R.id.nav_share:
-                setNavSectionId(DEFAULT_SECTION_ID);
+                Utility.shareInfoTrigger(this, new ShareInfo());
                 break;
             case R.id.nav_contact_us:
                 setNavSectionId(DEFAULT_SECTION_ID);
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     public int getNavSectionId() {

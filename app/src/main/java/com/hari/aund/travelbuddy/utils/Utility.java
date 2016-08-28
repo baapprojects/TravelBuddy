@@ -2,6 +2,7 @@ package com.hari.aund.travelbuddy.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.MainActivity;
+import com.hari.aund.travelbuddy.data.ShareInfo;
 
 /**
  * Created by Hari Nivas Kumar R P on 8/13/2016.
@@ -106,4 +108,15 @@ public class Utility {
         }
     }
 
+    public static void shareInfoTrigger(Context context,
+                                        ShareInfo shareInfo){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
+        shareIntent.setType(shareInfo.getType());
+        shareIntent.putExtra(Intent.EXTRA_TITLE, shareInfo.getTitle());
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareInfo.getTitle());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareInfo.getContent());
+
+        context.startActivity(Intent.createChooser(shareIntent, shareInfo.getIntentTitle()));
+    }
 }
