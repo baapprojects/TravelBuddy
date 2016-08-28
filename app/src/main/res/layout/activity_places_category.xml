@@ -32,7 +32,7 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_places_cateogory" />
+    <include layout="@layout/content_places_category" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_places_favourite"
@@ -49,6 +49,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:adSize="SMART_BANNER"
-        app:adUnitId="@string/ad_smart_banner_unit_id"/>
+        app:adUnitId="@string/ad_smart_banner_unit_id" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -50,7 +50,7 @@ public class PlacesCategoryActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_places_cateogory);
+        setContentView(R.layout.activity_places_category);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_places_category);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
