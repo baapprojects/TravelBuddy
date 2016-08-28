@@ -16,7 +16,10 @@ import android.widget.TextView;
 import com.hari.aund.travelbuddy.R;
 import com.hari.aund.travelbuddy.activity.PlaceDetailActivity;
 import com.hari.aund.travelbuddy.data.PlacesListInfo;
+import com.hari.aund.travelbuddy.parser.PlacesApiParser;
 import com.hari.aund.travelbuddy.utils.Utility;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -89,9 +92,8 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
         PlacesListInfo placesListInfo = mPlacesListInfoArrayList.get(position);
 
         //TODO : to be removed later
-        /*
         if (placesListInfo.isPhotoReferenceAvailable() &&
-                !Utility.isNetworkAvailable(mContext)) {
+                Utility.isNetworkAvailable(mContext)) {
             //Log.d(LOG_TAG, "ImageUrl - " + new PlacesApiParser().getPhotoUrl(placesListInfo.getPhotoReference()));
             Picasso.with(mContext)
                     .load(new PlacesApiParser().getPhotoUrl(placesListInfo.getPhotoReference()))
@@ -110,7 +112,6 @@ public class PlacesListAdapter extends RecyclerView.Adapter<PlacesListAdapter.Vi
                             }
                     );
         }
-        */
 
         // Content Description for Non-text elements
         viewHolder.place_pic.setContentDescription(

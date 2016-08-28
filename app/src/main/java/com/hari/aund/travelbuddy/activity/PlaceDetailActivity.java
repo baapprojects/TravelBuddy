@@ -39,6 +39,7 @@ import com.hari.aund.travelbuddy.data.provider.Places;
 import com.hari.aund.travelbuddy.parser.PlacesApiParser;
 import com.hari.aund.travelbuddy.utils.DefaultValues;
 import com.hari.aund.travelbuddy.utils.Utility;
+import com.squareup.picasso.Picasso;
 
 public class PlaceDetailActivity extends AppCompatActivity
         implements OnMapReadyCallback, DefaultValues,
@@ -281,17 +282,16 @@ public class PlaceDetailActivity extends AppCompatActivity
         placeVicinity.setText(mPlaceDetail.getVicinity());
 
         if (mPlaceDetail.hasPhotoReference() &&
-                !Utility.isNetworkAvailable(this)){
+                Utility.isNetworkAvailable(this)){
             String heightAndWidthStr = 500 + "";
             //TODO: to be removed later
-/*            Picasso.with(this)
+            Picasso.with(this)
                     .load(new PlacesApiParser(this).getPhotoUrl(
                             mPlaceDetail.getPhotoReference().get(0),
                             heightAndWidthStr, heightAndWidthStr)
                     )
                     .fit()
                     .into(coverImage);
-                    */
             coverImage.setAlpha(0.6f);
         }
         // Content Description for Non-text elements
@@ -343,13 +343,12 @@ public class PlaceDetailActivity extends AppCompatActivity
                 imageView.setLayoutParams(params);
                 String heightAndWidthStr = 500 + "";
                 //TODO: to be removed later
-/*                Picasso.with(this)
+                Picasso.with(this)
                         .load(placesApiParser.getPhotoUrl(
                                 mPlaceDetail.getPhotoReference().get(index),
                                 heightAndWidthStr, heightAndWidthStr))
                         .resize(300, 300)
                         .into(imageView);
-                        */
 
                 // Content Description for Non-text elements
                 imageView.setContentDescription(
