@@ -212,7 +212,7 @@ public class PlacesCategoryActivity extends AppCompatActivity
                 (getLongitude() == null || getLongitude().isEmpty())) {
 
             if (!Utility.isNetworkAvailable(this)){
-                Log.d(LOG_TAG, "You are Offline! : !");
+                Log.d(LOG_TAG, "You are Offline! : createAndAddAdapterToView!");
                 return;
             } else {
                 new PlacesApiParser(this).getExplorePlaceDetails();
@@ -227,6 +227,40 @@ public class PlacesCategoryActivity extends AppCompatActivity
             );
         }
         mRecyclerView.setAdapter(mPlacesCategoryAdapter);
+        checkAndUpdateFavouritesIcon();
+    }
+
+    private void checkAndUpdateFavouritesIcon(){
+        Cursor placeCursor = null;
+        Log.d(LOG_TAG, getPlaceId() + "" + getPlaceName());
+        try {
+            placeCursor = getContentResolver().query(
+                    Places.CONTENT_URI_PLACES,
+                    null,
+                    PlaceColumns.PLACE_ID + " = ?",
+                    new String[]{getPlaceId()},
+                    null);
+            if (placeCursor != null && placeCursor.moveToFirst()) {
+                Log.d(LOG_TAG, "checkAndUpdateFavouritesIcon : Entry[" +
+                        getPlaceName() + "] already present in DB!");
+                mMarkAsFavourite = true;
+                mFavouriteFab.setImageResource(R.drawable.ic_favorite_black_24dp);
+            } else {
+                Log.d(LOG_TAG, "checkAndUpdateFavouritesIcon : No Entry[" +
+                        getPlaceId() + "] present in DB!");
+                mMarkAsFavourite = false;
+                mFavouriteFab.setImageResource(R.drawable.ic_favorite_white_24dp);
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (placeCursor != null)
+                    placeCursor.close();
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     private void addPlaceToFavourites(){
@@ -254,14 +288,12 @@ public class PlacesCategoryActivity extends AppCompatActivity
                 Log.d(LOG_TAG, "addToFavourites : New Entry[" + getPlaceName() + "] added to DB!");
             }
         }catch (NullPointerException e){
-            Log.e(LOG_TAG, "addToFavourites : NullPointerException@try for Cursor!");
             e.printStackTrace();
         }finally {
             try {
                 if (placeCursor != null)
                     placeCursor.close();
             }catch (NullPointerException e){
-                Log.e(LOG_TAG, "addToFavourites : NullPointerException@finally for Cursor!");
                 e.printStackTrace();
             }
         }
@@ -285,14 +317,12 @@ public class PlacesCategoryActivity extends AppCompatActivity
                 Log.d(LOG_TAG, "removeFromFavourites : No Entry[" + getPlaceId() + "] present in DB!");
             }
         }catch (NullPointerException e){
-            Log.e(LOG_TAG, "removeFromFavourites : NullPointerException@try for Cursor!");
             e.printStackTrace();
         }finally {
             try {
                 if (placeCursor != null)
                     placeCursor.close();
             }catch (NullPointerException e){
-                Log.e(LOG_TAG, "removeFromFavourites : NullPointerException@finally for Cursor!");
                 e.printStackTrace();
             }
         }
