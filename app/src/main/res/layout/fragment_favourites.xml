@@ -68,7 +68,7 @@
                 android:src="@drawable/ic_filter_list_white_24dp"
                 android:contentDescription="@string/cd_fav_sub_type_filter"
                 app:fab_colorNormal="@color/colorAccent"
-                app:menu_fab_label="@string/fav_sub_type_fab_label"
+                app:fab_label="@string/fav_sub_type_fab_label"
                 app:fab_showShadow="true" />
 
             <com.github.clans.fab.FloatingActionButton
@@ -78,7 +78,7 @@
                 android:src="@drawable/ic_filter_list_white_24dp"
                 android:contentDescription="@string/cd_fav_category_filter"
                 app:fab_colorNormal="@color/colorAccent"
-                app:menu_fab_label="@string/fav_sub_type_fab_label"
+                app:fab_label="@string/fav_category_fab_label"
                 app:fab_showShadow="true" />
 
             <com.github.clans.fab.FloatingActionButton
